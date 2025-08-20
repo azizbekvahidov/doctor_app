@@ -1,4 +1,3 @@
-import 'package:doctor_app/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 
 import 'widgets/active_card.dart';
@@ -53,7 +52,7 @@ class HomeContent extends StatelessWidget {
               children: [
                 AnnouncementList(
                   title: "New announcements",
-                  height: 250,
+                  height: 260,
                   child: ListView.separated(
                     itemCount: 15,
                     separatorBuilder: (_, __) => const SizedBox(width: 10),

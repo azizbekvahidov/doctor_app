@@ -4,7 +4,7 @@ import 'package:doctor_app/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-import '../../../styles/text_styles.dart';
+import '../../../../styles/text_styles.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
