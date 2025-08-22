@@ -1,8 +1,9 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../../features/auth/domain/models/user.dart';
+
 class SecureStorageKeys {
-  static const token = 'token';
-  static const lang = 'lang';
+  static const token = 'token', lang = 'lang', user = 'user';
 }
 
 class SecureStorageService {
@@ -18,7 +19,8 @@ class SecureStorageService {
   }
 
   Future<String?> getToken() async {
-    return await _read(SecureStorageKeys.token);
+    String? token = await _read(SecureStorageKeys.token);
+    return token == null || token == '' ? null : token;
   }
 
   Future<void> deleteToken() async {
@@ -35,6 +37,23 @@ class SecureStorageService {
 
   Future<void> deleteLang() async {
     await _delete(SecureStorageKeys.lang);
+  }
+
+  Future<User?> getUser() async {
+    String? userJson = await _read(SecureStorageKeys.user);
+    if (userJson == null || userJson == '') {
+      return null;
+    }
+    User user = User.fromRawJson(userJson);
+    return user;
+  }
+
+  Future<void> saveUser(String value) async {
+    await _write(SecureStorageKeys.user, value);
+  }
+
+  Future<void> deleteUser() async {
+    await _delete(SecureStorageKeys.user);
   }
 
   Future<void> _write(String key, String value) async {
