@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:doctor_app/core/constants/api_constants.dart';
 import 'package:doctor_app/core/services/secure_storage_service.dart';
 
 class DioService {
@@ -8,7 +9,7 @@ class DioService {
 
   final Dio _dio = Dio(
     BaseOptions(
-      baseUrl: "https://api.example.com", // put your API base URL here
+      baseUrl: ApiConstants.mainUrl,
       connectTimeout: const Duration(seconds: 10),
       receiveTimeout: const Duration(seconds: 10),
     ),
