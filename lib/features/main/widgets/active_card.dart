@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-import '../../../core/utils/asset_finder.dart';
-import '../../../core/widgets/circle.dart';
-import '../../../styles/app_colors.dart';
 import '../../../styles/text_styles.dart';
 
 class ActiveCard extends StatelessWidget {
@@ -58,59 +55,6 @@ class ActiveCard extends StatelessWidget {
                 children: [Icon(LucideIcons.mapPin), Text("Lorem ipsum text")],
               ),
             ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class Header extends StatelessWidget {
-  const Header({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SvgPicture.asset(AssetFinder.icon('avatar'), height: 55),
-          SizedBox(width: 10),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Akhmadjon", style: WorkSansStyle.titleLarge),
-              Text("Akbarov", style: WorkSansStyle.titleLarge),
-            ],
-          ),
-          Spacer(),
-          SizedBox(
-            height: 65,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Circle(
-                  bgColor: AppColors.lightGray,
-                  border: Border.all(color: Colors.transparent),
-                  width: 50,
-                  height: 50,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: SvgPicture.asset(AssetFinder.icon('notification')),
-                  ),
-                ),
-                Positioned(
-                  right: -2,
-                  top: 0,
-                  child: ShadBadge(
-                    shape: CircleBorder(),
-                    backgroundColor: AppColors.red,
-                    child: Text('5', style: WorkSansStyle.labelLarge),
-                  ),
-                ),
-              ],
-            ),
           ),
         ],
       ),
