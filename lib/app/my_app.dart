@@ -1,3 +1,4 @@
+import 'package:doctor_app/core/languages.dart';
 import 'package:doctor_app/core/pages/pages.dart';
 import 'package:doctor_app/core/pages/routes.dart';
 import 'package:doctor_app/features/onboard/controller/onboard_controller.dart';
@@ -12,7 +13,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final OnboardController onboardController = Get.put(OnboardController());
     return ShadApp(
-      debugShowCheckedModeBanner: false,
       theme: ShadThemeData(
         brightness: Brightness.light,
         colorScheme: const ShadZincColorScheme.light(),
@@ -22,7 +22,9 @@ class MyApp extends StatelessWidget {
         colorScheme: const ShadZincColorScheme.dark(),
       ),
       home: GetMaterialApp(
-        locale: Locale(onboardController.selectedLang.value ?? "uz"),
+        debugShowCheckedModeBanner: false,
+        translations: AppTranslations(),
+        locale: Locale(onboardController.selectedLang.value),
         fallbackLocale: const Locale("en"),
         initialRoute: Routes.onboard,
         getPages: AppPages.pages,
