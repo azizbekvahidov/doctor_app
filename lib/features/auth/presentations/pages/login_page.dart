@@ -1,17 +1,31 @@
 import 'package:doctor_app/core/widgets/buttons.dart';
 import 'package:doctor_app/core/widgets/circle.dart';
+import 'package:doctor_app/features/auth/presentations/controller/auth_controller.dart';
+import 'package:doctor_app/features/onboard/controller/onboard_controller.dart';
 import 'package:doctor_app/styles/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 import '../../../../styles/text_styles.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class LoginPage extends GetView<AuthController> {
+  LoginPage({super.key});
 
+  final OnboardController onboardController = Get.find<OnboardController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: Obx(
+          () => !onboardController.isLangSelected.value
+              ? IconButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: Icon(Icons.arrow_back),
+                )
+              : SizedBox.shrink(),
+        ),
+      ),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20).copyWith(top: 60),
@@ -31,7 +45,7 @@ class LoginPage extends StatelessWidget {
                   ),
                   SizedBox(height: 8),
                   ShadInput(
-                    onChanged: (value) {},
+                    controller: controller.pinflController,
                     padding: EdgeInsets.symmetric(vertical: 14, horizontal: 10),
                     decoration: ShadDecoration(
                       border: ShadBorder.all(
@@ -53,19 +67,29 @@ class LoginPage extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Align(
-                    child: Text("Lorem ipsum"),
-                    alignment: Alignment.center,
-                  ),
+                  // Align(
+                  //   child: Text("Lorem ipsum"),
+                  //   alignment: Alignment.center,
+                  // ),
                   SizedBox(height: 15),
                   Padding(
                     padding: EdgeInsetsGeometry.symmetric(horizontal: 10),
-                    child: PrimaryButton(
-                      child: Text(
-                        "Login",
-                        style: WorkSansStyle.labelLarge.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
+                    child: Obx(
+                      () => PrimaryButton(
+                        onTap: () => controller.login(),
+                        child: controller.isAuthorization.value
+                            ? Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 1.5,
+                                ),
+                              )
+                            : Text(
+                                "login".tr,
+                                style: WorkSansStyle.labelLarge.copyWith(
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
                       ),
                     ),
                   ),

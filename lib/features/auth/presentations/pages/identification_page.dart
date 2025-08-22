@@ -1,12 +1,13 @@
 import 'package:doctor_app/core/utils/asset_finder.dart';
 import 'package:doctor_app/core/widgets/buttons.dart';
 import 'package:doctor_app/core/widgets/circle.dart';
-import 'package:doctor_app/styles/app_colors.dart';
+import 'package:doctor_app/features/auth/presentations/controller/auth_controller.dart';
 import 'package:doctor_app/styles/text_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-class IdentificationPage extends StatelessWidget {
+class IdentificationPage extends GetView<AuthController> {
   const IdentificationPage({super.key});
 
   @override
@@ -14,8 +15,8 @@ class IdentificationPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: ShadButton.secondary(
-          child: Icon(Icons.arrow_back),
           backgroundColor: Colors.transparent,
+          child: Icon(Icons.arrow_back),
         ),
       ),
       body: SafeArea(
@@ -46,12 +47,22 @@ class IdentificationPage extends StatelessWidget {
 
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
-              child: PrimaryButton(
-                child: Text(
-                  "Identification",
-                  style: WorkSansStyle.labelLarge.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
+              child: Obx(
+                () => PrimaryButton(
+                  onTap: () => controller.register(),
+                  child: controller.isAuthorization.value
+                      ? Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 1.5,
+                          ),
+                        )
+                      : Text(
+                          "Identification",
+                          style: WorkSansStyle.labelLarge.copyWith(
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
                 ),
               ),
             ),
