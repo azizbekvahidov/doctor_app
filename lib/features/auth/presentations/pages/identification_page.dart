@@ -20,53 +20,56 @@ class IdentificationPage extends GetView<AuthController> {
         ),
       ),
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              children: [
-                Divider(thickness: 2),
-                Circle(),
-                SizedBox(height: 160),
-                Column(
-                  children: [
-                    SvgPicture.asset(AssetFinder.icon('avatar'), height: 65),
-                    Text(
-                      "Сделать селфи и  пройти идентификацию",
-                      style: WorkSansStyle.headline3.copyWith(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 22,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Obx(
-                () => PrimaryButton(
-                  onTap: () => controller.register(),
-                  child: controller.isAuthorization.value
-                      ? Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 1.5,
-                          ),
-                        )
-                      : Text(
-                          "Identification",
-                          style: WorkSansStyle.labelLarge.copyWith(
-                            fontWeight: FontWeight.w500,
-                          ),
+        child: Padding(
+          padding: EdgeInsetsGeometry.symmetric(vertical: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                children: [
+                  Divider(thickness: 2),
+                  Circle(),
+                  SizedBox(height: 160),
+                  Column(
+                    children: [
+                      SvgPicture.asset(AssetFinder.icon('avatar'), height: 65),
+                      Text(
+                        "Сделать селфи и  пройти идентификацию",
+                        style: WorkSansStyle.headline3.copyWith(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 22,
                         ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Obx(
+                  () => PrimaryButton(
+                    onTap: () => controller.register(),
+                    child: controller.isAuthorization.value
+                        ? Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 1.5,
+                            ),
+                          )
+                        : Text(
+                            "Identification",
+                            style: WorkSansStyle.labelLarge.copyWith(
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

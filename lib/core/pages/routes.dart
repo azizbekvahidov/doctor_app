@@ -3,5 +3,6 @@ class Routes {
   static const String onboard = '/onboard';
   static const String lang = '/lang';
   static const String main = '/main';
-  static const String identification = '/identification';
+  static const String identification = '/identification',
+      register = '/register';
 }

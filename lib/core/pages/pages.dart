@@ -1,5 +1,6 @@
 import 'package:doctor_app/features/auth/presentations/pages/identification_page.dart';
 import 'package:doctor_app/features/auth/presentations/pages/login_page.dart';
+import 'package:doctor_app/features/auth/presentations/pages/register_page.dart';
 import 'package:doctor_app/features/main/main_page.dart';
 import 'package:doctor_app/features/onboard/bindings.dart';
 import 'package:doctor_app/features/onboard/pages/languages_page.dart';
@@ -24,8 +25,6 @@ class AppPages {
       name: Routes.onboard,
       page: () => OnboardPage(),
       binding: OnBoardBindings(),
-      transition: Transition.rightToLeftWithFade,
-      transitionDuration: const Duration(milliseconds: 400),
     ),
     GetPage(
       name: Routes.lang,
@@ -47,6 +46,11 @@ class AppPages {
       binding: AuthBindings(),
       transition: Transition.leftToRight,
       transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.register,
+      page: () => RegisterPage(),
+      binding: AuthBindings(),
     ),
   ];
 }
