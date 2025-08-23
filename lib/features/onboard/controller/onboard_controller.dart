@@ -1,29 +1,50 @@
 import 'package:doctor_app/core/services/secure_storage_service.dart';
-import 'package:doctor_app/features/main/main_page.dart';
+import 'package:flutter/material.dart';
+
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 
+import '../../../core/pages/routes.dart';
+import '../../auth/domain/models/user.dart';
+
 class OnboardController extends GetxController {
-  RxnString selectedLang = RxnString("uz");
+  RxString selectedLang = RxString("uz");
   final SecureStorageService _storage = SecureStorageService();
   var isLoading = false.obs;
+  var isLangSelected = false.obs;
+
+  Rxn<User> user = Rxn(null);
 
   @override
   void onInit() {
     super.onInit();
-    getLang();
+    // config();
+    getUser();
   }
 
-  Future<void> getLang() async {
-    isLoading(true);
+  getUser() async {
+    user.value = await _storage.getUser();
+  }
+
+  Future<void> config() async {
     final saved = await _storage.getLang();
+    final user = await _storage.getUser();
+
     if (saved != null) {
       selectedLang.value = saved;
       Get.updateLocale(Locale(saved));
-
-      Get.offAll(MainPage());
+      isLangSelected(true);
+      if (user != null) {
+        isLoading(true);
+        await Future.delayed(Duration(seconds: 1));
+        Get.offAndToNamed(Routes.main);
+      } else {
+        Get.offAndToNamed(Routes.login);
+      }
+    } else {
+      Get.toNamed(Routes.lang);
+      isLangSelected(false);
     }
-    await Future.delayed(Duration(milliseconds: 1000));
     isLoading(false);
   }
 

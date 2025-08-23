@@ -39,16 +39,11 @@ class LangButton extends StatelessWidget {
               ),
             ),
             child: Center(
-              child: AnimatedScale(
-                scale: isSelected ? 1.1 : 1.0, // zoom effect on flag
-                duration: const Duration(milliseconds: 250),
-                curve: Curves.easeInOut,
-                child: CountryFlag.fromLanguageCode(
-                  lang.toLowerCase(),
-                  shape: Circle(),
-                  height: isSelected ? 35 : 30,
-                  width: isSelected ? 55 : 50,
-                ),
+              child: CountryFlag.fromLanguageCode(
+                lang.toLowerCase(),
+                shape: Circle(),
+                height: 30,
+                width: 50,
               ),
             ),
           ),
