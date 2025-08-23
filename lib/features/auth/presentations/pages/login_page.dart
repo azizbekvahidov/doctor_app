@@ -28,7 +28,9 @@ class LoginPage extends GetView<AuthController> {
       ),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20).copyWith(top: 60),
+          padding: EdgeInsets.symmetric(
+            horizontal: 20,
+          ).copyWith(top: 60, bottom: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
