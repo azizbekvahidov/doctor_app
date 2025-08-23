@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:doctor_app/core/utils/asset_finder.dart';
-import 'package:doctor_app/core/widgets/circle.dart';
+import 'package:doctor_app/core/design_system/widgets/circle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';

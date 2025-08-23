@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import '../../../styles/text_styles.dart';
+import '../../../core/design_system/styles/text_styles.dart';
 
 class AnnouncementList extends StatelessWidget {
   const AnnouncementList({

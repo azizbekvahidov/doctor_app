@@ -1,6 +1,6 @@
 import 'package:country_flags/country_flags.dart';
-import 'package:doctor_app/styles/app_colors.dart';
-import 'package:doctor_app/styles/text_styles.dart';
+import 'package:doctor_app/core/design_system/styles/app_colors.dart';
+import 'package:doctor_app/core/design_system/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 
 class LangButton extends StatelessWidget {

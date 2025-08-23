@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-import '../../../styles/text_styles.dart';
+import '../../../core/design_system/styles/text_styles.dart';
 
 class ActiveCard extends StatelessWidget {
   const ActiveCard({super.key});

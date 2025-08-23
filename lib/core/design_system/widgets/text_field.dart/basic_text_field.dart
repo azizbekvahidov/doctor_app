@@ -9,6 +9,7 @@ class BasicTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return ShadInput(
       controller: controller,
+
       padding: EdgeInsets.symmetric(vertical: 14, horizontal: 10),
       decoration: ShadDecoration(
         border: ShadBorder.all(

@@ -1,8 +1,8 @@
 import 'package:doctor_app/core/utils/asset_finder.dart';
-import 'package:doctor_app/core/widgets/buttons.dart';
-import 'package:doctor_app/core/widgets/circle.dart';
+import 'package:doctor_app/core/design_system/widgets/buttons.dart';
+import 'package:doctor_app/core/design_system/widgets/circle.dart';
 import 'package:doctor_app/features/auth/presentations/controller/auth_controller.dart';
-import 'package:doctor_app/styles/text_styles.dart';
+import 'package:doctor_app/core/design_system/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -35,7 +35,7 @@ class IdentificationPage extends GetView<AuthController> {
                     children: [
                       SvgPicture.asset(AssetFinder.icon('avatar'), height: 65),
                       Text(
-                        "Сделать селфи и  пройти идентификацию",
+                        'identification_info'.tr,
                         style: WorkSansStyle.headline3.copyWith(
                           fontWeight: FontWeight.w400,
                           fontSize: 22,

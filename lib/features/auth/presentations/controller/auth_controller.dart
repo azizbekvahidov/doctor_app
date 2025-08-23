@@ -1,9 +1,10 @@
 import 'package:doctor_app/core/pages/routes.dart';
 import 'package:doctor_app/core/services/secure_storage_service.dart';
 import 'package:doctor_app/core/utils/log_helper.dart';
+import 'package:doctor_app/core/utils/notifier.dart';
 import 'package:doctor_app/features/auth/domain/models/login_data.dart';
 import 'package:doctor_app/features/auth/domain/repository/auth_repository.dart';
-import 'package:doctor_app/features/auth/presentations/pages/login_page.dart';
+
 import 'package:doctor_app/features/onboard/controller/onboard_controller.dart';
 
 import 'package:flutter/material.dart';
@@ -11,6 +12,8 @@ import 'package:get/get.dart';
 import 'package:myid/enums.dart';
 import 'package:myid/myid.dart';
 import 'package:myid/myid_config.dart';
+
+import '../../../../core/design_system/styles/text_styles.dart';
 
 class AuthController extends GetxController {
   final AuthRepository authRepository;
@@ -21,48 +24,50 @@ class AuthController extends GetxController {
 
   final TextEditingController pinflController = TextEditingController();
 
-  // Holds the current widget to display
-  var currentWidget = Rx<Widget>(LoginPage());
   var isAuthorization = false.obs;
   var isLangSelected = false.obs;
+  var isTextFieldEmpty = false.obs;
 
   Future<void> login() async {
-    isAuthorization(true);
-
     try {
-      String pinfl = pinflController.text.trim();
+      String pinfl = pinflController.text.trim().replaceAll('-', '');
+
       if (pinfl.isEmpty) {
-        Get.snackbar(
-          "Xatolik!",
-          "",
-          messageText: Text(
-            "Iltimos JSHSHR raqamingizni kiriting",
-            style: TextStyle(fontSize: 16, color: Colors.white),
-          ),
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-        );
+        isTextFieldEmpty(true);
+        await Future.delayed(Duration(seconds: 1));
+        isTextFieldEmpty(false);
+        // Notifier.showSnackbar(
+        //   content: Text(
+        //     'Iltimos JSHSHRni kiriting!',
+        //     style: WorkSansStyle.titleSmall.copyWith(
+        //       fontWeight: FontWeight.w500,
+        //       fontSize: 15,
+        //     ),
+        //   ),
+        // );
+
         return;
       }
+      isAuthorization(true);
       await Future.delayed(Durations.extralong1);
       LoginData? loginData = await authRepository.login(pinfl);
 
       if (loginData == null) {
-        Get.snackbar(
-          "Xatolik!",
-          "",
-          messageText: Text(
-            "Ma'lumot mavjud emas",
-            style: TextStyle(fontSize: 16, color: Colors.white),
+        Notifier.showSnackbar(
+          content: Text(
+            'JSHSHR bo\'yicha ma\'lumotlar mavjud emas!',
+            style: WorkSansStyle.titleSmall.copyWith(
+              fontWeight: FontWeight.w500,
+              fontSize: 15,
+            ),
           ),
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
         );
         return;
       }
       await secureStorageService.saveToken(loginData.token!);
-
-      if (loginData.user!.registeredAt == null) {
+      String registeredAt =
+          loginData.user!.registeredAt ?? DateTime.now().toString();
+      if (registeredAt.isEmpty) {
         Get.toNamed(Routes.identification);
         return;
       }
@@ -100,6 +105,19 @@ class AuthController extends GetxController {
   Future<void> logout() async {
     await secureStorageService.deleteToken();
     await secureStorageService.deleteUser();
-    currentWidget.value = LoginPage();
+
+    await Get.offAllNamed(Routes.onboard)?.then((value) {
+      Notifier.showSnackbar(
+        content: Text(
+          'Tizimdan chiqildi!',
+          style: WorkSansStyle.titleSmall.copyWith(
+            fontWeight: FontWeight.w500,
+            fontSize: 15,
+          ),
+        ),
+        backgroundColor: Colors.green,
+        duration: Duration(milliseconds: 1500),
+      );
+    });
   }
 }

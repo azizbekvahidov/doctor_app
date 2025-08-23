@@ -45,6 +45,7 @@ dependencies:
   country_flags: ^3.3.0
   talker: ^5.0.0
   image_picker: ^1.2.0
+  mask_text_input_formatter: ^2.9.0
 
 dev_dependencies:
   flutter_test:

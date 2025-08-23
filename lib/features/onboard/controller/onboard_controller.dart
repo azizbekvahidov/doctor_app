@@ -18,7 +18,7 @@ class OnboardController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    // config();
+
     getUser();
   }
 
@@ -30,21 +30,22 @@ class OnboardController extends GetxController {
     final saved = await _storage.getLang();
     final user = await _storage.getUser();
 
-    if (saved != null) {
-      selectedLang.value = saved;
-      Get.updateLocale(Locale(saved));
-      isLangSelected(true);
-      if (user != null) {
-        isLoading(true);
-        await Future.delayed(Duration(seconds: 1));
-        Get.offAndToNamed(Routes.main);
-      } else {
-        Get.offAndToNamed(Routes.login);
-      }
-    } else {
+    if (saved == null) {
       Get.toNamed(Routes.lang);
       isLangSelected(false);
+      return;
     }
+    selectedLang.value = saved;
+    Get.updateLocale(Locale(saved));
+    isLangSelected(true);
+
+    if (user == null) {
+      Get.offAndToNamed(Routes.login);
+      return;
+    }
+    isLoading(true);
+    await Future.delayed(Duration(seconds: 1));
+    await Get.offAllNamed(Routes.main);
     isLoading(false);
   }
 

@@ -1,8 +1,8 @@
-import 'package:doctor_app/core/widgets/buttons.dart';
-import 'package:doctor_app/core/widgets/text_field.dart/basic_text_field.dart';
-import 'package:doctor_app/core/widgets/text_field.dart/input_title.dart';
+import 'package:doctor_app/core/design_system/widgets/buttons.dart';
+import 'package:doctor_app/core/design_system/widgets/text_field.dart/basic_text_field.dart';
+import 'package:doctor_app/core/design_system/widgets/text_field.dart/input_title.dart';
 import 'package:doctor_app/features/auth/presentations/pages/widgets/profile_image.dart';
-import 'package:doctor_app/styles/text_styles.dart';
+import 'package:doctor_app/core/design_system/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/utils.dart';
 
@@ -72,7 +72,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 ],
               ),
               PrimaryButton(
-                height: 60,
                 onTap: () => setState(() {
                   page = 2;
                 }),

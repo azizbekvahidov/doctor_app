@@ -1,7 +1,7 @@
 import 'package:doctor_app/core/pages/routes.dart';
-import 'package:doctor_app/core/widgets/buttons.dart';
+import 'package:doctor_app/core/design_system/widgets/buttons.dart';
 import 'package:doctor_app/features/onboard/controller/onboard_controller.dart';
-import 'package:doctor_app/styles/text_styles.dart';
+import 'package:doctor_app/core/design_system/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -44,7 +44,7 @@ class LanguagesPage extends GetView<OnboardController> {
               Obx(() {
                 return PrimaryButton(
                   onTap: () => Get.toNamed(Routes.login),
-                  height: 50,
+
                   child: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 250),
                     transitionBuilder: (child, animation) =>

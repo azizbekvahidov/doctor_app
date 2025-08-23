@@ -7,17 +7,15 @@ import 'package:doctor_app/features/onboard/pages/languages_page.dart';
 import 'package:doctor_app/features/onboard/pages/onboard_page.dart';
 import 'package:get/get.dart';
 
-import '../../features/auth/bindins.dart';
 import 'routes.dart';
 
 class AppPages {
-  static const initial = Routes.login;
+  static const initial = Routes.onboard;
 
   static final pages = [
     GetPage(
       name: Routes.login,
       page: () => LoginPage(),
-      binding: AuthBindings(),
       transition: Transition.native,
       transitionDuration: const Duration(milliseconds: 500),
     ),
@@ -43,14 +41,14 @@ class AppPages {
     GetPage(
       name: Routes.identification,
       page: () => IdentificationPage(),
-      binding: AuthBindings(),
       transition: Transition.leftToRight,
       transitionDuration: const Duration(milliseconds: 400),
     ),
     GetPage(
       name: Routes.register,
       page: () => RegisterPage(),
-      binding: AuthBindings(),
+      transition: Transition.leftToRight,
+      transitionDuration: const Duration(milliseconds: 400),
     ),
   ];
 }

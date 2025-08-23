@@ -1,7 +1,8 @@
 import 'package:doctor_app/core/utils/asset_finder.dart';
-import 'package:doctor_app/core/widgets/circle.dart';
-import 'package:doctor_app/styles/app_colors.dart';
-import 'package:doctor_app/styles/text_styles.dart';
+import 'package:doctor_app/core/design_system/widgets/circle.dart';
+import 'package:doctor_app/core/design_system/styles/app_colors.dart';
+import 'package:doctor_app/core/design_system/styles/text_styles.dart';
+import 'package:doctor_app/features/auth/presentations/controller/auth_controller.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -12,6 +13,7 @@ import '../../onboard/controller/onboard_controller.dart';
 class Header extends StatelessWidget {
   Header({super.key});
   final OnboardController onboardController = Get.find<OnboardController>();
+  final AuthController authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
@@ -21,27 +23,30 @@ class Header extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Obx(() {
-            return Row(
-              children: [
-                if (onboardController.user.value!.avatar!.url == null)
-                  SvgPicture.asset(AssetFinder.icon('avatar'), height: 55)
-                else
-                  SizedBox.shrink(),
-                SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      onboardController.user.value!.firstName!,
-                      style: WorkSansStyle.titleLarge,
-                    ),
-                    Text(
-                      onboardController.user.value!.lastName!,
-                      style: WorkSansStyle.titleLarge,
-                    ),
-                  ],
-                ),
-              ],
+            return GestureDetector(
+              onTap: () => authController.logout(),
+              child: Row(
+                children: [
+                  if (onboardController.user.value!.avatar!.url == null)
+                    SvgPicture.asset(AssetFinder.icon('avatar'), height: 55)
+                  else
+                    SizedBox.shrink(),
+                  SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        onboardController.user.value!.firstName!,
+                        style: WorkSansStyle.titleLarge,
+                      ),
+                      Text(
+                        onboardController.user.value!.lastName!,
+                        style: WorkSansStyle.titleLarge,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             );
           }),
           Spacer(),
