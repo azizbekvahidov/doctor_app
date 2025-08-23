@@ -17,16 +17,12 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.light,
         colorScheme: const ShadZincColorScheme.light(),
       ),
-      darkTheme: ShadThemeData(
-        brightness: Brightness.dark,
-        colorScheme: const ShadZincColorScheme.dark(),
-      ),
       home: GetMaterialApp(
         debugShowCheckedModeBanner: false,
         translations: AppTranslations(),
         locale: Locale(onboardController.selectedLang.value),
         fallbackLocale: const Locale("en"),
-        initialRoute: Routes.onboard,
+        initialRoute: Routes.register,
         getPages: AppPages.pages,
       ),
     );
