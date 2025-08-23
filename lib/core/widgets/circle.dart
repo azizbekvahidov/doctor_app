@@ -11,21 +11,23 @@ class Circle extends StatelessWidget {
     this.border = const Border.fromBorderSide(
       BorderSide(color: AppColors.grey, width: 3),
     ),
+    this.padding = EdgeInsets.zero,
   });
   final Widget? child;
   final double? height;
   final double? width;
   final Color? bgColor;
   final Border? border;
+  final EdgeInsets? padding;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: width,
       height: height,
+      padding: padding,
       decoration: BoxDecoration(
         color: bgColor,
-
         border: border,
         shape: BoxShape.circle,
       ),
