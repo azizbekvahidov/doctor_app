@@ -43,6 +43,8 @@ dependencies:
   lucide_icons_flutter: ^3.0.9
   flutter_svg: ^2.2.0
   country_flags: ^3.3.0
+  talker: ^5.0.0
+  image_picker: ^1.2.0
 
 dev_dependencies:
   flutter_test:

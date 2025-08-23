@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
 
 import '../../../styles/text_styles.dart';
-import 'new_card.dart';
 
 class AnnouncementList extends StatelessWidget {
   const AnnouncementList({

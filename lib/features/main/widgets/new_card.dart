@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/utils.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../../../core/widgets/buttons.dart';
@@ -52,7 +53,7 @@ class NewCard extends StatelessWidget {
                           onTap: () {},
                           bgColor: Colors.transparent,
                           child: Text(
-                            "Dismiss",
+                            "dismiss".tr,
                             style: WorkSansStyle.labelLarge.copyWith(
                               fontWeight: FontWeight.w500,
                             ),
