@@ -1,18 +1,26 @@
-import 'package:doctor_app/core/widgets/buttons.dart';
-import 'package:doctor_app/core/widgets/circle.dart';
+import 'package:doctor_app/core/design_system/widgets/buttons.dart';
+import 'package:doctor_app/core/design_system/widgets/circle.dart';
 import 'package:doctor_app/features/auth/presentations/controller/auth_controller.dart';
 import 'package:doctor_app/features/onboard/controller/onboard_controller.dart';
-import 'package:doctor_app/styles/app_colors.dart';
+import 'package:doctor_app/core/design_system/styles/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:shadcn_ui/shadcn_ui.dart';
 
-import '../../../../styles/text_styles.dart';
+import 'package:get/get.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+
+import '../../../../core/design_system/styles/text_styles.dart';
+import 'widgets/pnfl_input.dart';
 
 class LoginPage extends GetView<AuthController> {
   LoginPage({super.key});
 
   final OnboardController onboardController = Get.find<OnboardController>();
+
+  final maskFormatter = MaskTextInputFormatter(
+    mask: '####-####-####-##',
+    filter: {"#": RegExp(r'[0-9]')},
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,23 +54,9 @@ class LoginPage extends GetView<AuthController> {
                     ),
                   ),
                   SizedBox(height: 8),
-                  ShadInput(
-                    controller: controller.pinflController,
-                    padding: EdgeInsets.symmetric(vertical: 14, horizontal: 10),
-                    decoration: ShadDecoration(
-                      border: ShadBorder.all(
-                        color: Colors.grey, // default border color
-                      ),
-                      focusedBorder: ShadBorder.all(
-                        color: Colors.grey, // border when focused
-                        width: 2,
-                        radius: BorderRadius.circular(10),
-                      ),
-                      errorBorder: ShadBorder.all(
-                        color: Colors.red, // border when error
-                      ),
-                      disableSecondaryBorder: true,
-                    ),
+                  PnflInput(
+                    controller: controller,
+                    maskFormatter: maskFormatter,
                   ),
                 ],
               ),
@@ -74,25 +68,31 @@ class LoginPage extends GetView<AuthController> {
                   //   alignment: Alignment.center,
                   // ),
                   SizedBox(height: 15),
-                  Padding(
-                    padding: EdgeInsetsGeometry.symmetric(horizontal: 10),
-                    child: Obx(
-                      () => PrimaryButton(
-                        onTap: () => controller.login(),
-                        child: controller.isAuthorization.value
-                            ? Center(
+                  Obx(
+                    () => PrimaryButton(
+                      onTap: controller.isAuthorization.value
+                          ? null
+                          : () {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                              controller.login();
+                            },
+                      child: controller.isAuthorization.value
+                          ? Center(
+                              child: SizedBox(
+                                height: 20,
+                                width: 20,
                                 child: CircularProgressIndicator(
                                   color: Colors.white,
-                                  strokeWidth: 1.5,
-                                ),
-                              )
-                            : Text(
-                                "login".tr,
-                                style: WorkSansStyle.labelLarge.copyWith(
-                                  fontWeight: FontWeight.w500,
+                                  strokeWidth: 1,
                                 ),
                               ),
-                      ),
+                            )
+                          : Text(
+                              "login".tr,
+                              style: WorkSansStyle.labelLarge.copyWith(
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
                     ),
                   ),
                 ],
