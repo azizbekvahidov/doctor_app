@@ -1,3 +1,4 @@
+import 'package:doctor_app/core/utils/log_helper.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../features/auth/domain/models/user.dart';
@@ -60,7 +61,7 @@ class SecureStorageService {
     try {
       await _storage.write(key: key, value: value);
     } catch (e) {
-      // TODO: handle or log error if needed
+      LogHelper.error("Saving $key: $e");
     }
   }
 
@@ -68,7 +69,7 @@ class SecureStorageService {
     try {
       return await _storage.read(key: key);
     } catch (e) {
-      // TODO: handle or log error if needed
+      LogHelper.error("Reading $key: $e");
       return null;
     }
   }
@@ -77,7 +78,7 @@ class SecureStorageService {
     try {
       await _storage.delete(key: key);
     } catch (e) {
-      // TODO: handle or log error if needed
+      LogHelper.error("Deleting $key: $e");
     }
   }
 }
