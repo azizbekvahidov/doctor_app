@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 import 'routes.dart';
 
 class AppPages {
-  static const initial = Routes.onboard;
+  static const initial = Routes.register;
 
   static final pages = [
     GetPage(
