@@ -7,18 +7,18 @@ class User {
   String? firstName;
   String? middleName;
   DateTime? birthdate;
-  dynamic email;
-  dynamic phone;
-  dynamic degree;
-  dynamic profession;
-  dynamic approvedByModeratorAt;
-  dynamic status;
+  String? email;
+  String? phone;
+  Degree? degree;
+  Degree? profession;
+  DateTime? approvedByModeratorAt;
+  String? status;
   Description? description;
-  dynamic socialNetwork;
+  SocialNetwork? socialNetwork;
   Settings? settings;
-  String? registeredAt;
+  DateTime? registeredAt;
   Avatar? avatar;
-  List<dynamic>? documents;
+  List<Avatar>? documents;
 
   User({
     this.id,
@@ -48,18 +48,18 @@ class User {
     String? firstName,
     String? middleName,
     DateTime? birthdate,
-    dynamic email,
-    dynamic phone,
-    dynamic degree,
-    dynamic profession,
-    dynamic approvedByModeratorAt,
-    dynamic status,
+    String? email,
+    String? phone,
+    Degree? degree,
+    Degree? profession,
+    DateTime? approvedByModeratorAt,
+    String? status,
     Description? description,
-    dynamic socialNetwork,
+    SocialNetwork? socialNetwork,
     Settings? settings,
-    String? registeredAt,
+    DateTime? registeredAt,
     Avatar? avatar,
-    List<dynamic>? documents,
+    List<Avatar>? documents,
   }) => User(
     id: id ?? this.id,
     pinfl: pinfl ?? this.pinfl,
@@ -96,22 +96,30 @@ class User {
         : DateTime.parse(json["birthdate"]),
     email: json["email"],
     phone: json["phone"],
-    degree: json["degree"],
-    profession: json["profession"],
-    approvedByModeratorAt: json["approved_by_moderator_at"],
+    degree: json["degree"] == null ? null : Degree.fromJson(json["degree"]),
+    profession: json["profession"] == null
+        ? null
+        : Degree.fromJson(json["profession"]),
+    approvedByModeratorAt: json["approved_by_moderator_at"] == null
+        ? null
+        : DateTime.parse(json["approved_by_moderator_at"]),
     status: json["status"],
     description: json["description"] == null
         ? null
         : Description.fromJson(json["description"]),
-    socialNetwork: json["social_network"],
+    socialNetwork: json["social_network"] == null
+        ? null
+        : SocialNetwork.fromJson(json["social_network"]),
     settings: json["settings"] == null
         ? null
         : Settings.fromJson(json["settings"]),
-    registeredAt: json["registered_at"],
+    registeredAt: json["registered_at"] == null
+        ? null
+        : DateTime.parse(json["registered_at"]),
     avatar: json["avatar"] == null ? null : Avatar.fromJson(json["avatar"]),
     documents: json["documents"] == null
         ? []
-        : List<dynamic>.from(json["documents"]!.map((x) => x)),
+        : List<Avatar>.from(json["documents"]!.map((x) => Avatar.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -124,51 +132,83 @@ class User {
         "${birthdate!.year.toString().padLeft(4, '0')}-${birthdate!.month.toString().padLeft(2, '0')}-${birthdate!.day.toString().padLeft(2, '0')}",
     "email": email,
     "phone": phone,
-    "degree": degree,
-    "profession": profession,
-    "approved_by_moderator_at": approvedByModeratorAt,
+    "degree": degree?.toJson(),
+    "profession": profession?.toJson(),
+    "approved_by_moderator_at": approvedByModeratorAt?.toIso8601String(),
     "status": status,
     "description": description?.toJson(),
-    "social_network": socialNetwork,
+    "social_network": socialNetwork?.toJson(),
     "settings": settings?.toJson(),
-    "registered_at": registeredAt,
+    "registered_at": registeredAt?.toIso8601String(),
     "avatar": avatar?.toJson(),
     "documents": documents == null
         ? []
-        : List<dynamic>.from(documents!.map((x) => x)),
+        : List<dynamic>.from(documents!.map((x) => x.toJson())),
   };
 }
 
 class Avatar {
-  dynamic url;
-  dynamic size;
-  dynamic name;
+  String? url;
+  String? size;
+  String? name;
+  int? id;
 
-  Avatar({this.url, this.size, this.name});
+  Avatar({this.url, this.size, this.name, this.id});
 
-  Avatar copyWith({dynamic url, dynamic size, dynamic name}) => Avatar(
+  Avatar copyWith({String? url, String? size, String? name, int? id}) => Avatar(
     url: url ?? this.url,
     size: size ?? this.size,
     name: name ?? this.name,
+    id: id ?? this.id,
   );
 
   factory Avatar.fromRawJson(String str) => Avatar.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory Avatar.fromJson(Map<String, dynamic> json) =>
-      Avatar(url: json["url"], size: json["size"], name: json["name"]);
+  factory Avatar.fromJson(Map<String, dynamic> json) => Avatar(
+    url: json["url"],
+    size: json["size"],
+    name: json["name"],
+    id: json["id"],
+  );
 
-  Map<String, dynamic> toJson() => {"url": url, "size": size, "name": name};
+  Map<String, dynamic> toJson() => {
+    "url": url,
+    "size": size,
+    "name": name,
+    "id": id,
+  };
+}
+
+class Degree {
+  int? id;
+  Description? name;
+
+  Degree({this.id, this.name});
+
+  Degree copyWith({int? id, Description? name}) =>
+      Degree(id: id ?? this.id, name: name ?? this.name);
+
+  factory Degree.fromRawJson(String str) => Degree.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory Degree.fromJson(Map<String, dynamic> json) => Degree(
+    id: json["id"],
+    name: json["name"] == null ? null : Description.fromJson(json["name"]),
+  );
+
+  Map<String, dynamic> toJson() => {"id": id, "name": name?.toJson()};
 }
 
 class Description {
-  dynamic uz;
-  dynamic ru;
+  String? uz;
+  String? ru;
 
   Description({this.uz, this.ru});
 
-  Description copyWith({dynamic uz, dynamic ru}) =>
+  Description copyWith({String? uz, String? ru}) =>
       Description(uz: uz ?? this.uz, ru: ru ?? this.ru);
 
   factory Description.fromRawJson(String str) =>
@@ -183,12 +223,12 @@ class Description {
 }
 
 class Settings {
-  dynamic language;
-  dynamic experienceFrom;
+  String? language;
+  String? experienceFrom;
 
   Settings({this.language, this.experienceFrom});
 
-  Settings copyWith({dynamic language, dynamic experienceFrom}) => Settings(
+  Settings copyWith({String? language, String? experienceFrom}) => Settings(
     language: language ?? this.language,
     experienceFrom: experienceFrom ?? this.experienceFrom,
   );
@@ -206,5 +246,31 @@ class Settings {
   Map<String, dynamic> toJson() => {
     "language": language,
     "experience_from": experienceFrom,
+  };
+}
+
+class SocialNetwork {
+  String? instagram;
+  String? telegram;
+
+  SocialNetwork({this.instagram, this.telegram});
+
+  SocialNetwork copyWith({String? instagram, String? telegram}) =>
+      SocialNetwork(
+        instagram: instagram ?? this.instagram,
+        telegram: telegram ?? this.telegram,
+      );
+
+  factory SocialNetwork.fromRawJson(String str) =>
+      SocialNetwork.fromJson(json.decode(str));
+
+  String toRawJson() => json.encode(toJson());
+
+  factory SocialNetwork.fromJson(Map<String, dynamic> json) =>
+      SocialNetwork(instagram: json["instagram"], telegram: json["telegram"]);
+
+  Map<String, dynamic> toJson() => {
+    "instagram": instagram,
+    "telegram": telegram,
   };
 }
