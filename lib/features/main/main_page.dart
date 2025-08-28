@@ -17,10 +17,6 @@ class _MainPageState extends State<MainPage> {
     const Center(child: Text("Search Page")),
     const Center(child: Text("Profile Page")),
   ];
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
 
   @override
   Widget build(BuildContext context) {
