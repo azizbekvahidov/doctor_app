@@ -53,45 +53,101 @@ class _SocialInfoFormState extends State<SocialInfoForm> {
                     ],
                   ),
                   SizedBox(
-                    height: 200,
+                    height: 250,
                     child: TabBarView(
                       children: [
                         Padding(
-                          padding: EdgeInsets.symmetric(vertical: 25),
-                          child: ShadTextarea(
-                            controller: widget.aboutUzController,
-                            placeholder: Text(
-                              "about_uz".tr,
-                              style: WorkSansStyle.labelLarge.copyWith(
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            minHeight: 200,
-                            decoration: ShadDecoration(
-                              border: ShadBorder.all(color: AppColors.grey),
-                              secondaryFocusedBorder: ShadBorder.all(
-                                color: Colors.transparent,
-                              ),
-                            ),
+                          padding: EdgeInsets.symmetric(vertical: 5),
+                          child: FormField(
+                            validator: (value) {
+                              if (widget.aboutUzController.text.isEmpty) {
+                                return "valid_about_uz".tr;
+                              }
+                              return null;
+                            },
+                            builder: (field) {
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ShadTextarea(
+                                    controller: widget.aboutUzController,
+                                    placeholder: Text(
+                                      "about_uz".tr,
+                                      style: WorkSansStyle.labelLarge.copyWith(
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    minHeight: 170,
+                                    decoration: ShadDecoration(
+                                      border: ShadBorder.all(
+                                        color: AppColors.grey,
+                                      ),
+                                      secondaryFocusedBorder: ShadBorder.all(
+                                        color: Colors.transparent,
+                                      ),
+                                    ),
+                                  ),
+                                  if (field.errorText != null)
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 4),
+                                      child: Text(
+                                        field.errorText!,
+                                        style: const TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              );
+                            },
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(vertical: 25),
-                          child: ShadTextarea(
-                            controller: widget.aboutRuController,
-                            placeholder: Text(
-                              "about_ru".tr,
-                              style: WorkSansStyle.labelLarge.copyWith(
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                            minHeight: 200,
-                            decoration: ShadDecoration(
-                              border: ShadBorder.all(color: AppColors.grey),
-                              secondaryFocusedBorder: ShadBorder.all(
-                                color: Colors.transparent,
-                              ),
-                            ),
+                          padding: EdgeInsets.symmetric(vertical: 10),
+                          child: FormField(
+                            validator: (value) {
+                              if (widget.aboutRuController.text.isEmpty) {
+                                return "valid_about_ru".tr;
+                              }
+                              return null;
+                            },
+                            builder: (field) {
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ShadTextarea(
+                                    controller: widget.aboutRuController,
+                                    placeholder: Text(
+                                      "about_ru".tr,
+                                      style: WorkSansStyle.labelLarge.copyWith(
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    minHeight: 170,
+                                    decoration: ShadDecoration(
+                                      border: ShadBorder.all(
+                                        color: AppColors.grey,
+                                      ),
+                                      secondaryFocusedBorder: ShadBorder.all(
+                                        color: Colors.transparent,
+                                      ),
+                                    ),
+                                  ),
+                                  if (field.errorText != null)
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 4),
+                                      child: Text(
+                                        field.errorText!,
+                                        style: const TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              );
+                            },
                           ),
                         ),
                       ],
@@ -108,7 +164,7 @@ class _SocialInfoFormState extends State<SocialInfoForm> {
               SizedBox(height: 20),
               BasicTextFormField(
                 controller: widget.telegramController,
-                errorText: "please enter your telegram username".tr,
+                errorText: "valid_social_networks".tr,
                 hintText: Text(
                   "Telegram",
                   style: WorkSansStyle.labelLarge.copyWith(
@@ -119,7 +175,7 @@ class _SocialInfoFormState extends State<SocialInfoForm> {
               SizedBox(height: 15),
               BasicTextFormField(
                 controller: widget.instagramController,
-                errorText: "please enter your instagram username".tr,
+                errorText: "valid_social_networks".tr,
                 hintText: Text(
                   "Instagram",
                   style: WorkSansStyle.labelLarge.copyWith(
@@ -133,7 +189,7 @@ class _SocialInfoFormState extends State<SocialInfoForm> {
               FormField<String>(
                 validator: (value) {
                   if (widget.experienceController.text.isEmpty) {
-                    return "please select your birthday".tr;
+                    return "valid_experience".tr;
                   }
                   return null;
                 },
@@ -151,7 +207,7 @@ class _SocialInfoFormState extends State<SocialInfoForm> {
                         if (picked != null) {
                           setState(() {
                             widget.experienceController.text = DateFormat(
-                              "dd-MM-yyyy",
+                              "yyyy-MM-dd",
                             ).format(picked);
                           });
                         }

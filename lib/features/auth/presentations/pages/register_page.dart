@@ -1,5 +1,7 @@
 import 'package:doctor_app/core/design_system/styles/app_colors.dart';
 import 'package:doctor_app/core/design_system/widgets/buttons.dart';
+import 'package:doctor_app/features/auth/domain/models/personal_data_form.dart';
+import 'package:doctor_app/features/auth/presentations/controller/auth_controller.dart';
 import 'package:doctor_app/features/auth/presentations/controller/register_screen_controller.dart';
 import 'package:doctor_app/features/auth/presentations/pages/widgets/personal_info_form.dart';
 import 'package:doctor_app/core/design_system/styles/text_styles.dart';
@@ -16,31 +18,28 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  // Controllers
   final RegisterScreenController registerScreenController =
       Get.find<RegisterScreenController>();
+  final AuthController authController = Get.find<AuthController>();
 
-  int page = 1; // start from 1
-  final List<String> jobRoles = [
-    'Developer',
-    'Designer',
-    'Consultant',
-    'Student',
-  ];
+  int page = 1;
+
+  // form keys
   final personalFormKey = GlobalKey<FormState>();
   final educationFormKey = GlobalKey<FormState>();
   final socialFormKey = GlobalKey<FormState>();
 
+  // TextEditingControllers
   final TextEditingController aboutUzController = TextEditingController();
   final TextEditingController aboutRuController = TextEditingController();
   final TextEditingController telegramController = TextEditingController();
   final TextEditingController instagramController = TextEditingController();
   final TextEditingController experienceController = TextEditingController();
-
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController middleNameController = TextEditingController();
   final TextEditingController birthdayController = TextEditingController();
-
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneNumberController = TextEditingController();
   final TextEditingController selectedDegreeController =
@@ -48,7 +47,38 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController selectedProfessionController =
       TextEditingController();
 
-  late PersonalFormData personalFormData;
+  PersonalFormData? personalFormData;
+
+  cleanControllers() async {
+    personalFormKey.currentState!.reset();
+    socialFormKey.currentState!.reset();
+    educationFormKey.currentState!.reset();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadUserData();
+  }
+
+  loadUserData() async {
+    await registerScreenController.getUser();
+    await Future.delayed(Durations.medium2);
+    personalFormData = registerScreenController.personalFormData.value;
+    if (personalFormData != null) {
+      firstNameController.text = personalFormData!.firstName ?? "";
+      lastNameController.text = personalFormData!.lastName ?? "";
+      middleNameController.text = personalFormData!.middleName ?? "";
+      birthdayController.text = personalFormData!.birthday ?? "";
+      aboutRuController.text = personalFormData!.aboutRu ?? "";
+      aboutUzController.text = personalFormData!.aboutUz ?? "";
+      emailController.text = personalFormData!.email ?? "";
+      phoneNumberController.text = personalFormData!.phoneNumber ?? "";
+      experienceController.text = personalFormData!.experienceForm ?? "";
+      instagramController.text = personalFormData!.instagramUsername ?? "";
+      telegramController.text = personalFormData!.telegramUsername ?? "";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +106,6 @@ class _RegisterPageState extends State<RegisterPage> {
         child: ListView(
           children: [
             const Divider(height: 1),
-
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: AnimatedSwitcher(
@@ -84,7 +113,6 @@ class _RegisterPageState extends State<RegisterPage> {
                 switchInCurve: Curves.easeOutCubic,
                 switchOutCurve: Curves.easeInCubic,
                 transitionBuilder: (child, animation) {
-                  // Slide from right
                   final slide =
                       Tween<Offset>(
                         begin: const Offset(0.1, 0), // subtle slide
@@ -96,7 +124,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       );
 
-                  // Scale a little while sliding
                   final scale = Tween<double>(begin: 0.95, end: 1).animate(
                     CurvedAnimation(
                       parent: animation,
@@ -126,7 +153,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         );
                       } else if (page == 2) {
                         return EducationInfoForm(
-                          jobRoles: jobRoles,
                           formKey: educationFormKey,
                           emailController: emailController,
                           phoneNumberController: phoneNumberController,
@@ -180,33 +206,54 @@ class _RegisterPageState extends State<RegisterPage> {
                   if (page < 3) {
                     setState(() => page++);
                   } else if (page == 3) {
-                    personalFormData = PersonalFormData(
-                      firstName: firstNameController.text,
-                      lastName: lastNameController.text,
-                      middleName: middleNameController.text,
-                      email: emailController.text,
-                      birthday: birthdayController.text,
-                      experience: registerScreenController.calculateExperience(
-                        experienceController.text,
-                      ),
-                      phoneNumber: phoneNumberController.text,
-                      degree: selectedDegreeController.text,
-                      profession: selectedProfessionController.text,
-                      aboutUz: aboutUzController.text,
-                      aboutRu: aboutRuController.text,
-                      telegramUsername: telegramController.text,
-                      instagramUsername: instagramController.text,
-                    );
-                    registerScreenController.save(personalFormData);
+                    personalFormData = registerScreenController
+                        .personalFormData
+                        .value!
+                        .copyWith(
+                          firstName: firstNameController.text,
+                          lastName: lastNameController.text,
+                          middleName: middleNameController.text,
+                          email: emailController.text,
+                          birthday: birthdayController.text,
+                          experienceForm: experienceController.text,
+                          phoneNumber: phoneNumberController.text
+                              .replaceAll("+", "")
+                              .replaceAll(" ", '')
+                              .replaceAll('-', ''),
+                          degree: selectedDegreeController.text,
+                          profession: selectedProfessionController.text,
+                          aboutUz: aboutUzController.text,
+                          aboutRu: aboutRuController.text,
+                          telegramUsername: telegramController.text,
+                          instagramUsername: instagramController.text,
+                        );
+                    registerScreenController.save(personalFormData!);
+                    await authController.register();
+                    await cleanControllers();
                   }
                 },
                 width: double.infinity,
-                child: Text(
-                  page == 3 ? 'save'.tr : 'next'.tr,
-                  style: WorkSansStyle.labelLarge.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+                child: Obx(() {
+                  if (authController.isAuthorization.value) {
+                    return Center(
+                      child: SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 1,
+                        ),
+                      ),
+                    );
+                  } else {
+                    return Text(
+                      page == 3 ? 'save'.tr : 'next'.tr,
+                      style: WorkSansStyle.labelLarge.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
+                    );
+                  }
+                }),
               ),
             ),
           ],

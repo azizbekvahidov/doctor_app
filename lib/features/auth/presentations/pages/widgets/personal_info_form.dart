@@ -1,10 +1,10 @@
 import 'package:doctor_app/core/design_system/styles/text_styles.dart';
 import 'package:doctor_app/core/design_system/widgets/text_field.dart/basic_text_fields.dart';
 import 'package:doctor_app/core/design_system/widgets/text_field.dart/input_title.dart';
+import 'package:doctor_app/core/utils/formatters.dart';
 import 'package:doctor_app/features/auth/presentations/pages/widgets/profile_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 class PersonalInfoForm extends StatefulWidget {
   final GlobalKey<FormState> formKey;
@@ -40,21 +40,21 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
           InputTitle(text: "first_name".tr),
           const SizedBox(height: 8),
           BasicTextFormField(
-            errorText: "please enter your first name".tr,
+            errorText: "valid_first_name".tr,
             controller: widget.firstNameController,
           ),
           const SizedBox(height: 25),
           InputTitle(text: "last_name".tr),
           const SizedBox(height: 8),
           BasicTextFormField(
-            errorText: "please enter your last name".tr,
+            errorText: "valid_last_name".tr,
             controller: widget.lastNameController,
           ),
           const SizedBox(height: 25),
           InputTitle(text: "middle_name".tr),
           const SizedBox(height: 8),
           BasicTextFormField(
-            errorText: "please enter your last name".tr,
+            errorText: "valid_middle_name".tr,
             controller: widget.middleNameController,
           ),
           const SizedBox(height: 25),
@@ -63,7 +63,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
           FormField<String>(
             validator: (value) {
               if (widget.birthdayController.text.isEmpty) {
-                return "please select your birthday".tr;
+                return "valid_birthday".tr;
               }
               return null;
             },
@@ -80,9 +80,9 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
                     );
                     if (picked != null) {
                       setState(() {
-                        widget.birthdayController.text = DateFormat(
-                          "dd-MM-yyyy",
-                        ).format(picked);
+                        widget.birthdayController.text = DateFormatter.birthday(
+                          picked,
+                        );
                       });
                     }
                   },
@@ -91,7 +91,7 @@ class _PersonalInfoFormState extends State<PersonalInfoForm> {
                       controller: widget.birthdayController,
 
                       hintText: Text(
-                        DateFormat("dd-MM-yyyy").format(DateTime.now()),
+                        DateFormatter.birthday(DateTime.now()),
                         style: WorkSansStyle.labelLarge.copyWith(
                           fontWeight: FontWeight.w400,
                         ),

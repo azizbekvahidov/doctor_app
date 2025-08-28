@@ -5,20 +5,19 @@ import 'package:doctor_app/core/design_system/widgets/text_field.dart/basic_text
 import 'package:doctor_app/core/design_system/widgets/text_field.dart/input_title.dart';
 import 'package:doctor_app/features/auth/presentations/pages/widgets/profile_image.dart';
 import 'package:get/utils.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class EducationInfoForm extends StatefulWidget {
   final GlobalKey<FormState> formKey;
-  final List<String> jobRoles;
 
   final TextEditingController emailController;
   final TextEditingController phoneNumberController;
   final TextEditingController selectedProfessionController;
   final TextEditingController selectedDegreeController;
 
-  EducationInfoForm({
+  const EducationInfoForm({
     super.key,
     required this.formKey,
-    required this.jobRoles,
     required this.emailController,
     required this.phoneNumberController,
     required this.selectedProfessionController,
@@ -30,6 +29,40 @@ class EducationInfoForm extends StatefulWidget {
 }
 
 class _EducationInfoFormState extends State<EducationInfoForm> {
+  final maskFormatter = MaskTextInputFormatter(
+    mask: '+998 ## ###-##-##',
+    filter: {"#": RegExp(r'[0-9]')},
+  );
+
+  List<String> medicalDegreesKeys = [
+    "bachelor",
+    "master",
+    "phd",
+    "docent",
+    "professor",
+  ];
+
+  List<String> medicalProfessionsKeys = [
+    "general_practitioner",
+    "dentist",
+    "surgeon",
+    "therapist",
+    "pediatrician",
+    "cardiologist",
+    "neurologist",
+    "oncologist",
+    "orthopedist",
+    "gynecologist",
+    "urologist",
+    "dermatologist",
+    "psychiatrist",
+    "radiologist",
+    "ophthalmologist",
+    "anesthesiologist",
+    "endocrinologist",
+    "family_doctor",
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -43,8 +76,10 @@ class _EducationInfoFormState extends State<EducationInfoForm> {
           InputTitle(text: "phone_number".tr),
           const SizedBox(height: 8),
           BasicTextFormField(
-            errorText: "please enter your phone number".tr,
+            textInputType: TextInputType.phone,
+            errorText: "valid_phone_number".tr,
             controller: widget.phoneNumberController,
+            inputFormatters: [maskFormatter],
           ),
           const SizedBox(height: 25),
           InputTitle(text: "profession".tr),
@@ -60,15 +95,20 @@ class _EducationInfoFormState extends State<EducationInfoForm> {
                       closedBorder: Border.all(color: AppColors.grey),
                       expandedBorder: Border.all(color: AppColors.grey),
                     ),
-                    hintText: 'Select job role',
+                    hintText: 'select_profession'.tr,
                     initialItem:
                         widget.selectedProfessionController.text.isEmpty
                         ? null
-                        : widget.selectedProfessionController.text,
-                    items: widget.jobRoles,
+                        : widget.selectedProfessionController.text.tr,
+                    items: medicalProfessionsKeys.map((key) => key.tr).toList(),
+
                     onChanged: (value) {
                       setState(() {
-                        widget.selectedProfessionController.text = value!;
+                        final selectedKey = medicalProfessionsKeys.firstWhere(
+                          (k) => k.tr == value,
+                          orElse: () => value!,
+                        );
+                        widget.selectedProfessionController.text = selectedKey;
                       });
                     },
                   ),
@@ -85,7 +125,7 @@ class _EducationInfoFormState extends State<EducationInfoForm> {
             },
             validator: (value) {
               if (widget.selectedProfessionController.text.isEmpty) {
-                return "please select your profession role".tr;
+                return "valid_profession".tr;
               }
               return null;
             },
@@ -103,15 +143,24 @@ class _EducationInfoFormState extends State<EducationInfoForm> {
                       closedBorder: Border.all(color: AppColors.grey),
                       expandedBorder: Border.all(color: AppColors.grey),
                     ),
-                    hintText: 'Select degree',
+                    hintText: 'select_degree'.tr,
                     initialItem: widget.selectedDegreeController.text.isEmpty
                         ? null
-                        : widget.selectedDegreeController.text,
-                    items: widget.jobRoles,
+                        : widget
+                              .selectedDegreeController
+                              .text
+                              .tr, // show translated value
+                    items: medicalDegreesKeys
+                        .map((key) => key.tr)
+                        .toList(), // show translated list
                     onChanged: (value) {
-                      print(widget.selectedDegreeController.text);
                       setState(() {
-                        widget.selectedDegreeController.text = value!;
+                        final selectedKey = medicalDegreesKeys.firstWhere(
+                          (k) => k.tr == value,
+                          orElse: () => value!,
+                        );
+                        widget.selectedDegreeController.text =
+                            selectedKey; // store the key
                       });
                     },
                   ),
@@ -128,7 +177,7 @@ class _EducationInfoFormState extends State<EducationInfoForm> {
             },
             validator: (value) {
               if (widget.selectedDegreeController.text.isEmpty) {
-                return "please select your degree".tr;
+                return "valid_degree".tr;
               }
               return null;
             },
@@ -137,7 +186,7 @@ class _EducationInfoFormState extends State<EducationInfoForm> {
           InputTitle(text: "email".tr),
           const SizedBox(height: 8),
           BasicTextFormField(
-            errorText: "please enter your email".tr,
+            errorText: "valid_email".tr,
             controller: widget.emailController,
           ),
         ],

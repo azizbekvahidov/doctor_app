@@ -17,7 +17,7 @@ class LoginPage extends GetView<AuthController> {
   final OnboardController onboardController = Get.find<OnboardController>();
 
   final maskFormatter = MaskTextInputFormatter(
-    mask: '####-####-####-##',
+    mask: '##############',
     filter: {"#": RegExp(r'[0-9]')},
   );
 

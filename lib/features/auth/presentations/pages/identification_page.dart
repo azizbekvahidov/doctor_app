@@ -1,3 +1,4 @@
+import 'package:doctor_app/core/pages/routes.dart';
 import 'package:doctor_app/core/utils/asset_finder.dart';
 import 'package:doctor_app/core/design_system/widgets/buttons.dart';
 import 'package:doctor_app/core/design_system/widgets/circle.dart';
@@ -15,6 +16,7 @@ class IdentificationPage extends GetView<AuthController> {
     return Scaffold(
       appBar: AppBar(
         leading: ShadButton.secondary(
+          onPressed: () => Navigator.of(context).pop(),
           backgroundColor: Colors.transparent,
           child: Icon(Icons.arrow_back),
         ),
@@ -34,6 +36,7 @@ class IdentificationPage extends GetView<AuthController> {
                   Column(
                     children: [
                       SvgPicture.asset(AssetFinder.icon('avatar'), height: 65),
+                      SizedBox(height: 10),
                       Text(
                         'identification_info'.tr,
                         style: WorkSansStyle.headline3.copyWith(
@@ -51,7 +54,8 @@ class IdentificationPage extends GetView<AuthController> {
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Obx(
                   () => PrimaryButton(
-                    onTap: () => controller.register(),
+                    onTap: () => controller.myIdRegister(),
+                    // onTap: () => Get.toNamed(Routes.register),
                     child: controller.isAuthorization.value
                         ? Center(
                             child: CircularProgressIndicator(
@@ -60,7 +64,7 @@ class IdentificationPage extends GetView<AuthController> {
                             ),
                           )
                         : Text(
-                            "Identification",
+                            "identification".tr,
                             style: WorkSansStyle.labelLarge.copyWith(
                               fontWeight: FontWeight.w500,
                             ),
