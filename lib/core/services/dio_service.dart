@@ -5,38 +5,27 @@ import 'package:doctor_app/core/services/secure_storage_service.dart';
 class DioService {
   static final DioService _instance = DioService._internal();
   factory DioService() => _instance;
-  DioService._internal();
+  DioService._internal() {
+    _dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) async {
+          final token = await _storage.getToken(); // always latest token
+          if (token != null && token.isNotEmpty) {
+            options.headers['Authorization'] = 'Bearer $token';
+          }
+          return handler.next(options);
+        },
+        onError: (DioException e, handler) {
+          // Here you could refresh token / log out
+          return handler.next(e);
+        },
+      ),
+    );
+  }
 
-  final Dio _dio = Dio(
-    BaseOptions(
-      baseUrl: ApiConstants.mainUrl,
-      connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 10),
-    ),
-  );
+  final Dio _dio = Dio(BaseOptions(baseUrl: ApiConstants.mainUrl));
 
   final SecureStorageService _storage = SecureStorageService();
 
-  Dio get dio {
-    // Attach interceptor once
-    if (_dio.interceptors.isEmpty) {
-      _dio.interceptors.add(
-        InterceptorsWrapper(
-          onRequest: (options, handler) async {
-            // Always fetch latest token
-            final token = await _storage.getToken();
-            if (token != null) {
-              options.headers['Authorization'] = 'Bearer $token';
-            }
-            return handler.next(options);
-          },
-          onError: (DioException e, handler) {
-            // Handle token expiry, logging, etc.
-            return handler.next(e);
-          },
-        ),
-      );
-    }
-    return _dio;
-  }
+  Dio get dio => _dio;
 }
