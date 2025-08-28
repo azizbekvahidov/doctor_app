@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         scaffoldMessengerKey: Notifier.messengerKey, // attach here
         debugShowCheckedModeBanner: false,
         translations: AppTranslations(),
-        locale: Locale(onboardController.selectedLang.value),
+        locale: Locale(onboardController.selectedLang.value ?? "uz"),
         fallbackLocale: const Locale("en"),
         initialRoute: AppPages.initial,
         getPages: AppPages.pages,
