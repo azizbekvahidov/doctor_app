@@ -8,7 +8,7 @@ import '../../../core/pages/routes.dart';
 import '../../auth/domain/models/user.dart';
 
 class OnboardController extends GetxController {
-  RxString selectedLang = RxString("uz");
+  Rxn<String> selectedLang = Rxn(null);
   final SecureStorageService _storage = SecureStorageService();
   var isLoading = false.obs;
   var isLangSelected = false.obs;
@@ -18,7 +18,6 @@ class OnboardController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
     getUser();
   }
 

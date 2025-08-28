@@ -1,78 +1,45 @@
+import 'package:doctor_app/core/services/secure_storage_service.dart';
+import 'package:doctor_app/core/utils/formatters.dart';
+import 'package:doctor_app/features/auth/domain/models/personal_data_form.dart';
+import 'package:doctor_app/features/auth/domain/models/user.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-
-class PersonalFormData {
-  final String firstName;
-  final String lastName;
-  final String middleName;
-  final String email;
-  final String birthday;
-  final int experience;
-  final String phoneNumber;
-  final String degree;
-  final String profession;
-  final String aboutUz;
-  final String aboutRu;
-  final String telegramUsername;
-  final String instagramUsername;
-
-  PersonalFormData({
-    required this.firstName,
-    required this.lastName,
-    required this.middleName,
-    required this.email,
-    required this.birthday,
-    required this.experience,
-    required this.phoneNumber,
-    required this.degree,
-    required this.profession,
-    required this.aboutUz,
-    required this.aboutRu,
-    required this.telegramUsername,
-    required this.instagramUsername,
-  });
-
-  Map<String, dynamic> toJson() => {
-    "first_name": firstName,
-    "last_name": lastName,
-    "middle_name": middleName,
-    "email": email,
-    "birthday": birthday,
-    "experience": experience,
-    "phone_number": phoneNumber,
-    "degree": degree,
-    "profession": profession,
-    "about_uz": aboutUz,
-    "about_ru": aboutRu,
-    "telegram_username": telegramUsername,
-    "instagram_username": instagramUsername,
-  };
-}
 
 class RegisterScreenController extends GetxController {
-  Rxn<PersonalFormData> personalFomrData = Rxn<PersonalFormData>(null);
-  save(PersonalFormData personalFormData) {
-    personalFomrData.value = personalFormData;
+  Rxn<PersonalFormData> personalFormData = Rxn<PersonalFormData>();
+
+  final storage = SecureStorageService();
+
+  @override
+  void onInit() {
+    super.onInit();
+    personalFormData.value = PersonalFormData(); // 👈 always initialized
   }
 
-  int calculateExperience(String input) {
-    if (input.isEmpty) return 0;
+  void save(PersonalFormData data) {
+    personalFormData.value = data;
+  }
 
-    try {
-      final startDate = DateFormat("dd-MM-yyyy").parse(input);
-      final now = DateTime.now();
+  getUser() async {
+    User? user = await storage.getUser();
 
-      int years = now.year - startDate.year;
-
-      // Adjust if "anniversary" not yet reached this year
-      if (now.month < startDate.month ||
-          (now.month == startDate.month && now.day < startDate.day)) {
-        years--;
-      }
-
-      return years < 0 ? 0 : years; // avoid negatives
-    } catch (e) {
-      return 0; // fallback if parsing fails
+    if (user != null) {
+      personalFormData.value = PersonalFormData(
+        firstName: user.firstName,
+        lastName: user.lastName,
+        middleName: user.middleName,
+        birthday: DateFormatter.birthday(user.birthdate!),
+        phoneNumber: user.phone,
+        email: user.email,
+        aboutRu: user.description!.ru,
+        aboutUz: user.description!.uz,
+        experienceForm: user.settings!.experienceFrom,
+        instagramUsername: user.socialNetwork != null
+            ? user.socialNetwork!.instagram
+            : "",
+        telegramUsername: user.socialNetwork != null
+            ? user.socialNetwork!.telegram
+            : "",
+      );
     }
   }
 }

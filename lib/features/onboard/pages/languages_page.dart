@@ -1,5 +1,6 @@
 import 'package:doctor_app/core/pages/routes.dart';
 import 'package:doctor_app/core/design_system/widgets/buttons.dart';
+import 'package:doctor_app/core/utils/notifier.dart';
 import 'package:doctor_app/features/onboard/controller/onboard_controller.dart';
 import 'package:doctor_app/core/design_system/styles/text_styles.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,19 @@ class LanguagesPage extends GetView<OnboardController> {
               ),
               Obx(() {
                 return PrimaryButton(
-                  onTap: () => Get.toNamed(Routes.login),
+                  onTap: () {
+                    if (controller.selectedLang.value == null) {
+                      Notifier.showSnackbar(
+                        duration: Durations.extralong1,
+                        content: Text(
+                          "Iltimos tilni tanlang!",
+                          style: WorkSansStyle.label.copyWith(fontSize: 15),
+                        ),
+                      );
+                      return;
+                    }
+                    Get.toNamed(Routes.login);
+                  },
 
                   child: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 250),

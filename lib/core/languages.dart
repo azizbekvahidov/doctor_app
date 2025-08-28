@@ -1,4 +1,4 @@
-import 'package:get/get.dart';
+import 'package:get/get_navigation/src/root/internacionalization.dart';
 
 class AppTranslations extends Translations {
   @override
@@ -6,13 +6,14 @@ class AppTranslations extends Translations {
     'ru_RU': {
       'hello': 'Привет',
       'login': 'Войти',
-      'logout': 'Выйти',
+      'logout': 'Выход из системы',
       'next': 'Дальше',
       'dismiss': 'Отмена',
       'new_ann': 'Новые заказы',
       'active_ann': 'Активные заказы',
       'first_name': "Ваше имя",
       'last_name': "Ваша фамилия",
+      'personal_info': "Личная информация",
       'middle_name': "Отчество",
       'phone_number': "Ваш номер телефона",
       'email': "Ваша почта",
@@ -23,18 +24,74 @@ class AppTranslations extends Translations {
       'about_uz': "О себе на узбекском языке",
       'about_ru': "О себе на русском языке",
       'social_networks': "Социальные сети",
+      'select profession': 'Выберите специальность',
+      'select_degree': 'Выберите степень',
       'identification_info': 'Сделайте селфи и пройдите идентификацию',
+      'identification': 'Идентификация',
+      'register_success': 'Вы успешно зарегистрировались в системе.',
+
+      // --- Validation texts ---
+      'valid_first_name': 'Пожалуйста, введите ваше имя',
+      'valid_last_name': 'Пожалуйста, введите вашу фамилию',
+      'valid_middle_name': 'Пожалуйста, введите отчество',
+      'valid_phone_number': 'Пожалуйста, введите ваш номер телефона',
+      'valid_email': 'Пожалуйста, введите вашу почту',
+      'valid_birthday': 'Пожалуйста, введите дату рождения',
+      'valid_experience': 'Пожалуйста, введите ваш опыт',
+      'valid_degree': 'Пожалуйста, выберите вашу степень',
+      'valid_profession': 'Пожалуйста, выберите вашу специальность',
+      'valid_about_uz':
+          'Пожалуйста, введите информацию о себе на узбекском языке',
+      'valid_about_ru':
+          'Пожалуйста, введите информацию о себе на русском языке',
+      'valid_social_networks':
+          'Пожалуйста, введите информацию о социальных сетях',
+      'valid_language': 'Пожалуйста, выберите язык',
+      'valid_pnfl': 'Пожалуйста, введите ваш JSHSHR',
+
+      // --- Medical Degrees ---
+      'bachelor': 'Бакалавр',
+      'master': 'Магистр',
+      'phd': 'Кандидат наук (PhD)',
+      'docent': 'Доцент',
+      'professor': 'Профессор',
+      'resident': 'Ординатор',
+      'intern': 'Интерн',
+      'specialist': 'Специалист',
+      'doctor_sciences': 'Доктор наук',
+
+      // --- Medical Professions ---
+      'general_practitioner': 'Терапевт',
+      'dentist': 'Стоматолог',
+      'surgeon': 'Хирург',
+      'pediatrician': 'Педиатр',
+      'cardiologist': 'Кардиолог',
+      'neurologist': 'Невролог',
+      'oncologist': 'Онколог',
+      'orthopedist': 'Ортопед',
+      'gynecologist': 'Гинеколог',
+      'urologist': 'Уролог',
+      'dermatologist': 'Дерматолог',
+      'psychiatrist': 'Психиатр',
+      'radiologist': 'Рентгенолог',
+      'ophthalmologist': 'Офтальмолог',
+      'anesthesiologist': 'Анестезиолог',
+      'endocrinologist': 'Эндокринолог',
+      'family_doctor': 'Семейный врач',
     },
     'uz_UZ': {
+      'select_profession': 'Iltimos yo\'nalishingizni tanlang',
+      'select_degree': 'Iltimos darajangizni tanlang',
       'hello': 'Salom',
       'login': 'Kirish',
-      'logout': 'Chiqish',
+      'logout': 'Tizimdan chiqildi',
       'next': 'Davom etish',
       'dismiss': 'Bekor qilish',
       'new_ann': 'Yangi buyurtmalar',
       'active_ann': 'Aktiv buyurtmalar',
       'first_name': "Ismingiz",
       'last_name': "Familiyangiz",
+      'personal_info': "Shaxsiy ma'lumotlar",
       'middle_name': "Otangizning ismi",
       'phone_number': "Telefon raqamingiz",
       'email': "Emailingiz",
@@ -46,6 +103,57 @@ class AppTranslations extends Translations {
       'about_ru': "Rus tilida o'zingiz haqingizda",
       'social_networks': "Ijtimoiy tarmoqlar",
       'identification_info': 'Selfi oling va identifikatsiyadan o\'ting',
+      'identification': 'Identifikatsiya',
+      'register_success': 'Siz tizimdan muvaffaqiyatli ro\'yxatdan o\'tdingiz.',
+
+      // --- Validation texts ---
+      'valid_first_name': 'Iltimos ismingizni kiriting',
+      'valid_last_name': 'Iltimos familiyangizni kiriting',
+      'valid_middle_name': 'Iltimos otangizning ismini kiriting',
+      'valid_phone_number': 'Iltimos telefon raqamingizni kiriting',
+      'valid_email': 'Iltimos emailingizni kiriting',
+      'valid_birthday': 'Iltimos tug\'ilgan kuningizni kiriting',
+      'valid_experience': 'Iltimos tajribangizni kiriting',
+      'valid_degree': 'Iltimos darajangizni tanlang',
+      'valid_profession': 'Iltimos yo\'nalishingizni tanlang',
+      'valid_about_uz':
+          'Iltimos o\'zbek tilida o\'zingiz haqingizda ma\'lumot kiriting',
+      'valid_about_ru':
+          'Iltimos rus tilida o\'zingiz haqingizda ma\'lumot kiriting',
+      'valid_social_networks':
+          'Iltimos ijtimoiy tarmoqlar haqingizda ma\'lumot kiriting',
+      'valid_language': 'Iltimos tilni tanlang',
+      'valid_pnfl': 'Iltimos JSHSHR ni kiriting!',
+
+      // --- Medical Degrees ---
+      'bachelor': 'Bakalavr',
+      'master': 'Magistr',
+      'phd': 'PhD (Falsafa doktori)',
+      'docent': 'Dotsent',
+      'professor': 'Professor',
+      'resident': 'Rezident',
+      'intern': 'Intern',
+      'specialist': 'Mutaxassis',
+      'doctor_sciences': 'Fan doktori',
+
+      // --- Medical Professions ---
+      'general_practitioner': 'Terapevt',
+      'dentist': 'Stomatolog',
+      'surgeon': 'Jarroh',
+      'pediatrician': 'Pediatr',
+      'cardiologist': 'Kardiolog',
+      'neurologist': 'Nevrolog',
+      'oncologist': 'Onkolog',
+      'orthopedist': 'Ortoped',
+      'gynecologist': 'Ginekolog',
+      'urologist': 'Urolog',
+      'dermatologist': 'Dermatolog',
+      'psychiatrist': 'Psixiatr',
+      'radiologist': 'Rentgenolog',
+      'ophthalmologist': 'Oftalmolog',
+      'anesthesiologist': 'Anesteziolog',
+      'endocrinologist': 'Endokrinolog',
+      'family_doctor': 'Oilaviy shifokor',
     },
   };
 }
