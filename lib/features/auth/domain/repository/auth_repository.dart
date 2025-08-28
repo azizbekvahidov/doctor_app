@@ -1,7 +1,7 @@
-import 'package:doctor_app/features/auth/domain/models/login_data.dart';
+import 'package:doctor_app/features/auth/domain/models/auth_data.dart';
 
 abstract class AuthRepository {
-  Future<LoginData?> login(String pinfl);
-  Future<void> register();
+  Future<AuthData?> login(String pinfl);
+  Future<bool> register(Map<String, dynamic> personalData);
   Future<void> logout();
 }
