@@ -69,7 +69,7 @@ class AuthController extends GetxController {
 
   Future<void> login() async {
     try {
-      String pinfl = pinflController.text.trim().replaceAll('-', '');
+      String pinfl = pinflController.text.trim();
 
       if (pinfl.isEmpty) {
         isTextFieldEmpty(true);
@@ -77,7 +77,7 @@ class AuthController extends GetxController {
         isTextFieldEmpty(false);
         return;
       }
-      isAuthorization(true);
+      isAuthorization.value = true;
       await Future.delayed(Durations.extralong1);
       AuthData? loginData = await authRepository.login(pinfl);
 
@@ -101,6 +101,9 @@ class AuthController extends GetxController {
       if (registeredAt.isEmpty) {
         Get.toNamed(Routes.identification);
         return;
+      } else {
+        isAuthorization.value = false;
+        myIdRegister(isRegisteredAt: true);
       }
 
       onboardController.getUser();
@@ -109,12 +112,12 @@ class AuthController extends GetxController {
     } catch (e) {
       LogHelper.error("Error:$e");
     } finally {
-      isAuthorization(false);
+      isAuthorization.value = false;
     }
   }
 
   Future<void> register() async {
-    isAuthorization(true);
+    isAuthorization.value = true;
     final RegisterScreenController registerScreenController =
         Get.find<RegisterScreenController>();
 
@@ -142,7 +145,8 @@ class AuthController extends GetxController {
           backgroundColor: Colors.green,
           content: Text("register_success".tr, style: WorkSansStyle.label),
         );
-        isAuthorization(false);
+        isAuthorization.value = false;
+        await onboardController.getUser();
         await Future.delayed(Duration(milliseconds: 2250));
         await Get.toNamed(Routes.onboard);
       }
@@ -151,8 +155,8 @@ class AuthController extends GetxController {
     }
   }
 
-  Future<void> myIdRegister() async {
-    await MyIdClient.start(
+  Future<void> myIdRegister({bool isRegisteredAt = false}) async {
+    MyIdResult result = await MyIdClient.start(
       config: MyIdConfig(
         environment: MyIdEnvironment.DEBUG,
         clientId: '',
@@ -160,10 +164,22 @@ class AuthController extends GetxController {
       ),
       iosAppearance: MyIdIOSAppearance(),
     );
-    await Get.toNamed(Routes.register);
+    print("RES:${result}");
+    LogHelper.error("BASE: ${result.base64}");
+    LogHelper.error("Code: ${result.code}");
+    LogHelper.error("Comparison: ${result.comparison}");
+
+    if (result.base64 != null) {
+      if (isRegisteredAt) {
+        await Get.toNamed(Routes.main);
+      } else {
+        await Get.toNamed(Routes.register);
+      }
+    }
   }
 
   Future<void> logout() async {
+    isAuthorization.value = false;
     await secureStorageService.deleteToken();
     await secureStorageService.deleteUser();
 

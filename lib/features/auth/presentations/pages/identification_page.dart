@@ -1,4 +1,3 @@
-import 'package:doctor_app/core/pages/routes.dart';
 import 'package:doctor_app/core/utils/asset_finder.dart';
 import 'package:doctor_app/core/design_system/widgets/buttons.dart';
 import 'package:doctor_app/core/design_system/widgets/circle.dart';
