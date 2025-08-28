@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class BasicTextField extends StatelessWidget {
@@ -7,14 +8,23 @@ class BasicTextField extends StatelessWidget {
     this.controller,
     this.hintText,
     this.enabled = true,
+    this.inputFormatters,
+    this.initialValue,
+    this.textInputType,
   });
+
   final TextEditingController? controller;
   final Widget? hintText;
   final bool enabled;
-
+  final List<TextInputFormatter>? inputFormatters;
+  final String? initialValue;
+  final TextInputType? textInputType;
   @override
   Widget build(BuildContext context) {
     return ShadInput(
+      keyboardType: textInputType,
+      initialValue: initialValue,
+      inputFormatters: inputFormatters,
       enabled: enabled,
       controller: controller,
       padding: EdgeInsets.symmetric(vertical: 14, horizontal: 10),
@@ -43,12 +53,17 @@ class BasicTextFormField extends StatelessWidget {
   final String errorText;
   final TextEditingController controller;
   final Widget? hintText;
-
+  final List<TextInputFormatter>? inputFormatters;
+  final String? initialValue;
+  final TextInputType? textInputType;
   const BasicTextFormField({
     super.key,
     required this.errorText,
     required this.controller,
+    this.inputFormatters,
     this.hintText,
+    this.initialValue,
+    this.textInputType,
   });
 
   @override
@@ -57,7 +72,13 @@ class BasicTextFormField extends StatelessWidget {
       builder: (field) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          BasicTextField(controller: controller, hintText: hintText),
+          BasicTextField(
+            textInputType: textInputType,
+            initialValue: initialValue,
+            controller: controller,
+            hintText: hintText,
+            inputFormatters: inputFormatters,
+          ),
           if (field.errorText != null)
             Padding(
               padding: const EdgeInsets.only(top: 4),
