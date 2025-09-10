@@ -1,3 +1,4 @@
+import 'package:doctor_app/features/main/contents/archive_content.dart';
 import 'package:flutter/material.dart';
 
 import 'contents/home_content.dart';
@@ -14,6 +15,7 @@ class _MainPageState extends State<MainPage> {
 
   final List<Widget> pages = [
     HomeContent(),
+    ArchiveContent(),
     const Center(child: Text("Search Page")),
     const Center(child: Text("Profile Page")),
   ];
@@ -34,3 +36,5 @@ class _MainPageState extends State<MainPage> {
     );
   }
 }
+
+
