@@ -1,10 +1,16 @@
+import 'package:doctor_app/core/bindings/app_bindings.dart';
 import 'package:doctor_app/features/auth/presentations/pages/identification_page.dart';
 import 'package:doctor_app/features/auth/presentations/pages/login_page.dart';
 import 'package:doctor_app/features/auth/presentations/pages/register_page.dart';
-import 'package:doctor_app/features/main/main_page.dart';
+import 'package:doctor_app/features/detail/presentation/detail_page.dart';
+import 'package:doctor_app/features/main/bindings.dart';
+import 'package:doctor_app/features/main/presentation/main_page.dart';
 import 'package:doctor_app/features/onboard/bindings.dart';
 import 'package:doctor_app/features/onboard/pages/languages_page.dart';
 import 'package:doctor_app/features/onboard/pages/onboard_page.dart';
+import 'package:doctor_app/features/profile/presentation/create_work_schedule_page.dart';
+import 'package:doctor_app/features/profile/presentation/documents_page.dart';
+import 'package:doctor_app/features/profile/presentation/work_info_page.dart';
 import 'package:get/get.dart';
 
 import 'routes.dart';
@@ -22,7 +28,7 @@ class AppPages {
     GetPage(
       name: Routes.onboard,
       page: () => OnboardPage(),
-      binding: OnBoardBindings(),
+      binding: AppBindings(),
     ),
     GetPage(
       name: Routes.lang,
@@ -34,6 +40,7 @@ class AppPages {
     GetPage(
       name: Routes.main,
       page: () => MainPage(),
+      binding: MainPageBindings(),
       transition: Transition.zoom,
       transitionDuration: const Duration(milliseconds: 600),
     ),
@@ -48,6 +55,30 @@ class AppPages {
       name: Routes.register,
       page: () => RegisterPage(),
       transition: Transition.leftToRight,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.detail,
+      page: () => DetailPage(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.documents,
+      page: () => DocumentsPage(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.workInfo,
+      page: () => WorkInfoPage(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.createWorkSchedule,
+      page: () => CreateWorkSchedulePage(),
+      transition: Transition.rightToLeft,
       transitionDuration: const Duration(milliseconds: 400),
     ),
   ];

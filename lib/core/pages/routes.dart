@@ -4,5 +4,9 @@ class Routes {
   static const String lang = '/lang';
   static const String main = '/main';
   static const String identification = '/identification',
-      register = '/register';
+      register = '/register',
+      detail = '/detail',
+      documents = '/documents',
+      workInfo = '/work-info',
+      createWorkSchedule = '/create-work-schedule';
 }
