@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 class Notifier {
   static final GlobalKey<ScaffoldMessengerState> messengerKey =
       GlobalKey<ScaffoldMessengerState>();
+
   static showSnackbar({
     Duration duration = const Duration(milliseconds: 600),
     Color backgroundColor = Colors.red,
     required Widget content,
-  }) {
+  }) async {
     messengerKey.currentState?.clearSnackBars();
     final snackBar = SnackBar(
       content: content,
