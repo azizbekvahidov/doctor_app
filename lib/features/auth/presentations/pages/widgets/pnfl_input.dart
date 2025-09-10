@@ -49,7 +49,7 @@ class PnflInput extends StatelessWidget {
                     key: const ValueKey('errorText'),
                     padding: const EdgeInsets.only(top: 6),
                     child: Text(
-                      'please enter jshshr'.tr,
+                      'valid_pnfl'.tr,
                       style: WorkSansStyle.label.copyWith(color: AppColors.red),
                     ),
                   )
