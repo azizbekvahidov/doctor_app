@@ -1,0 +1,1 @@
+enum Contents { home, archive }
