@@ -12,6 +12,7 @@ class OnboardController extends GetxController {
   final SecureStorageService _storage = SecureStorageService();
   var isLoading = false.obs;
   var isLangSelected = false.obs;
+  var loadingUser = false.obs;
 
   Rxn<User> user = Rxn(null);
 
@@ -22,10 +23,13 @@ class OnboardController extends GetxController {
   }
 
   getUser() async {
+    loadingUser.value = true;
     user.value = await _storage.getUser();
+    loadingUser.value = false;
   }
 
   Future<void> config() async {
+    isLoading.value = true;
     final saved = await _storage.getLang();
     final user = await _storage.getUser();
 
