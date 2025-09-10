@@ -54,7 +54,6 @@ class IdentificationPage extends GetView<AuthController> {
                 child: Obx(
                   () => PrimaryButton(
                     onTap: () => controller.myIdRegister(),
-                    // onTap: () => Get.toNamed(Routes.register),
                     child: controller.isAuthorization.value
                         ? Center(
                             child: CircularProgressIndicator(

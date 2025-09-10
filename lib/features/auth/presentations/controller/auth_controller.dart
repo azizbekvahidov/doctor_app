@@ -10,12 +10,14 @@ import 'package:doctor_app/features/auth/presentations/controller/register_scree
 import 'package:doctor_app/features/onboard/controller/onboard_controller.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:myid/enums.dart';
 import 'package:myid/myid.dart';
 import 'package:myid/myid_config.dart';
 
 import '../../../../core/design_system/styles/text_styles.dart';
+import '../../domain/models/user.dart';
 
 // --- Medical Degrees ---
 Map<String, dynamic> degrees = {
@@ -56,16 +58,28 @@ Map<String, dynamic> professions = {
 
 class AuthController extends GetxController {
   final AuthRepository authRepository;
-  final SecureStorageService secureStorageService = SecureStorageService();
-  final OnboardController onboardController = Get.find<OnboardController>();
 
   AuthController(this.authRepository);
 
+  final SecureStorageService secureStorageService = SecureStorageService();
+  final OnboardController onboardController = Get.find<OnboardController>();
   final TextEditingController pinflController = TextEditingController();
 
+  // Obx variables
   var isAuthorization = false.obs;
   var isLangSelected = false.obs;
   var isTextFieldEmpty = false.obs;
+
+  // Normal Variables
+  User? user;
+  String? token;
+
+  @override
+  void onInit() {
+    isAuthorization.value = false;
+
+    super.onInit();
+  }
 
   Future<void> login() async {
     try {
@@ -78,10 +92,9 @@ class AuthController extends GetxController {
         return;
       }
       isAuthorization.value = true;
+      AuthData? authData = await authRepository.login(pinfl);
       await Future.delayed(Durations.extralong1);
-      AuthData? loginData = await authRepository.login(pinfl);
-
-      if (loginData == null) {
+      if (authData == null) {
         Notifier.showSnackbar(
           content: Text(
             'JSHSHR bo\'yicha ma\'lumotlar mavjud emas!',
@@ -93,26 +106,22 @@ class AuthController extends GetxController {
         );
         return;
       }
-      await secureStorageService.saveUser(loginData.user!.toRawJson());
-      await secureStorageService.saveToken(loginData.token!);
-      String registeredAt = loginData.user!.registeredAt != null
-          ? loginData.user!.registeredAt.toString()
+      token = authData.token;
+      user = authData.user;
+      await secureStorageService.saveUser(user!.toRawJson());
+      await secureStorageService.saveToken(token!);
+      String registeredAt = authData.user!.registeredAt != null
+          ? authData.user!.registeredAt.toString()
           : "";
+      isAuthorization.value = false;
       if (registeredAt.isEmpty) {
         Get.toNamed(Routes.identification);
-        return;
       } else {
-        isAuthorization.value = false;
-        myIdRegister(isRegisteredAt: true);
+        Get.toNamed(Routes.main);
+        // myIdRegister(isRegisteredAt: true);
       }
-
-      onboardController.getUser();
-      await Future.delayed(Durations.medium3);
-      await Get.offAllNamed(Routes.main);
     } catch (e) {
       LogHelper.error("Error:$e");
-    } finally {
-      isAuthorization.value = false;
     }
   }
 
@@ -140,15 +149,14 @@ class AuthController extends GetxController {
 
       final isRegistered = await authRepository.register(personalDataMap);
       if (isRegistered) {
+        isAuthorization.value = false;
         Notifier.showSnackbar(
           duration: Duration(seconds: 2),
           backgroundColor: Colors.green,
           content: Text("register_success".tr, style: WorkSansStyle.label),
         );
-        isAuthorization.value = false;
-        await onboardController.getUser();
         await Future.delayed(Duration(milliseconds: 2250));
-        await Get.toNamed(Routes.onboard);
+        await Get.offAllNamed(Routes.onboard);
       }
     } catch (e) {
       LogHelper.error(e.toString());
@@ -156,25 +164,38 @@ class AuthController extends GetxController {
   }
 
   Future<void> myIdRegister({bool isRegisteredAt = false}) async {
-    MyIdResult result = await MyIdClient.start(
-      config: MyIdConfig(
-        environment: MyIdEnvironment.DEBUG,
-        clientId: '',
-        entryType: MyIdEntryType.FACE_DETECTION,
-      ),
-      iosAppearance: MyIdIOSAppearance(),
-    );
-    print("RES:${result}");
-    LogHelper.error("BASE: ${result.base64}");
-    LogHelper.error("Code: ${result.code}");
-    LogHelper.error("Comparison: ${result.comparison}");
-
-    if (result.base64 != null) {
-      if (isRegisteredAt) {
-        await Get.toNamed(Routes.main);
-      } else {
-        await Get.toNamed(Routes.register);
+    isAuthorization.value = false;
+    try {
+      MyIdResult result = await MyIdClient.start(
+        config: MyIdConfig(
+          environment: MyIdEnvironment.DEBUG,
+          clientId: '',
+          entryType: MyIdEntryType.FACE_DETECTION,
+        ),
+        iosAppearance: MyIdIOSAppearance(),
+      );
+      LogHelper.warning("BASE64: ${result.base64}");
+      LogHelper.warning("CODE: ${result.code}");
+      LogHelper.warning("COMP: ${result.comparison}");
+      if (result.code == null ||
+          result.code == "CANCELLED" ||
+          result.code == "USER_CANCELLED") {
+        return;
       }
+
+      if (result.base64 != null) {
+        if (isRegisteredAt) {
+          await Get.toNamed(Routes.onboard);
+        } else {
+          await Get.toNamed(Routes.register);
+        }
+      } else {
+        LogHelper.error("Face detection failed with code: ${result.code}");
+      }
+    } on PlatformException catch (e) {
+      LogHelper.warning("ERROR: ${e.toString()}");
+    } catch (e) {
+      LogHelper.error(e.toString());
     }
   }
 
@@ -182,19 +203,17 @@ class AuthController extends GetxController {
     isAuthorization.value = false;
     await secureStorageService.deleteToken();
     await secureStorageService.deleteUser();
-
-    Get.offAllNamed(Routes.onboard)?.then((value) {
-      Notifier.showSnackbar(
-        content: Text(
-          'logout'.tr,
-          style: WorkSansStyle.titleSmall.copyWith(
-            fontWeight: FontWeight.w500,
-            fontSize: 15,
-          ),
+    Notifier.showSnackbar(
+      content: Text(
+        'logout'.tr,
+        style: WorkSansStyle.titleSmall.copyWith(
+          fontWeight: FontWeight.w500,
+          fontSize: 15,
         ),
-        backgroundColor: Colors.green,
-        duration: Duration(milliseconds: 1500),
-      );
-    });
+      ),
+      backgroundColor: Colors.green,
+      duration: Duration(milliseconds: 1500),
+    );
+    Get.offAllNamed(Routes.login);
   }
 }

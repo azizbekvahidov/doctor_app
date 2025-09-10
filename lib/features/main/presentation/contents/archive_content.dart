@@ -1,9 +1,11 @@
 import 'package:doctor_app/core/design_system/styles/app_colors.dart';
 import 'package:doctor_app/core/design_system/styles/text_styles.dart';
+import 'package:doctor_app/core/enums/contents.dart';
+import 'package:doctor_app/features/main/presentation/controller/main_page_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ArchiveContent extends StatelessWidget {
+class ArchiveContent extends GetView<MainPageController> {
   const ArchiveContent({super.key});
 
   @override
@@ -11,7 +13,7 @@ class ArchiveContent extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => controller.setContent(Contents.home),
           icon: Icon(Icons.arrow_back),
         ),
         centerTitle: true,

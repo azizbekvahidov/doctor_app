@@ -1,9 +1,10 @@
+import 'package:doctor_app/core/design_system/styles/text_styles.dart';
+import 'package:doctor_app/core/design_system/widgets/buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:get/utils.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
-import '../../../core/design_system/widgets/buttons.dart';
-import '../../../core/design_system/styles/text_styles.dart';
+
 
 class NewCard extends StatelessWidget {
   const NewCard({super.key});

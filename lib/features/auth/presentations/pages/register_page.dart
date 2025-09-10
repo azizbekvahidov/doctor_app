@@ -229,7 +229,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         );
                     registerScreenController.save(personalFormData!);
                     await authController.register();
-                    await cleanControllers();
                   }
                 },
                 width: double.infinity,

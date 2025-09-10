@@ -1,7 +1,6 @@
+import 'package:doctor_app/core/design_system/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
-
-import '../../../core/design_system/styles/text_styles.dart';
 
 class ActiveCard extends StatelessWidget {
   const ActiveCard({super.key, this.onClick});
@@ -20,7 +19,7 @@ class ActiveCard extends StatelessWidget {
           padding: EdgeInsets.all(10),
           width: 300,
           height: double.infinity,
-         
+
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

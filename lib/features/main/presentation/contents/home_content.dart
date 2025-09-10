@@ -1,5 +1,6 @@
 import 'package:doctor_app/core/pages/routes.dart';
-import 'package:doctor_app/features/main/widgets/header.dart';
+import 'package:doctor_app/features/main/presentation/widgets/header.dart';
+
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/utils.dart';
