@@ -26,10 +26,9 @@ class DocumentBox extends StatelessWidget {
           ),
         ),
 
-        // Close button on border
         Positioned(
-          top: -12, // half outside
-          right: -12, // half outside
+          top: -12,
+          right: -12,
           child: Material(
             color: Colors.white,
             shape: const CircleBorder(),

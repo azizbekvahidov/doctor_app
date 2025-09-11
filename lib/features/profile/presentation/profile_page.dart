@@ -7,7 +7,6 @@ import 'package:doctor_app/core/design_system/widgets/buttons.dart';
 import 'package:doctor_app/core/design_system/widgets/circle.dart';
 import 'package:doctor_app/core/utils/asset_finder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/utils.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});

@@ -5,8 +5,6 @@ import 'package:doctor_app/core/utils/asset_finder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_utils/src/extensions/export.dart';
 
 class WorkInfoPage extends StatelessWidget {
   const WorkInfoPage({super.key});
@@ -94,17 +92,26 @@ class WorkInfoPage extends StatelessWidget {
                               // Header row
                               TableRow(
                                 children: [
-                                  Text("Дни", style: WorkSansStyle.body),
-                                  Center(
-                                    child: Text(
-                                      "Часы",
-                                      style: WorkSansStyle.body,
+                                  Text(
+                                    "day".tr,
+                                    style: WorkSansStyle.body.copyWith(
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                   Center(
                                     child: Text(
-                                      "Обед",
-                                      style: WorkSansStyle.body,
+                                      "hour".tr,
+                                      style: WorkSansStyle.body.copyWith(
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      "lunch".tr,
+                                      style: WorkSansStyle.body.copyWith(
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
                                   ),
                                 ],

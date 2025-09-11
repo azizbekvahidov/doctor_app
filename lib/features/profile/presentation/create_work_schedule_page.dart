@@ -1,16 +1,25 @@
+import 'dart:async';
+
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:doctor_app/core/design_system/styles/app_colors.dart';
 import 'package:doctor_app/core/design_system/styles/text_styles.dart';
+import 'package:doctor_app/core/design_system/widgets/buttons.dart';
 import 'package:doctor_app/core/design_system/widgets/text_field.dart/basic_text_fields.dart';
 import 'package:doctor_app/core/design_system/widgets/text_field.dart/input_title.dart';
+import 'package:doctor_app/core/pages/routes.dart';
 import 'package:doctor_app/core/utils/asset_finder.dart';
+
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_utils/src/extensions/export.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
+import 'widgets/time_picker_button.dart';
+
 class CreateWorkSchedulePage extends StatelessWidget {
   CreateWorkSchedulePage({super.key});
-  List<String> medicalProfessionsKeys = [
+  final List<String> medicalProfessionsKeys = [
     "general_practitioner",
     "dentist",
     "surgeon",
@@ -30,6 +39,8 @@ class CreateWorkSchedulePage extends StatelessWidget {
     "endocrinologist",
     "family_doctor",
   ];
+
+  String? selectedDay;
 
   Future<void> showAddScheduleDialog(BuildContext context) async {
     String? selectedDay;
@@ -67,7 +78,7 @@ class CreateWorkSchedulePage extends StatelessWidget {
                     // Title
                     Center(
                       child: Text(
-                        "Добавить график",
+                        "add_schedule".tr,
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -79,7 +90,7 @@ class CreateWorkSchedulePage extends StatelessWidget {
                     // Dropdown
                     DropdownButtonFormField<String>(
                       value: selectedDay,
-                      hint: const Text("select day"),
+                      hint: Text("select_weekday".tr),
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
@@ -96,7 +107,7 @@ class CreateWorkSchedulePage extends StatelessWidget {
 
                     const SizedBox(height: 20),
                     Text(
-                      "Время работы",
+                      "opening_hours".tr,
                       style: TextStyle(color: Colors.grey[700]),
                     ),
 
@@ -104,14 +115,14 @@ class CreateWorkSchedulePage extends StatelessWidget {
                     Row(
                       children: [
                         Expanded(
-                          child: _TimePickerButton(
+                          child: TimePickerButton(
                             label: workStart,
                             onPick: (t) => setState(() => workStart = t),
                           ),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
-                          child: _TimePickerButton(
+                          child: TimePickerButton(
                             label: workEnd,
                             onPick: (t) => setState(() => workEnd = t),
                           ),
@@ -121,7 +132,7 @@ class CreateWorkSchedulePage extends StatelessWidget {
 
                     const SizedBox(height: 20),
                     Text(
-                      "Время обеда",
+                      "lunch_time".tr,
                       style: TextStyle(color: Colors.grey[700]),
                     ),
 
@@ -129,14 +140,14 @@ class CreateWorkSchedulePage extends StatelessWidget {
                     Row(
                       children: [
                         Expanded(
-                          child: _TimePickerButton(
+                          child: TimePickerButton(
                             label: lunchStart,
                             onPick: (t) => setState(() => lunchStart = t),
                           ),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
-                          child: _TimePickerButton(
+                          child: TimePickerButton(
                             label: lunchEnd,
                             onPick: (t) => setState(() => lunchEnd = t),
                           ),
@@ -146,21 +157,13 @@ class CreateWorkSchedulePage extends StatelessWidget {
 
                     const SizedBox(height: 24),
 
-                    // Submit button
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.deepPurple,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                      ),
-                      onPressed: () {
+                    PrimaryButton(
+                      onTap: () {
                         // TODO: Handle save logic
                         Navigator.pop(context);
                       },
-                      child: const Text(
-                        "Добавить день",
+                      child: Text(
+                        "add_day".tr,
                         style: TextStyle(fontSize: 16, color: Colors.white),
                       ),
                     ),
@@ -177,6 +180,7 @@ class CreateWorkSchedulePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.white,
       appBar: AppBar(
         title: Text("add_work_place".tr),
@@ -227,10 +231,10 @@ class CreateWorkSchedulePage extends StatelessWidget {
                       );
                     },
                     validator: (value) {
-                      // if (widget.selectedProfessionController.text.isEmpty) {
-                      //   return "valid_profession".tr;
-                      // }
-                      // return null;
+                      if (selectedDay == null) {
+                        return "valid_weekday".tr;
+                      }
+                      return null;
                     },
                   ),
                 ),
@@ -245,7 +249,7 @@ class CreateWorkSchedulePage extends StatelessWidget {
                     width: 28,
                     height: 28,
                   ),
-                  onTap: () {},
+                  onTap: () => Get.toNamed(Routes.createWorkPlace),
                 ),
               ],
             ),
@@ -310,9 +314,13 @@ class CreateWorkSchedulePage extends StatelessWidget {
                     // Header row
                     TableRow(
                       children: [
-                        Text("Дни", style: WorkSansStyle.body),
-                        Center(child: Text("Часы", style: WorkSansStyle.body)),
-                        Center(child: Text("Обед", style: WorkSansStyle.body)),
+                        Text("day".tr, style: WorkSansStyle.body),
+                        Center(
+                          child: Text("hour".tr, style: WorkSansStyle.body),
+                        ),
+                        Center(
+                          child: Text("lunch".tr, style: WorkSansStyle.body),
+                        ),
                       ],
                     ),
 
@@ -376,37 +384,6 @@ class CreateWorkSchedulePage extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _TimePickerButton extends StatelessWidget {
-  final TimeOfDay? label;
-  final ValueChanged<TimeOfDay> onPick;
-
-  const _TimePickerButton({required this.label, required this.onPick, Key? key})
-    : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return OutlinedButton.icon(
-      icon: const Icon(Icons.access_time, size: 18),
-      style: OutlinedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        side: const BorderSide(color: Colors.black54),
-      ),
-      onPressed: () async {
-        final picked = await showTimePicker(
-          context: context,
-          initialTime: label ?? TimeOfDay.now(),
-        );
-        if (picked != null) onPick(picked);
-      },
-      label: Text(
-        label != null ? label!.format(context) : "00:00",
-        style: const TextStyle(fontSize: 14, color: Colors.black),
       ),
     );
   }

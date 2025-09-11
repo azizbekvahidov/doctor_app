@@ -1,4 +1,3 @@
-import 'package:doctor_app/core/design_system/styles/app_colors.dart';
 import 'package:doctor_app/core/design_system/styles/text_styles.dart';
 import 'package:doctor_app/features/profile/presentation/widgets/document_box.dart';
 import 'package:flutter/material.dart';
