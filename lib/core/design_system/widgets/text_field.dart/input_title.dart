@@ -11,7 +11,7 @@ class InputTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: WorkSansStyle.label.copyWith(color: AppColors.grey),
+      style: WorkSansStyle.label.copyWith(color: AppColors.subtitleSecond),
     );
   }
 }
