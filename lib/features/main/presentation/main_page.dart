@@ -1,13 +1,6 @@
 import 'package:doctor_app/features/profile/presentation/profile_page.dart';
 import 'package:flutter/material.dart';
 
-import 'contents/archive_content.dart';
-import 'contents/home_content.dart';
-import 'contents/main_content.dart';
-import 'package:flutter/material.dart';
-
-import 'contents/archive_content.dart';
-import 'contents/home_content.dart';
 import 'contents/main_content.dart';
 
 class MainPage extends StatefulWidget {

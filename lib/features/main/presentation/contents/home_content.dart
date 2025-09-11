@@ -3,7 +3,6 @@ import 'package:doctor_app/features/main/presentation/widgets/header.dart';
 
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:get/utils.dart';
 
 import '../widgets/active_card.dart';
 import '../widgets/announcement_list.dart';

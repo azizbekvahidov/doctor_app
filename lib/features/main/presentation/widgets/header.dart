@@ -20,9 +20,7 @@ class Header extends StatefulWidget {
 
 class _HeaderState extends State<Header> {
   final OnboardController onboardController = Get.find<OnboardController>();
-
   final AuthController authController = Get.find<AuthController>();
-
   final MainPageController mainPageController = Get.find<MainPageController>();
 
   @override

@@ -13,14 +13,15 @@ class MainContent extends GetView<MainPageController> {
     return Obx(() {
       return AnimatedSwitcher(
         duration: const Duration(milliseconds: 250),
-        transitionBuilder: (child, animation) {final offsetAnimation = Tween<Offset>(
-          begin: const Offset(1.0, 0.0), // from right
-          end: Offset.zero,
-        ).animate(animation);
-        return FadeTransition(
-          opacity: animation,
-          child: ScaleTransition(scale: animation, child: child),
-        );
+        transitionBuilder: (child, animation) {
+          Tween<Offset>(
+            begin: const Offset(1.0, 0.0),
+            end: Offset.zero,
+          ).animate(animation);
+          return FadeTransition(
+            opacity: animation,
+            child: ScaleTransition(scale: animation, child: child),
+          );
         },
         child: controller.content.value == Contents.home
             ? const HomeContent(key: ValueKey('home'))

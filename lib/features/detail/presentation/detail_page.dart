@@ -4,7 +4,7 @@ import 'package:doctor_app/core/utils/asset_finder.dart';
 import 'package:doctor_app/core/utils/formatters.dart';
 import 'package:doctor_app/features/detail/presentation/widgets/patient_row_detail_info.dart';
 import 'package:doctor_app/features/detail/presentation/widgets/section_info.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -25,8 +25,8 @@ class DetailPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        child: SvgPicture.asset(AssetFinder.icon('chat'), height: 30),
         backgroundColor: AppColors.primary,
+        child: SvgPicture.asset(AssetFinder.icon('chat'), height: 30),
       ),
       body: SafeArea(
         child: ListView(
