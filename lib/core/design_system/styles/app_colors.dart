@@ -8,5 +8,6 @@ class AppColors {
       white = Colors.white,
       subTitleDark = Color(0xFF61646B),
       subTitleLight = Color(0xFFAFB1B6),
-      surface = Color(0xFFFAFAFA);
+      surface = Color(0xFFFAFAFA),
+      subtitleSecond = Color(0xFFAFB1B6);
 }
