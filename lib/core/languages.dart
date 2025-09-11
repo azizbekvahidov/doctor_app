@@ -174,7 +174,21 @@ class AppTranslations extends Translations {
       'documents': 'Hujjatlar',
       'work_and_schedule': 'Ish joyi va jadvallari',
       'profile': 'Profil',
+
+      // work and schedule
       'add_work_place': 'Ish joyini qo\'shing',
+      'add_day': 'Kun qo\'shish',
+      'add_schedule': "Ish vaqtlarini qo'shish",
+      'select_weekday': "Hafta kunini tanlang",
+      'lunch_time': "Tushlik vaqti",
+      'opening_hours': "Ish vaqti",
+      'name_of_clinic': "Shifoxona nomi",
+      'address_of_clinic': "Shifoxona manzili",
+      'region': "Viloyat",
+      'place': "Ish joyi",
+      'schedule': "Ish jadvali",
+      'day': "Kun",
+      'hour': 'Soat', "lunch": "Tushlik",
     },
   };
 }
