@@ -8,6 +8,7 @@ import 'package:doctor_app/features/main/presentation/main_page.dart';
 import 'package:doctor_app/features/onboard/bindings.dart';
 import 'package:doctor_app/features/onboard/pages/languages_page.dart';
 import 'package:doctor_app/features/onboard/pages/onboard_page.dart';
+import 'package:doctor_app/features/profile/presentation/create_work_place_page.dart';
 import 'package:doctor_app/features/profile/presentation/create_work_schedule_page.dart';
 import 'package:doctor_app/features/profile/presentation/documents_page.dart';
 import 'package:doctor_app/features/profile/presentation/work_info_page.dart';
@@ -78,6 +79,12 @@ class AppPages {
     GetPage(
       name: Routes.createWorkSchedule,
       page: () => CreateWorkSchedulePage(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.createWorkPlace,
+      page: () => CreateWorkPlacePage(),
       transition: Transition.rightToLeft,
       transitionDuration: const Duration(milliseconds: 400),
     ),

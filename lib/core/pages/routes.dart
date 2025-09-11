@@ -8,5 +8,6 @@ class Routes {
       detail = '/detail',
       documents = '/documents',
       workInfo = '/work-info',
-      createWorkSchedule = '/create-work-schedule';
+      createWorkSchedule = '/create-work-schedule',
+      createWorkPlace = '/create-work-place';
 }
