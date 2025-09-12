@@ -11,8 +11,7 @@ import 'package:doctor_app/core/utils/asset_finder.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_utils/src/extensions/export.dart';
+
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 import 'widgets/time_picker_button.dart';
