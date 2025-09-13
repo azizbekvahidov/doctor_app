@@ -82,15 +82,25 @@ class AppTranslations extends Translations {
       'diagnosis': 'Диагноз',
       'card': 'Карта',
 
-      // profile
+      // --- Profile ---
       'documents': 'Документы',
-      'work_and_schedule': 'Место работы и графики',
+      'work_and_schedule': 'Место работы и график',
       'profile': 'Профиль',
+
+      // --- Work and Schedule ---
       'add_work_place': 'Добавить место работы',
+      'add_day': 'Добавить день',
+      'add_schedule': 'Добавить рабочие часы',
+      'select_weekday': 'Выберите день недели',
+      'lunch_time': 'Время обеда',
+      'opening_hours': 'Часы работы',
+      'name_of_clinic': 'Название клиники',
+      'address_of_clinic': 'Адрес клиники',
+      'region': 'Регион',
+      'place': 'Место работы',
+      'schedule': 'График работы',
     },
     'uz_UZ': {
-      'select_profession': 'Iltimos yo\'nalishingizni tanlang',
-      'select_degree': 'Iltimos darajangizni tanlang',
       'hello': 'Salom',
       'login': 'Kirish',
       'logout': 'Tizimdan chiqildi',
@@ -111,6 +121,8 @@ class AppTranslations extends Translations {
       'about_uz': "O'zbek tilida o'zingiz haqingizda",
       'about_ru': "Rus tilida o'zingiz haqingizda",
       'social_networks': "Ijtimoiy tarmoqlar",
+      'select_profession': 'Iltimos yo\'nalishingizni tanlang',
+      'select_degree': 'Iltimos darajangizni tanlang',
       'identification_info': 'Selfi oling va identifikatsiyadan o\'ting',
       'identification': 'Identifikatsiya',
       'register_success': 'Siz tizimdan muvaffaqiyatli ro\'yxatdan o\'tdingiz.',
@@ -164,18 +176,18 @@ class AppTranslations extends Translations {
       'endocrinologist': 'Endokrinolog',
       'family_doctor': 'Oilaviy shifokor',
 
-      // patient info
+      // --- Patient Info ---
       'patient_information': 'Bemor ma\'lumotlari',
       'analysis_data': 'Analiz natijasi',
       'diagnosis': 'Diagnos',
       'card': 'Karta',
 
-      // profile
+      // --- Profile ---
       'documents': 'Hujjatlar',
       'work_and_schedule': 'Ish joyi va jadvallari',
       'profile': 'Profil',
 
-      // work and schedule
+      // --- Work and Schedule ---
       'add_work_place': 'Ish joyini qo\'shing',
       'add_day': 'Kun qo\'shish',
       'add_schedule': "Ish vaqtlarini qo'shish",
@@ -187,8 +199,6 @@ class AppTranslations extends Translations {
       'region': "Viloyat",
       'place': "Ish joyi",
       'schedule': "Ish jadvali",
-      'day': "Kun",
-      'hour': 'Soat', "lunch": "Tushlik",
     },
   };
 }
