@@ -3,14 +3,16 @@ import 'package:doctor_app/features/auth/data/repository/auth_repository_iml.dar
 import 'package:doctor_app/features/auth/presentations/controller/auth_controller.dart';
 import 'package:doctor_app/features/auth/presentations/controller/register_screen_controller.dart';
 import 'package:doctor_app/features/onboard/controller/onboard_controller.dart';
+import 'package:doctor_app/features/profile/presentation/controllers/cabinet_controller.dart';
 import 'package:get/get.dart';
 
 class AppBindings extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut(() => OnboardController());
+    Get.lazyPut(() => CabinetController());
     Get.lazyPut(
-      () => AuthController(AuthRepositoryIml(DioService().dio)),
+      () => AuthController(AuthRepositoryIml(DioService().createDio())),
       fenix: true,
     );
     Get.lazyPut(() => RegisterScreenController(), fenix: true);

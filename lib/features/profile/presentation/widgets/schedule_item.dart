@@ -128,14 +128,14 @@ class ScheduleItem extends StatelessWidget {
                                 child: Text(
                                   day.lunch!.from != null &&
                                           day.lunch!.until != null
-                                      ? "${day.work!.from}  ${day.work!.until}"
+                                      ? "${day.lunch!.from}  ${day.lunch!.until}"
                                       : "-",
                                   style: WorkSansStyle.bodyLarge,
                                 ),
                               ),
                             ],
                           );
-                        }).toList(),
+                        }),
                       ],
                     ),
                   ],

@@ -9,5 +9,6 @@ class AppColors {
       subTitleDark = Color(0xFF61646B),
       subTitleLight = Color(0xFFAFB1B6),
       surface = Color(0xFFFAFAFA),
-      subtitleSecond = Color(0xFFAFB1B6);
+      subtitleSecond = Color(0xFFAFB1B6),
+      success = Color(0xFF28A745);
 }

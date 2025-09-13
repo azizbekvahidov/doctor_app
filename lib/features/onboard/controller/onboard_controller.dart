@@ -5,7 +5,6 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 
 import '../../../core/pages/routes.dart';
-import '../../auth/domain/models/user.dart';
 
 class OnboardController extends GetxController {
   Rxn<String> selectedLang = Rxn(null);
@@ -14,32 +13,18 @@ class OnboardController extends GetxController {
   var isLangSelected = false.obs;
   var loadingUser = false.obs;
 
-  Rxn<User> user = Rxn(null);
-
-  @override
-  void onInit() {
-    super.onInit();
-    getUser();
-  }
-
-  getUser() async {
-    loadingUser.value = true;
-    user.value = await _storage.getUser();
-    loadingUser.value = false;
-  }
-
   Future<void> config() async {
     isLoading.value = true;
-    final saved = await _storage.getLang();
+    final savedLang = await _storage.getLang();
     final user = await _storage.getUser();
 
-    if (saved == null) {
+    if (savedLang == null) {
       Get.toNamed(Routes.lang);
       isLangSelected(false);
       return;
     }
-    selectedLang.value = saved;
-    Get.updateLocale(Locale(saved));
+    selectedLang.value = savedLang;
+    Get.updateLocale(Locale(savedLang));
     isLangSelected(true);
 
     if (user == null) {

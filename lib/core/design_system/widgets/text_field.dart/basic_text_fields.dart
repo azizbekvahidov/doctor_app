@@ -11,6 +11,7 @@ class BasicTextField extends StatelessWidget {
     this.inputFormatters,
     this.initialValue,
     this.textInputType,
+    this.onChanged,
   });
 
   final TextEditingController? controller;
@@ -19,9 +20,12 @@ class BasicTextField extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final String? initialValue;
   final TextInputType? textInputType;
+  final Function(String)? onChanged;
+
   @override
   Widget build(BuildContext context) {
     return ShadInput(
+      onChanged: onChanged,
       keyboardType: textInputType,
       initialValue: initialValue,
       inputFormatters: inputFormatters,

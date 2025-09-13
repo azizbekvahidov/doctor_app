@@ -231,9 +231,11 @@ class ScheduleElement {
       );
 
   Map<String, dynamic> toJson() => {
-    "day": day,
-    "work": work?.toJson(),
-    "lunch": lunch?.toJson(),
+    "day": day!.toLowerCase(),
+    "work_from": work!.from,
+    "work_until": work!.until,
+    "lunch_from": lunch!.from,
+    "lunch_until": lunch!.until,
   };
 }
 

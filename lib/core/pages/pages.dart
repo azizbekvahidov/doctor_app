@@ -1,4 +1,3 @@
-import 'package:doctor_app/core/bindings/app_bindings.dart';
 import 'package:doctor_app/features/auth/presentations/pages/identification_page.dart';
 import 'package:doctor_app/features/auth/presentations/pages/login_page.dart';
 import 'package:doctor_app/features/auth/presentations/pages/register_page.dart';
@@ -29,7 +28,7 @@ class AppPages {
     GetPage(
       name: Routes.onboard,
       page: () => OnboardPage(),
-      binding: AppBindings(),
+      binding: OnBoardBindings(),
     ),
     GetPage(
       name: Routes.lang,
