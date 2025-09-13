@@ -31,7 +31,10 @@ class Circle extends StatelessWidget {
         border: border,
         shape: BoxShape.circle,
       ),
-      child: child,
+      child: ClipRRect(
+        borderRadius: BorderRadius.all(Radius.circular(100)),
+        child: child,
+      ),
     );
   }
 }
