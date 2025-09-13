@@ -1,13 +1,15 @@
-import 'package:doctor_app/core/design_system/styles/app_colors.dart';
 import 'package:doctor_app/core/design_system/styles/text_styles.dart';
+import 'package:doctor_app/core/design_system/widgets/buttons/float_button.dart';
 import 'package:doctor_app/core/pages/routes.dart';
-import 'package:doctor_app/core/utils/asset_finder.dart';
+import 'package:doctor_app/features/profile/presentation/controllers/cabinet_controller.dart';
+import 'package:doctor_app/features/profile/presentation/widgets/schedule_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+
 import 'package:get/get.dart';
 
 class WorkInfoPage extends StatelessWidget {
-  const WorkInfoPage({super.key});
+  WorkInfoPage({super.key});
+  final CabinetController cabinetController = Get.find<CabinetController>();
 
   @override
   Widget build(BuildContext context) {
@@ -18,175 +20,36 @@ class WorkInfoPage extends StatelessWidget {
           style: WorkSansStyle.titleLarge.copyWith(fontWeight: FontWeight.w400),
         ),
         centerTitle: true,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Divider(height: 1, thickness: 1, color: Colors.grey.shade300),
+        ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.primary,
-        onPressed: () => Get.toNamed(Routes.createWorkSchedule),
-        child: SvgPicture.asset(AssetFinder.icon('add_work')),
+      floatingActionButton: FloatButton(
+        onClick: () => Get.toNamed(Routes.createWorkSchedule),
       ),
-      body: Column(
-        children: [
-          Divider(),
-          SizedBox(height: 10),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 28),
-            child: Column(
-              children: [
-                Container(
-                  padding: EdgeInsets.all(15),
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    border: Border.all(),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Center(
-                        child: Text(
-                          "place".tr,
-                          style: WorkSansStyle.titleMedium,
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        "${"clinic".tr}: Davlat Shifoxonasi",
-                        style: WorkSansStyle.titleMedium.copyWith(fontSize: 16),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        "${"address".tr}: Farg'ona, Kokand",
-                        style: WorkSansStyle.titleMedium.copyWith(fontSize: 16),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        "${"price".tr}: 2500\$",
-                        style: WorkSansStyle.titleMedium.copyWith(fontSize: 16),
-                      ),
-                      SizedBox(height: 20),
-
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          // Title
-                          Center(
-                            child: Text(
-                              "schedule".tr,
-                              style: WorkSansStyle.titleMedium.copyWith(),
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-
-                          // Table
-                          Table(
-                            border: TableBorder.symmetric(
-                              inside: BorderSide.none,
-                              outside: BorderSide.none,
-                            ),
-                            columnWidths: const {
-                              0: FlexColumnWidth(2), // Дни wider
-                              1: FlexColumnWidth(1.5), // Часы
-                              2: FlexColumnWidth(1.5), // Обед
-                            },
-                            children: [
-                              // Header row
-                              TableRow(
-                                children: [
-                                  Text(
-                                    "day".tr,
-                                    style: WorkSansStyle.body.copyWith(
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  Center(
-                                    child: Text(
-                                      "hour".tr,
-                                      style: WorkSansStyle.body.copyWith(
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                  Center(
-                                    child: Text(
-                                      "lunch".tr,
-                                      style: WorkSansStyle.body.copyWith(
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-
-                              const TableRow(
-                                children: [
-                                  SizedBox(height: 8),
-                                  SizedBox(),
-                                  SizedBox(),
-                                ],
-                              ),
-
-                              // Rows
-                              TableRow(
-                                children: [
-                                  const Text("Понедельник:"),
-                                  Center(child: Text("9.30-17.15")),
-                                  Center(child: Text("12.00-13.30")),
-                                ],
-                              ),
-                              TableRow(
-                                children: [
-                                  const Text("Вторник:"),
-                                  Center(child: Text("9.30-17.15")),
-                                  Center(child: Text("12.00-13.30")),
-                                ],
-                              ),
-                              TableRow(
-                                children: [
-                                  const Text("Среда:"),
-                                  Center(child: Text("9.30-17.15")),
-                                  Center(child: Text("12.00-13.30")),
-                                ],
-                              ),
-                              TableRow(
-                                children: [
-                                  const Text("Четверг:"),
-                                  Center(child: Text("9.30-17.15")),
-                                  Center(child: Text("12.00-13.30")),
-                                ],
-                              ),
-                              TableRow(
-                                children: [
-                                  const Text("Пятница:"),
-                                  Center(child: Text("9.30-17.15")),
-                                  Center(child: Text("12.00-13.30")),
-                                ],
-                              ),
-                              TableRow(
-                                children: [
-                                  const Text("Суббота:"),
-                                  Center(child: Text("9.30-17.15")),
-                                  Center(child: Text("12.00-13.30")),
-                                ],
-                              ),
-                              TableRow(
-                                children: [
-                                  const Text("Воскресенье:"),
-                                  Center(child: Text("9.30-17.15")),
-                                  Center(child: Text("12.00-13.30")),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+      body: Obx(() {
+        if (cabinetController.schedules.isEmpty) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 50),
+            child: Center(
+              child: Text("no_schedules".tr, style: WorkSansStyle.bodyLarge),
             ),
-          ),
-        ],
-      ),
+          );
+        } else {
+          return Expanded(
+            child: ListView.separated(
+              shrinkWrap: true,
+              itemBuilder: (context, index) {
+                final schedule = cabinetController.schedules[index];
+                return ScheduleItem(schedule: schedule);
+              },
+              separatorBuilder: (context, index) => SizedBox(height: 10),
+              itemCount: cabinetController.schedules.length,
+            ),
+          );
+        }
+      }),
     );
   }
 }
