@@ -12,7 +12,7 @@ class ApiConstants {
 
   // Profile
   static const String avatar = "$apiDoctor/file/avatar";
-  static const String doc = "$apiDoctor/file";
+  static const String document = "$apiDoctor/file";
 
   // Work Schedule
   static const String workSchedule = "$apiDoctor/schedule";
