@@ -1,5 +1,7 @@
 import 'package:doctor_app/features/profile/presentation/profile_page.dart';
+import 'package:doctor_app/features/shared/controllers/user_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'contents/main_content.dart';
 
@@ -11,13 +13,21 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  final UserController userController = Get.find();
+
   int index = 0;
 
-  final List<Widget> pages = const [
+  final List<Widget> pages = [
     MainContent(key: ValueKey("home")),
     Center(key: ValueKey("search"), child: Text("Search Page")),
     ProfilePage(key: ValueKey("profile")),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    userController.getUser();
+  }
 
   @override
   Widget build(BuildContext context) {
