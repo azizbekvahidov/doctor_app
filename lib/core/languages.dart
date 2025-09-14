@@ -201,6 +201,8 @@ class AppTranslations extends Translations {
       'schedule': "Ish jadvali",
       'delete_document_alert': 'Hujjatni o\'chirmoqchimisiz?',
       'no_documents': 'Hujjatlar mavjud emas',
+
+      // Days of the week
       'monday': 'Dushanba',
       'tuesday': 'Seshanba',
       'wednesday': 'Chorshanba',
@@ -208,8 +210,7 @@ class AppTranslations extends Translations {
       'friday': 'Juma',
       'saturday': 'Shanba',
       'sunday': 'Yakshanba',
-      'main_price': 'Asosiy narx',
-      'second_price': 'Ikkinchi narx',
+
       'no_schedules': 'Jadvallar mavjud emas',
       'clinic': 'Klinika',
       'address': 'Manzil',
@@ -219,6 +220,33 @@ class AppTranslations extends Translations {
       'work_hours': 'Ish soatlari',
       'delete': 'O\'chirish',
       'cancel': 'Bekor qilish',
+      'first_price': 'Birinchi qabul narxi',
+      'second_price': 'Ikkinchi qabul narxi',
+
+      // validations
+      'valid_price': 'Iltimos narxni kiriting',
+      'valid_clinic': 'Iltimos klinika nomini kiriting',
+      'valid_address': 'Iltimos klinika manzilini kiriting',
+      'valid_region': 'Iltimos viloyatni tanlang',
+      'valid_day': 'Iltimos hafta kunini tanlang',
+      'valid_work_hours': 'Iltimos ish vaqtlarini kiriting',
+      'valid_first_price': 'Iltimos birinchi qabul narxini kiriting',
+      'valid_second_price': 'Iltimos ikkinchi qabul narxini kiriting',
+
+      // Buttons lables
+      'add': 'Qo\'shish',
+      'save': 'Saqlash',
+      'create': 'Yaratish',
+      'upload': 'Yuklash',
+      'select_file': 'Faylni tanlang',
+      'select_region': 'Viloyatni tanlang',
+      'select_language': 'Tilni tanlang',
+      'select_day': 'Kun tanlash',
+      'select_time': 'Vaqtni tanlang',
+      'select_work_hours': 'Ish vaqtlarini tanlang',
+      'select_clinic': 'Klinikani tanlang',
+      'create_schedule': 'Jadval yaratish ',
+      'create_clinic': 'Klinika yaratish',
     },
   };
 }
