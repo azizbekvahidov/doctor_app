@@ -25,6 +25,7 @@ class CabinetController extends GetxController {
   RxBool isAvatarLoading = RxBool(false);
   RxBool isDocumentUploading = RxBool(false);
   RxBool isDeleting = RxBool(false);
+  RxBool showClinic = RxBool(false);
 
   // documents and avatar paths
   RxString selectedAvatarPath = RxString('');
@@ -155,19 +156,29 @@ class CabinetController extends GetxController {
   }
 
   getClinics(String query) async {
-    if (query.isEmpty) {
-      clinics.clear();
+    if (query.isEmpty || clinicController.text.isEmpty) {
+      showClinic.value = false;
+      clinics.value = [];
       return;
     }
+
     final result = await commonRepository.getClinics(query);
     switch (result) {
       case Success(:final data):
-        LogHelper.info("✅ Clinics fetched: $data");
         clinics.value = data;
         break;
       case Error(:final message, :final code):
         print("Error: $message (code: $code)");
     }
+    if (clinics.isEmpty) {
+      showClinic.value = false;
+    } else {
+      showClinic.value = true;
+    }
+  }
+
+  toggleClinic() {
+    showClinic.value = !showClinic.value;
   }
 
   getRegions() async {
@@ -183,6 +194,7 @@ class CabinetController extends GetxController {
 
   selectClinic(ClinicRequest clinic) {
     selectedClinicRequest.value = clinic;
+    toggleClinic();
   }
 
   addSchedule(ScheduleElement scheduleElement) {
@@ -205,8 +217,10 @@ class CabinetController extends GetxController {
         backgroundColor: AppColors.success,
         content: Text("Schedule was created successfully!"),
       );
+
       Get.back();
       getSchedules();
+      reset();
     } else {
       Notifier.showSnackbar(
         duration: Duration(milliseconds: 1500),
@@ -214,5 +228,18 @@ class CabinetController extends GetxController {
         content: Text("Failed to create schedule. Please try again."),
       );
     }
+  }
+
+  void reset() {
+    selectedClinicRequest.value = null;
+    selectedScheduleRequest.value = null;
+    selectedSchedules.clear();
+    clinicController.clear();
+    priceController.clear();
+    secondPriceController.clear();
+  }
+
+  removeSchedule(ScheduleElement scheduleElement) {
+    selectedSchedules.remove(scheduleElement);
   }
 }
