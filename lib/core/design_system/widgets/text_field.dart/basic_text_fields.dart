@@ -60,6 +60,8 @@ class BasicTextFormField extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final String? initialValue;
   final TextInputType? textInputType;
+  final Function(String)? onChanged;
+
   const BasicTextFormField({
     super.key,
     required this.errorText,
@@ -68,6 +70,7 @@ class BasicTextFormField extends StatelessWidget {
     this.hintText,
     this.initialValue,
     this.textInputType,
+    this.onChanged,
   });
 
   @override
@@ -77,20 +80,36 @@ class BasicTextFormField extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           BasicTextField(
+            onChanged: onChanged,
             textInputType: textInputType,
             initialValue: initialValue,
             controller: controller,
             hintText: hintText,
             inputFormatters: inputFormatters,
           ),
-          if (field.errorText != null)
-            Padding(
-              padding: const EdgeInsets.only(top: 4),
-              child: Text(
-                field.errorText!,
-                style: const TextStyle(color: Colors.red, fontSize: 12),
-              ),
-            ),
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 250),
+            transitionBuilder: (child, animation) {
+              return FadeTransition(
+                opacity: animation,
+                child: SizeTransition(
+                  sizeFactor: animation,
+                  axisAlignment: -1, // expand from top
+                  child: child,
+                ),
+              );
+            },
+            child: field.errorText == null
+                ? const SizedBox.shrink()
+                : Padding(
+                    key: ValueKey(field.errorText), // ensure animation triggers
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      field.errorText!,
+                      style: const TextStyle(color: Colors.red, fontSize: 12),
+                    ),
+                  ),
+          ),
         ],
       ),
       validator: (value) {
