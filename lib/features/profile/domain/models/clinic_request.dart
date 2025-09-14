@@ -7,14 +7,14 @@ class ClinicRequest {
   final String nameRu;
   final String addressUz;
   final String addressRu;
-  final int regionId;
+  final int district;
   ClinicRequest({
     this.id,
     required this.nameUz,
     required this.nameRu,
     required this.addressUz,
     required this.addressRu,
-    required this.regionId,
+    required this.district,
   });
 
   ClinicRequest copyWith({
@@ -22,14 +22,14 @@ class ClinicRequest {
     String? nameRu,
     String? addressUz,
     String? addressRu,
-    int? regionId,
+    int? district,
   }) {
     return ClinicRequest(
       nameUz: nameUz ?? this.nameUz,
       nameRu: nameRu ?? this.nameRu,
       addressUz: addressUz ?? this.addressUz,
       addressRu: addressRu ?? this.addressRu,
-      regionId: regionId ?? this.regionId,
+      district: district ?? this.district,
     );
   }
 
@@ -39,7 +39,7 @@ class ClinicRequest {
       'name_ru': nameRu,
       'address_uz': addressUz,
       'address_ru': addressRu,
-      'district_id': regionId,
+      'district_id': district,
       "latitude": 40.1102392,
       "longitude": 65.5168817,
       'clinic_id': id,
@@ -50,6 +50,6 @@ class ClinicRequest {
 
   @override
   String toString() {
-    return 'ClinicRequest(nameUz: $nameUz, nameRu: $nameRu, addressUz: $addressUz, addressRu: $addressRu, regionId: $regionId)';
+    return 'ClinicRequest(nameUz: $nameUz, nameRu: $nameRu, addressUz: $addressUz, addressRu: $addressRu, regionId: $district)';
   }
 }
