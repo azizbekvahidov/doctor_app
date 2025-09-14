@@ -63,14 +63,7 @@ class DocumentsPage extends StatelessWidget {
           ),
         );
       },
-    ).then((value) {
-      if (value == true) {
-        // Do something when confirmed
-        debugPrint("User confirmed");
-      } else {
-        debugPrint("User canceled");
-      }
-    });
+    );
   }
 
   @override

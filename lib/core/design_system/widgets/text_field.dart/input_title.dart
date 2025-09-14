@@ -10,7 +10,9 @@ class InputTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: WorkSansStyle.label.copyWith(color: Colors.black.withOpacity(0.6)),
+      style: WorkSansStyle.label.copyWith(
+        color: Colors.black.withValues(alpha: 0.6),
+      ),
     );
   }
 }

@@ -283,6 +283,7 @@ class AppTranslations extends Translations {
       'valid_region': 'Iltimos viloyatni tanlang',
       'valid_day': 'Iltimos hafta kunini tanlang',
       'valid_work_hours': 'Iltimos ish vaqtlarini kiriting',
+      'valid_lunch_hours': 'Iltimos tushlik vaqtlarini kiriting',
       'valid_first_price': 'Iltimos birinchi qabul narxini kiriting',
       'valid_second_price': 'Iltimos ikkinchi qabul narxini kiriting',
       'valid_schedules': 'Iltimos jadval qo\'shing',

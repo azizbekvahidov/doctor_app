@@ -1,3 +1,5 @@
+import 'package:doctor_app/core/design_system/styles/app_colors.dart';
+import 'package:doctor_app/core/design_system/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -12,6 +14,7 @@ class BasicTextField extends StatelessWidget {
     this.initialValue,
     this.textInputType,
     this.onChanged,
+    this.trailing,
   });
 
   final TextEditingController? controller;
@@ -21,6 +24,7 @@ class BasicTextField extends StatelessWidget {
   final String? initialValue;
   final TextInputType? textInputType;
   final Function(String)? onChanged;
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +35,7 @@ class BasicTextField extends StatelessWidget {
       inputFormatters: inputFormatters,
       enabled: enabled,
       controller: controller,
+      trailing: trailing,
       padding: EdgeInsets.symmetric(vertical: 14, horizontal: 10),
       placeholder: hintText,
       decoration: ShadDecoration(
@@ -61,6 +66,7 @@ class BasicTextFormField extends StatelessWidget {
   final String? initialValue;
   final TextInputType? textInputType;
   final Function(String)? onChanged;
+  final Widget? trailing;
 
   const BasicTextFormField({
     super.key,
@@ -71,6 +77,7 @@ class BasicTextFormField extends StatelessWidget {
     this.initialValue,
     this.textInputType,
     this.onChanged,
+    this.trailing,
   });
 
   @override
@@ -86,6 +93,7 @@ class BasicTextFormField extends StatelessWidget {
             controller: controller,
             hintText: hintText,
             inputFormatters: inputFormatters,
+            trailing: trailing,
           ),
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 250),
@@ -106,7 +114,7 @@ class BasicTextFormField extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 4),
                     child: Text(
                       field.errorText!,
-                      style: const TextStyle(color: Colors.red, fontSize: 12),
+                      style: WorkSansStyle.label.copyWith(color: AppColors.red),
                     ),
                   ),
           ),

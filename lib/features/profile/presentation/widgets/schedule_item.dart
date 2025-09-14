@@ -11,7 +11,7 @@ class ScheduleItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 28),
+      padding: EdgeInsets.symmetric(horizontal: 15),
       child: Column(
         children: [
           Container(

@@ -7,9 +7,21 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-class WorkInfoPage extends StatelessWidget {
-  WorkInfoPage({super.key});
+class WorkInfoPage extends StatefulWidget {
+  const WorkInfoPage({super.key});
+
+  @override
+  State<WorkInfoPage> createState() => _WorkInfoPageState();
+}
+
+class _WorkInfoPageState extends State<WorkInfoPage> {
   final CabinetController cabinetController = Get.find<CabinetController>();
+
+  @override
+  void initState() {
+    cabinetController.getSchedules();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,17 +40,18 @@ class WorkInfoPage extends StatelessWidget {
       floatingActionButton: FloatButton(
         onClick: () => Get.toNamed(Routes.createWorkSchedule),
       ),
-      body: Obx(() {
-        if (cabinetController.schedules.isEmpty) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 50),
-            child: Center(
-              child: Text("no_schedules".tr, style: WorkSansStyle.bodyLarge),
-            ),
-          );
-        } else {
-          return Expanded(
-            child: ListView.separated(
+      body: SafeArea(
+        child: Obx(() {
+          if (cabinetController.schedules.isEmpty) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 50),
+              child: Center(
+                child: Text("no_schedules".tr, style: WorkSansStyle.bodyLarge),
+              ),
+            );
+          } else {
+            return ListView.separated(
+              padding: const EdgeInsets.symmetric().copyWith(top: 20),
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 final schedule = cabinetController.schedules[index];
@@ -46,10 +59,10 @@ class WorkInfoPage extends StatelessWidget {
               },
               separatorBuilder: (context, index) => SizedBox(height: 10),
               itemCount: cabinetController.schedules.length,
-            ),
-          );
-        }
-      }),
+            );
+          }
+        }),
+      ),
     );
   }
 }

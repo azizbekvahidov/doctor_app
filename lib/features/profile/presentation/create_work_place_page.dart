@@ -12,33 +12,36 @@ import 'package:doctor_app/features/profile/presentation/controllers/cabinet_con
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class CreateWorkPlacePage extends StatelessWidget {
-  CreateWorkPlacePage({super.key});
+class CreateWorkPlacePage extends StatefulWidget {
+  const CreateWorkPlacePage({super.key});
 
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController ruNameOfClinicController =
-      TextEditingController();
-  final TextEditingController uzNameOfClinicController =
-      TextEditingController();
-  final TextEditingController ruAddressOfClinicController =
-      TextEditingController();
-  final TextEditingController uzAddressOfClinicController =
-      TextEditingController();
+  @override
+  State<CreateWorkPlacePage> createState() => _CreateWorkPlacePageState();
+}
+
+class _CreateWorkPlacePageState extends State<CreateWorkPlacePage> {
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  TextEditingController ruNameOfClinicController = TextEditingController();
+  TextEditingController uzNameOfClinicController = TextEditingController();
+  TextEditingController ruAddressOfClinicController = TextEditingController();
+  TextEditingController uzAddressOfClinicController = TextEditingController();
 
   int selectedRegionId = -1;
+
   Region? selectedRegion;
 
-  final CabinetController cabinetController = Get.find<CabinetController>();
-  final OnboardController onboardController = Get.find<OnboardController>();
+  CabinetController cabinetController = Get.find<CabinetController>();
+
+  OnboardController onboardController = Get.find<OnboardController>();
 
   saveClinic() async {
-    if (_formKey.currentState!.validate() && selectedRegionId > 0) {
+    if (formKey.currentState!.validate() && selectedRegionId > 0) {
       final clinic = ClinicRequest(
         addressRu: ruAddressOfClinicController.text,
         addressUz: uzAddressOfClinicController.text,
         nameRu: ruNameOfClinicController.text,
         nameUz: uzNameOfClinicController.text,
-        regionId: selectedRegionId,
+        district: selectedRegionId,
       );
       LogHelper.info("Saving clinic: ${clinic.toJson()}");
       cabinetController.selectClinic(clinic);
@@ -46,8 +49,24 @@ class CreateWorkPlacePage extends StatelessWidget {
     } else {
       LogHelper.error("Form is not valid or region not selected");
       await Future.delayed(Duration(milliseconds: 1000));
-      _formKey.currentState!.reset();
+      formKey.currentState!.reset();
     }
+  }
+
+  @override
+  void dispose() {
+    ruAddressOfClinicController.dispose();
+    uzAddressOfClinicController.dispose();
+    ruNameOfClinicController.dispose();
+    uzNameOfClinicController.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    cabinetController.getRegions();
   }
 
   @override
@@ -59,14 +78,14 @@ class CreateWorkPlacePage extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 15),
           child: Form(
-            key: _formKey,
+            key: formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
                   children: [
                     SizedBox(
-                      height: 300,
+                      height: 320,
                       child: DefaultTabController(
                         length: 2,
                         child: Column(
@@ -78,7 +97,7 @@ class CreateWorkPlacePage extends StatelessWidget {
                               ],
                             ),
                             SizedBox(
-                              height: 240,
+                              height: 260,
                               child: TabBarView(
                                 children: [
                                   Column(
@@ -202,8 +221,7 @@ class CreateWorkPlacePage extends StatelessWidget {
                                     .toList(),
 
                                 onChanged: (value) {
-                                  final _selectedRegion = cabinetController
-                                      .regions
+                                  final foundRegion = cabinetController.regions
                                       .firstWhere(
                                         (region) =>
                                             (onboardController
@@ -214,8 +232,10 @@ class CreateWorkPlacePage extends StatelessWidget {
                                                 : region.name!.uz) ==
                                             value,
                                       );
-                                  selectedRegion = _selectedRegion;
-                                  selectedRegionId = _selectedRegion.id!;
+                                  setState(() {
+                                    selectedRegion = foundRegion;
+                                    selectedRegionId = foundRegion.id!;
+                                  });
                                 },
                               ),
                               if (field.hasError)
@@ -223,9 +243,8 @@ class CreateWorkPlacePage extends StatelessWidget {
                                   padding: const EdgeInsets.only(top: 6),
                                   child: Text(
                                     field.errorText!,
-                                    style: const TextStyle(
-                                      color: Colors.red,
-                                      fontSize: 12,
+                                    style: WorkSansStyle.label.copyWith(
+                                      color: AppColors.red,
                                     ),
                                   ),
                                 ),
