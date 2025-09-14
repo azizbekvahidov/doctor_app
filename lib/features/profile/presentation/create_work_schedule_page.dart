@@ -8,7 +8,7 @@ import 'package:doctor_app/core/design_system/widgets/text_field.dart/input_titl
 import 'package:doctor_app/core/pages/routes.dart';
 import 'package:doctor_app/core/utils/asset_finder.dart';
 import 'package:doctor_app/features/onboard/controller/onboard_controller.dart';
-import 'package:doctor_app/features/profile/domain/models/schedule.dart';
+
 import 'package:doctor_app/features/profile/presentation/controllers/cabinet_controller.dart';
 import 'package:doctor_app/features/profile/presentation/widgets/add_schedule_time_dialog.dart';
 
@@ -17,7 +17,7 @@ import 'package:get/get.dart';
 
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-import 'widgets/time_picker_button.dart';
+import '../../../core/design_system/widgets/validator_widget.dart';
 
 class CreateWorkSchedulePage extends StatelessWidget {
   CreateWorkSchedulePage({super.key});
@@ -35,7 +35,14 @@ class CreateWorkSchedulePage extends StatelessWidget {
   }
 
   save() {
-    cabinetController.create();
+    if (cabinetController.formKey.currentState!.validate()) {
+      cabinetController.create();
+    } else {
+      Future.delayed(const Duration(milliseconds: 1000), () {
+        cabinetController.formKey.currentState!.reset();
+      });
+      return;
+    }
   }
 
   @override
@@ -60,185 +67,228 @@ class CreateWorkSchedulePage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  InputTitle(text: "clinic".tr),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: BasicTextField(
-                          controller: cabinetController.clinicController,
-                          onChanged: (query) {
-                            cabinetController.getClinics(query);
-                          },
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      InkWell(
-                        splashColor: Colors.transparent,
-                        hoverColor: Colors.transparent,
-                        borderRadius: BorderRadius.circular(15),
-                        child: SvgPicture.asset(
-                          AssetFinder.icon('add_work'),
-                          color: AppColors.primary,
-                          width: 28,
-                          height: 28,
-                        ),
-                        onTap: () => Get.toNamed(Routes.createWorkPlace),
-                      ),
-                    ],
-                  ),
-
-                  Obx(() {
-                    if (cabinetController.clinics.isEmpty) {
-                      return SizedBox.shrink();
-                    }
-                    return Column(
+              Form(
+                key: cabinetController.formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    InputTitle(text: "clinic".tr),
+                    const SizedBox(height: 8),
+                    Row(
                       children: [
-                        SizedBox(height: 5),
-                        Container(
-                          height: 280,
-                          decoration: BoxDecoration(
-                            color: Colors.grey,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: ListView.builder(
-                            itemBuilder: (context, index) {
-                              final clinic = cabinetController.clinics[index];
-                              return ListTile(
-                                title: Text(clinic.name!.ru ?? ""),
-                                subtitle: Text(clinic.address!.ru ?? ""),
-                                onTap: () {
-                                  // Handle clinic selection
-                                },
-                              );
+                        Expanded(
+                          child: BasicTextFormField(
+                            controller: cabinetController.clinicController,
+                            onChanged: (query) {
+                              cabinetController.getClinics(query);
                             },
-                            itemCount: cabinetController.clinics.length,
+                            errorText: 'valid_clinic'.tr,
                           ),
+                        ),
+                        SizedBox(width: 10),
+                        InkWell(
+                          splashColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          borderRadius: BorderRadius.circular(15),
+                          child: SvgPicture.asset(
+                            AssetFinder.icon('add_work'),
+                            color: AppColors.primary,
+                            width: 28,
+                            height: 28,
+                          ),
+                          onTap: () => Get.toNamed(Routes.createWorkPlace),
                         ),
                       ],
-                    );
-                  }),
-                  const SizedBox(height: 20),
-                  InputTitle(text: "Цена первого приема".tr),
-                  const SizedBox(height: 8),
-                  BasicTextFormField(
-                    errorText: "",
-                    controller: cabinetController.priceController,
-                  ),
-                  const SizedBox(height: 20),
-                  InputTitle(text: "Цена последующих приемов".tr),
-                  const SizedBox(height: 8),
-                  BasicTextFormField(
-                    errorText: "",
-                    controller: cabinetController.secondPriceController,
-                  ),
-                  const SizedBox(height: 20),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Title
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox.shrink(),
-                          Center(
-                            child: Text(
-                              "schedule".tr,
-                              style: WorkSansStyle.titleMedium.copyWith(),
+                    ),
+                    Obx(() {
+                      return AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 300),
+                        transitionBuilder: (child, animation) {
+                          return SlideTransition(
+                            position: Tween<Offset>(
+                              begin: const Offset(0, -0.1), // from slightly up
+                              end: Offset.zero,
+                            ).animate(animation),
+                            child: FadeTransition(
+                              opacity: animation,
+                              child: child,
                             ),
-                          ),
-                          InkWell(
-                            splashColor: Colors.transparent,
-                            hoverColor: Colors.transparent,
-                            borderRadius: BorderRadius.circular(15),
-                            child: SvgPicture.asset(
-                              AssetFinder.icon('add_work'),
-                              color: AppColors.primary,
-                              width: 28,
-                              height: 28,
-                            ),
-                            onTap: () {
-                              showAddScheduleDialog(context);
-                            },
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-
-                      Obx(() {
-                        return Table(
-                          border: TableBorder.symmetric(
-                            inside: BorderSide.none,
-                            outside: BorderSide.none,
-                          ),
-                          columnWidths: const {
-                            0: FlexColumnWidth(2),
-                            1: FlexColumnWidth(2.4),
-                            2: FlexColumnWidth(2.4),
-                          },
-                          children: [
-                            // Header row
-                            TableRow(
-                              children: [
-                                Text("day".tr, style: WorkSansStyle.body),
-                                Center(
-                                  child: Text(
-                                    "hour".tr,
-                                    style: WorkSansStyle.body,
-                                  ),
-                                ),
-                                Center(
-                                  child: Text(
-                                    "lunch".tr,
-                                    style: WorkSansStyle.body,
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            const TableRow(
-                              children: [
-                                SizedBox(height: 8),
-                                SizedBox(),
-                                SizedBox(),
-                              ],
-                            ),
-
-                            // Rows
-                            ...cabinetController.selectedSchedules.map((day) {
-                              return TableRow(
+                          );
+                        },
+                        child: cabinetController.clinics.isEmpty
+                            ? const SizedBox.shrink()
+                            : Column(
+                                key: const ValueKey("clinic_list"),
                                 children: [
-                                  Text(day.day!.toLowerCase().tr),
-                                  Center(
-                                    child: Text(
-                                      day.work!.from != null &&
-                                              day.work!.until != null
-                                          ? "${day.work!.from}-${day.work!.until}"
-                                          : "-",
-                                      style: WorkSansStyle.bodySmall,
+                                  const SizedBox(height: 5),
+                                  Container(
+                                    height: 280,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: AppColors.subTitleLight,
+                                      ),
+                                      borderRadius: BorderRadius.circular(10),
                                     ),
-                                  ),
-                                  Center(
-                                    child: Text(
-                                      day.lunch!.from != null &&
-                                              day.lunch!.until != null
-                                          ? "${day.lunch!.from}-${day.lunch!.until}"
-                                          : "-",
-                                      style: WorkSansStyle.bodySmall,
+                                    child: ListView.builder(
+                                      itemCount:
+                                          cabinetController.clinics.length,
+                                      itemBuilder: (context, index) {
+                                        final clinic =
+                                            cabinetController.clinics[index];
+                                        return ListTile(
+                                          title: Text(clinic.name?.ru ?? ""),
+                                          subtitle: Text(
+                                            clinic.address?.ru ?? "",
+                                          ),
+                                          onTap: () {
+                                            cabinetController
+                                                    .clinicController
+                                                    .text =
+                                                onboardController
+                                                        .selectedLang
+                                                        .value ==
+                                                    'ru'
+                                                ? clinic.name?.ru ?? ""
+                                                : clinic.name?.uz ?? "";
+                                          },
+                                        );
+                                      },
                                     ),
                                   ),
                                 ],
-                              );
-                            }),
+                              ),
+                      );
+                    }),
+
+                    const SizedBox(height: 20),
+                    InputTitle(text: "first_price".tr),
+                    const SizedBox(height: 8),
+                    BasicTextFormField(
+                      errorText: "valid_first_price".tr,
+                      controller: cabinetController.priceController,
+                      textInputType: TextInputType.number,
+                    ),
+                    const SizedBox(height: 20),
+                    InputTitle(text: "second_price".tr),
+                    const SizedBox(height: 8),
+                    BasicTextFormField(
+                      errorText: "valid_second_price".tr,
+                      controller: cabinetController.secondPriceController,
+                      textInputType: TextInputType.number,
+                    ),
+                    const SizedBox(height: 20),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Title
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox.shrink(),
+                            Center(
+                              child: Text(
+                                "schedule".tr,
+                                style: WorkSansStyle.titleMedium.copyWith(),
+                              ),
+                            ),
+                            InkWell(
+                              splashColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              borderRadius: BorderRadius.circular(15),
+                              child: SvgPicture.asset(
+                                AssetFinder.icon('add_work'),
+                                color: AppColors.primary,
+                                width: 28,
+                                height: 28,
+                              ),
+                              onTap: () {
+                                showAddScheduleDialog(context);
+                              },
+                            ),
                           ],
-                        );
-                      }),
-                    ],
-                  ),
-                ],
+                        ),
+                        const SizedBox(height: 10),
+
+                        Obx(() {
+                          return ValidatorWidget(
+                            errorText: "valid_schedule".tr,
+                            value:
+                                cabinetController.selectedSchedules.isNotEmpty
+                                ? "ok"
+                                : "",
+                            child: Table(
+                              border: TableBorder.symmetric(
+                                inside: BorderSide.none,
+                                outside: BorderSide.none,
+                              ),
+                              columnWidths: const {
+                                0: FlexColumnWidth(2),
+                                1: FlexColumnWidth(2.4),
+                                2: FlexColumnWidth(2.4),
+                              },
+                              children: [
+                                // Header row
+                                TableRow(
+                                  children: [
+                                    Text("day".tr, style: WorkSansStyle.body),
+                                    Center(
+                                      child: Text(
+                                        "hour".tr,
+                                        style: WorkSansStyle.body,
+                                      ),
+                                    ),
+                                    Center(
+                                      child: Text(
+                                        "lunch".tr,
+                                        style: WorkSansStyle.body,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const TableRow(
+                                  children: [
+                                    SizedBox(height: 8),
+                                    SizedBox(),
+                                    SizedBox(),
+                                  ],
+                                ),
+
+                                // Rows
+                                ...cabinetController.selectedSchedules.map((
+                                  day,
+                                ) {
+                                  return TableRow(
+                                    children: [
+                                      Text(day.day!.toLowerCase().tr),
+                                      Center(
+                                        child: Text(
+                                          day.work!.from != null &&
+                                                  day.work!.until != null
+                                              ? "${day.work!.from}-${day.work!.until}"
+                                              : "-",
+                                          style: WorkSansStyle.bodySmall,
+                                        ),
+                                      ),
+                                      Center(
+                                        child: Text(
+                                          day.lunch!.from != null &&
+                                                  day.lunch!.until != null
+                                              ? "${day.lunch!.from}-${day.lunch!.until}"
+                                              : "-",
+                                          style: WorkSansStyle.bodySmall,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                }),
+                              ],
+                            ),
+                          );
+                        }),
+                      ],
+                    ),
+                  ],
+                ),
               ),
 
               Padding(

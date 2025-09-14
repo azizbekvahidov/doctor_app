@@ -46,6 +46,7 @@ class CabinetController extends GetxController {
   late CommonRepository commonRepository;
 
   // TextEditingControllers
+  final formKey = GlobalKey<FormState>();
   final TextEditingController clinicController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
   final TextEditingController secondPriceController = TextEditingController();
@@ -154,6 +155,10 @@ class CabinetController extends GetxController {
   }
 
   getClinics(String query) async {
+    if (query.isEmpty) {
+      clinics.clear();
+      return;
+    }
     final result = await commonRepository.getClinics(query);
     switch (result) {
       case Success(:final data):
@@ -169,7 +174,6 @@ class CabinetController extends GetxController {
     final result = await commonRepository.getRegions();
     switch (result) {
       case Success(:final data):
-        LogHelper.info("✅ Regions fetched: $data");
         regions.value = data;
         break;
       case Error(:final message, :final code):

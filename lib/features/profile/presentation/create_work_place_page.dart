@@ -182,7 +182,7 @@ class CreateWorkPlacePage extends StatelessWidget {
                                     color: AppColors.grey,
                                   ),
                                 ),
-                                hintText: 'select_profession'.tr,
+                                hintText: 'select_region'.tr,
                                 initialItem: selectedRegion != null
                                     ? onboardController.selectedLang.value ==
                                               'ru'
@@ -234,7 +234,7 @@ class CreateWorkPlacePage extends StatelessWidget {
                         },
                         validator: (value) {
                           if (selectedRegionId <= 0) {
-                            return "valid_weekday".tr;
+                            return "valid_region".tr;
                           }
                           return null;
                         },
