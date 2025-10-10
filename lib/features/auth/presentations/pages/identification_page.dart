@@ -1,3 +1,4 @@
+import 'package:doctor_app/core/pages/routes.dart';
 import 'package:doctor_app/core/utils/asset_finder.dart';
 import 'package:doctor_app/core/design_system/widgets/buttons.dart';
 import 'package:doctor_app/core/design_system/widgets/circle.dart';
@@ -53,7 +54,8 @@ class IdentificationPage extends GetView<AuthController> {
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Obx(
                   () => PrimaryButton(
-                    onTap: () => controller.myIdRegister(),
+                    onTap: () => Get.toNamed(Routes.onboard),
+                    // onTap: () => controller.myIdRegister(),
                     child: controller.isAuthorization.value
                         ? Center(
                             child: CircularProgressIndicator(

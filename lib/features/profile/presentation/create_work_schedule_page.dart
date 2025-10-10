@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:doctor_app/core/design_system/styles/app_colors.dart';
 import 'package:doctor_app/core/design_system/styles/text_styles.dart';
-import 'package:doctor_app/core/design_system/widgets/buttons.dart';
+
 import 'package:doctor_app/core/design_system/widgets/buttons/create_button.dart';
+import 'package:doctor_app/core/design_system/widgets/buttons/ready_buttons.dart';
 import 'package:doctor_app/core/design_system/widgets/text_field.dart/basic_text_fields.dart';
 import 'package:doctor_app/core/design_system/widgets/text_field.dart/input_title.dart';
 import 'package:doctor_app/core/pages/routes.dart';
-import 'package:doctor_app/core/utils/asset_finder.dart';
 import 'package:doctor_app/core/utils/notifier.dart';
 import 'package:doctor_app/features/onboard/controller/onboard_controller.dart';
 
@@ -18,8 +18,6 @@ import 'package:doctor_app/features/profile/presentation/widgets/schedule_table.
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import 'package:shadcn_ui/shadcn_ui.dart';
 
 class CreateWorkSchedulePage extends StatefulWidget {
   const CreateWorkSchedulePage({super.key});
@@ -59,14 +57,6 @@ class _CreateWorkSchedulePageState extends State<CreateWorkSchedulePage> {
       return;
     }
     cabinetController.create();
-  }
-
-  @override
-  void didChangeDependencies() {
-    if (cabinetController.selectedClinicRequest.value != null) {
-      cabinetController.clinics.clear();
-    }
-    super.didChangeDependencies();
   }
 
   @override
@@ -176,17 +166,8 @@ class _CreateWorkSchedulePageState extends State<CreateWorkSchedulePage> {
                                 style: WorkSansStyle.titleMedium.copyWith(),
                               ),
                             ),
-                            InkWell(
-                              splashColor: Colors.transparent,
-                              hoverColor: Colors.transparent,
-                              borderRadius: BorderRadius.circular(15),
-                              child: SvgPicture.asset(
-                                AssetFinder.icon('add_work'),
-                                color: AppColors.primary,
-                                width: 28,
-                                height: 28,
-                              ),
-                              onTap: () {
+                            CreateButton(
+                              onClick: () {
                                 showAddScheduleDialog(context);
                               },
                             ),
@@ -203,14 +184,7 @@ class _CreateWorkSchedulePageState extends State<CreateWorkSchedulePage> {
 
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
-                child: PrimaryButton(
-                  width: double.infinity,
-                  onTap: save,
-                  child: Text(
-                    "save".tr,
-                    style: TextStyle(fontSize: 16, color: Colors.white),
-                  ),
-                ),
+                child: SaveButton(onClick: save),
               ),
             ],
           ),
