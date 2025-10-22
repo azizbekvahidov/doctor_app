@@ -9,5 +9,5 @@ class Routes {
       documents = '/documents',
       workInfo = '/work-info',
       createWorkSchedule = '/create-work-schedule',
-      createWorkPlace = '/create-work-place';
+      createWorkPlace = '/create-work-place', chat='/chat';
 }

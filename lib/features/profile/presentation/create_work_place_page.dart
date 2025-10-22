@@ -1,7 +1,7 @@
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:doctor_app/core/design_system/styles/app_colors.dart';
 import 'package:doctor_app/core/design_system/styles/text_styles.dart';
-import 'package:doctor_app/core/design_system/widgets/buttons.dart';
+import 'package:doctor_app/core/design_system/widgets/buttons/ready_buttons.dart';
 import 'package:doctor_app/core/design_system/widgets/text_field.dart/basic_text_fields.dart';
 import 'package:doctor_app/core/design_system/widgets/text_field.dart/input_title.dart';
 import 'package:doctor_app/core/utils/log_helper.dart';
@@ -280,15 +280,9 @@ class _CreateWorkPlacePageState extends State<CreateWorkPlacePage> {
                   ],
                 ),
 
-                PrimaryButton(
-                  onTap: saveClinic,
-                  width: double.infinity,
-                  child: Text(
-                    "save".tr,
-                    style: WorkSansStyle.labelLarge.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: SaveButton(onClick: saveClinic),
                 ),
               ],
             ),

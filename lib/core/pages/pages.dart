@@ -1,6 +1,7 @@
 import 'package:doctor_app/features/auth/presentations/pages/identification_page.dart';
 import 'package:doctor_app/features/auth/presentations/pages/login_page.dart';
 import 'package:doctor_app/features/auth/presentations/pages/register_page.dart';
+import 'package:doctor_app/features/chat/presentation/chat_page.dart';
 import 'package:doctor_app/features/detail/presentation/detail_page.dart';
 import 'package:doctor_app/features/main/bindings.dart';
 import 'package:doctor_app/features/main/presentation/main_page.dart';
@@ -16,7 +17,7 @@ import 'package:get/get.dart';
 import 'routes.dart';
 
 class AppPages {
-  static const initial = Routes.onboard;
+  static const initial = Routes.chat;
 
   static final pages = [
     GetPage(
@@ -84,6 +85,13 @@ class AppPages {
     GetPage(
       name: Routes.createWorkPlace,
       page: () => CreateWorkPlacePage(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+
+    GetPage(
+      name: Routes.chat,
+      page: () => ChatPage(),
       transition: Transition.rightToLeft,
       transitionDuration: const Duration(milliseconds: 400),
     ),
