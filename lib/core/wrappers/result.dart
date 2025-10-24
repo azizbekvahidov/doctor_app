@@ -1,4 +1,4 @@
-// result.dart
+
 sealed class Result<T> {
   const Result();
 }

@@ -151,6 +151,11 @@ class AppTranslations extends Translations {
       'select_clinic': 'Выберите клинику',
       'create_schedule': 'Создать расписание',
       'create_clinic': 'Создать клинику',
+
+      // extra
+      'type message': 'Введите сообщение',
+      'send': 'Отправить',
+      'chats': 'Чаты',
     },
 
     'uz_UZ': {
@@ -302,6 +307,11 @@ class AppTranslations extends Translations {
       'select_clinic': 'Klinikani tanlang',
       'create_schedule': 'Jadval yaratish ',
       'create_clinic': 'Klinika yaratish',
+
+      // extra
+      'type message': 'Xabarni kiriting',
+      'send': 'Yuborish',
+      'chats': 'Xabarlar',
     },
   };
 }

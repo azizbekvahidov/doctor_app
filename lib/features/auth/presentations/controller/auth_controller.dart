@@ -1,4 +1,4 @@
-import 'package:doctor_app/core/pages/routes.dart';
+import 'package:doctor_app/core/navigation/routes.dart';
 import 'package:doctor_app/core/services/secure_storage_service.dart';
 import 'package:doctor_app/core/utils/log_helper.dart';
 import 'package:doctor_app/core/utils/notifier.dart';

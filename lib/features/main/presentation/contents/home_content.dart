@@ -1,4 +1,4 @@
-import 'package:doctor_app/core/pages/routes.dart';
+import 'package:doctor_app/core/navigation/routes.dart';
 import 'package:doctor_app/features/main/presentation/widgets/header.dart';
 
 import 'package:flutter/widgets.dart';
@@ -28,7 +28,11 @@ class HomeContent extends StatelessWidget {
                     itemCount: 15,
                     separatorBuilder: (_, __) => const SizedBox(width: 10),
                     scrollDirection: Axis.horizontal,
-                    itemBuilder: (_, __) => const NewCard(),
+                    itemBuilder: (_, __) => NewCard(
+                      onClick: () {
+                        Get.toNamed(Routes.detail);
+                      },
+                    ),
                   ),
                 ),
                 const SizedBox(height: 30),

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:doctor_app/core/pages/routes.dart';
+import 'package:doctor_app/core/navigation/routes.dart';
 import 'package:doctor_app/features/profile/presentation/controllers/cabinet_controller.dart';
 import 'package:doctor_app/features/shared/controllers/user_controller.dart';
 import 'package:flutter/material.dart';

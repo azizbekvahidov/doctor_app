@@ -1,6 +1,6 @@
 import 'package:doctor_app/core/design_system/styles/text_styles.dart';
 import 'package:doctor_app/core/design_system/widgets/buttons/float_button.dart';
-import 'package:doctor_app/core/pages/routes.dart';
+import 'package:doctor_app/core/navigation/routes.dart';
 import 'package:doctor_app/features/profile/presentation/controllers/cabinet_controller.dart';
 import 'package:doctor_app/features/profile/presentation/widgets/schedule_item.dart';
 import 'package:flutter/material.dart';

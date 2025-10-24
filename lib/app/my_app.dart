@@ -1,7 +1,7 @@
 import 'package:doctor_app/core/bindings/app_bindings.dart';
 import 'package:doctor_app/core/config/app_config.dart';
 import 'package:doctor_app/core/languages.dart';
-import 'package:doctor_app/core/pages/pages.dart';
+import 'package:doctor_app/core/navigation/pages.dart';
 import 'package:doctor_app/features/onboard/controller/onboard_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

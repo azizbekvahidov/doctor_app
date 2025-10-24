@@ -14,10 +14,11 @@ import 'package:doctor_app/features/profile/presentation/documents_page.dart';
 import 'package:doctor_app/features/profile/presentation/work_info_page.dart';
 import 'package:get/get.dart';
 
+import '../../features/chat/presentation/chats_page.dart';
 import 'routes.dart';
 
 class AppPages {
-  static const initial = Routes.chat;
+  static const initial = Routes.onboard;
 
   static final pages = [
     GetPage(
@@ -92,6 +93,12 @@ class AppPages {
     GetPage(
       name: Routes.chat,
       page: () => ChatPage(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.chats,
+      page: () => ChatsPage(),
       transition: Transition.rightToLeft,
       transitionDuration: const Duration(milliseconds: 400),
     ),

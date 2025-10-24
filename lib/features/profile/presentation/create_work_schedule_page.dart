@@ -7,7 +7,7 @@ import 'package:doctor_app/core/design_system/widgets/buttons/create_button.dart
 import 'package:doctor_app/core/design_system/widgets/buttons/ready_buttons.dart';
 import 'package:doctor_app/core/design_system/widgets/text_field.dart/basic_text_fields.dart';
 import 'package:doctor_app/core/design_system/widgets/text_field.dart/input_title.dart';
-import 'package:doctor_app/core/pages/routes.dart';
+import 'package:doctor_app/core/navigation/routes.dart';
 import 'package:doctor_app/core/utils/notifier.dart';
 import 'package:doctor_app/features/onboard/controller/onboard_controller.dart';
 

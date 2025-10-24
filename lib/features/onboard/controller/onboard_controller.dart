@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 
-import '../../../core/pages/routes.dart';
+import '../../../core/navigation/routes.dart';
 
 class OnboardController extends GetxController {
   Rxn<String> selectedLang = Rxn(null);
