@@ -1,12 +1,9 @@
-import 'package:dio/dio.dart';
 import 'package:doctor_app/core/services/dio_service.dart';
-import 'package:doctor_app/core/utils/log_helper.dart';
 import 'package:doctor_app/features/shared/data/repositories/issue_repository_impl.dart';
+import 'package:doctor_app/features/shared/domain/models/issue.dart';
 import 'package:doctor_app/features/shared/domain/repositories/issue_repository.dart';
 import 'package:get/get.dart';
 
-import '../domain/models/issue.dart';
-import 'package:get/get.dart';
 
 class IssueController extends GetxController {
   var issues = <Issue>[].obs;
