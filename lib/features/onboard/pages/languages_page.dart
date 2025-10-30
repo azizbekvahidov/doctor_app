@@ -26,7 +26,7 @@ class LanguagesPage extends GetView<OnboardController> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Obx(
-                    () => LangButton(
+                    () => LanguageSelectButton(
                       lang: "Uz",
                       onTap: () => controller.setLang("uz"),
                       isSelected: controller.selectedLang.value == "uz",
@@ -34,7 +34,7 @@ class LanguagesPage extends GetView<OnboardController> {
                   ),
                   SizedBox(width: 30),
                   Obx(
-                    () => LangButton(
+                    () => LanguageSelectButton(
                       lang: "Ru",
                       onTap: () => controller.setLang("ru"),
                       isSelected: controller.selectedLang.value == "ru",
