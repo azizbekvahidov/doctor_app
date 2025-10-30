@@ -32,15 +32,10 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Icon(Icons.message),
-      ),
       body: SafeArea(
         child: AnimatedSwitcher(
           duration: const Duration(milliseconds: 250),
           transitionBuilder: (child, animation) {
-            // Fade + Scale combo
             return FadeTransition(
               opacity: animation,
               child: ScaleTransition(scale: animation, child: child),
