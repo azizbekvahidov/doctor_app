@@ -21,4 +21,7 @@ class ApiConstants {
   static const String clinic = "$apiList/clinic";
   static const String region = "$apiList/region";
   static const String degree = "$apiList/degree";
+
+  // Issue
+  static const String issue = "$mainUrl/api/issue";
 }
