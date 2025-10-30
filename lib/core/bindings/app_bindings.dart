@@ -4,6 +4,7 @@ import 'package:doctor_app/features/auth/presentations/controller/auth_controlle
 import 'package:doctor_app/features/auth/presentations/controller/register_screen_controller.dart';
 import 'package:doctor_app/features/onboard/controller/onboard_controller.dart';
 import 'package:doctor_app/features/profile/presentation/controllers/cabinet_controller.dart';
+import 'package:doctor_app/features/shared/controllers/issue_controller.dart';
 import 'package:get/get.dart';
 
 class AppBindings extends Bindings {
@@ -16,5 +17,6 @@ class AppBindings extends Bindings {
       fenix: true,
     );
     Get.lazyPut(() => RegisterScreenController(), fenix: true);
+    Get.lazyPut(() => IssueController(), fenix: true);
   }
 }
