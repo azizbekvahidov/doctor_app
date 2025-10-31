@@ -1,36 +1,68 @@
 import 'package:doctor_app/core/design_system/styles/app_colors.dart';
 import 'package:doctor_app/core/design_system/styles/text_styles.dart';
+import 'package:doctor_app/core/design_system/widgets/buttons.dart';
+import 'package:doctor_app/core/enums/issue_pop_up_menu.dart';
 import 'package:doctor_app/core/navigation/routes.dart';
 import 'package:doctor_app/core/utils/asset_finder.dart';
 import 'package:doctor_app/core/utils/formatters.dart';
-import 'package:doctor_app/features/detail/presentation/widgets/patient_row_detail_info.dart';
-import 'package:doctor_app/features/detail/presentation/widgets/section_info.dart';
+
+import 'package:doctor_app/features/issue_detail/presentation/widgets/patient_row_detail_info.dart';
+import 'package:doctor_app/features/issue_detail/presentation/widgets/section_info.dart';
+import 'package:doctor_app/features/shared/controllers/issue_controller.dart';
 import 'package:doctor_app/features/shared/domain/models/issue.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 
-class DetailPage extends StatefulWidget {
-  const DetailPage({super.key});
+import '../../shared/controllers/issue_event.dart';
+
+class IssueDetailPage extends StatefulWidget {
+  const IssueDetailPage({super.key});
 
   @override
-  State<DetailPage> createState() => _DetailPageState();
+  State<IssueDetailPage> createState() => _IssueDetailPageState();
 }
 
-class _DetailPageState extends State<DetailPage> {
+class _IssueDetailPageState extends State<IssueDetailPage> {
+  final IssueController issueController = Get.find<IssueController>();
   Issue? issue;
 
   @override
   void initState() {
     super.initState();
     getIssue();
+    ever<IssueEvent?>(issueController.uiEvent, (event) {
+      if (event is Archive) {
+        Get.snackbar(
+          "",
+          "",
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green,
+          margin: const EdgeInsets.all(16),
+          borderRadius: 8,
+          snackStyle: SnackStyle.FLOATING,
+          titleText: Text(
+            "archived".tr,
+            style: WorkSansStyle.labelLarge.copyWith(color: Colors.white),
+          ),
+          messageText: Text(
+            "issue_archived_successfully".tr,
+            style: WorkSansStyle.label.copyWith(color: Colors.white),
+          ),
+        );
+      }
+    });
   }
 
   getIssue() async {
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Duration(milliseconds: 500));
     setState(() {
       issue = Get.arguments;
+      if (issue != null) {
+        issueController.setIssueUUID(issue!.uuid!);
+      }
     });
   }
 
@@ -44,6 +76,69 @@ class _DetailPageState extends State<DetailPage> {
         ),
         centerTitle: true,
         title: Text("${"card".tr} №23"),
+        actions: [
+          PopupMenuButton(
+            itemBuilder: (BuildContext context) => [
+              PopupMenuItem<IssuePopUpMenu>(
+                value: IssuePopUpMenu.archive,
+                child: Text('archive'.tr),
+              ),
+            ],
+            onSelected: (value) {
+              print(value);
+              if (value == IssuePopUpMenu.archive) {
+                Get.dialog(
+                  Dialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.archive_outlined, size: 48),
+                          const SizedBox(height: 16),
+                          Text(
+                            "archive_alert".tr,
+                            textAlign: TextAlign.center,
+                            style: Get.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+
+                          const SizedBox(height: 24),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: ShadButton.secondary(
+                                  child: Text('no'.tr),
+                                  onPressed: () => Get.back(),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: ShadButton(
+                                  backgroundColor: AppColors.primary,
+                                  child: Text('yes'.tr),
+                                  onPressed: () {
+                                    issueController.archiveIssue();
+                                    Get.back();
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }
+            },
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

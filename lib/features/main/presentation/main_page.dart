@@ -1,4 +1,6 @@
+import 'package:doctor_app/features/main/presentation/contents/archive_content.dart';
 import 'package:doctor_app/features/profile/presentation/profile_page.dart';
+import 'package:doctor_app/features/shared/controllers/issue_event.dart';
 import 'package:doctor_app/features/shared/controllers/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,7 +21,7 @@ class _MainPageState extends State<MainPage> {
 
   final List<Widget> pages = [
     MainContent(key: ValueKey("home")),
-    Center(key: ValueKey("search"), child: Text("Search Page")),
+    ArchiveContent(key: ValueKey("archive")),
     ProfilePage(key: ValueKey("profile")),
   ];
 

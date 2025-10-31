@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:doctor_app/core/services/dio_service.dart';
+import 'package:doctor_app/core/utils/log_helper.dart';
+import 'package:doctor_app/features/shared/controllers/issue_event.dart';
 import 'package:doctor_app/features/shared/data/repositories/issue_repository_impl.dart';
 import 'package:doctor_app/features/shared/domain/models/issue.dart';
 import 'package:doctor_app/features/shared/domain/repositories/issue_repository.dart';
@@ -10,10 +12,20 @@ import '../../chat/domain/models/message.dart';
 
 class IssueController extends GetxController {
   var issues = <Issue>[].obs;
+  var archivedIssues = <Issue>[].obs;
   var currentPage = 1;
   var lastPage = 1;
   var isLoading = false.obs;
+  var isLoadingArchivedIssues = false.obs;
   var isMoreLoading = false.obs;
+  final Rxn<IssueEvent> _uiEvent = Rxn<IssueEvent>();
+
+  Rxn<IssueEvent> get uiEvent => _uiEvent;
+
+  void sendEvent(IssueEvent event) {
+    // always assign a NEW instance to trigger event
+    _uiEvent.value = event;
+  }
 
   // === Chat related ===
   Timer? _chatTimer;
@@ -27,7 +39,12 @@ class IssueController extends GetxController {
   void onInit() {
     super.onInit();
     repository = IssueRepositoryImpl(dio: DioService().createDio());
-    getInitialIssues();
+    initialize();
+  }
+
+  Future<void> initialize() async {
+    await getInitialIssues();
+    await getArchivedIssues();
   }
 
   Future<void> getInitialIssues() async {
@@ -60,6 +77,26 @@ class IssueController extends GetxController {
     } finally {
       isMoreLoading.value = false;
     }
+  }
+
+  Future<void> archiveIssue() async {
+    try {
+      final isArchived = await repository.archiveIssue(activeIssueUuid.value!);
+      if (isArchived) {
+        sendEvent(Archive());
+      }
+    } catch (e) {
+      LogHelper.error(e.toString());
+    }
+  }
+
+  Future<void> getArchivedIssues() async {
+    isLoadingArchivedIssues.value = true;
+    final archives = issues
+        .where((element) => element.inactiveAt != null)
+        .toList();
+    archivedIssues.value = archives;
+    isLoadingArchivedIssues.value = false;
   }
 
   Future<void> getChatForIssue(String issueUuid) async {

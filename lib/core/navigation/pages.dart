@@ -2,7 +2,7 @@ import 'package:doctor_app/features/auth/presentations/pages/identification_page
 import 'package:doctor_app/features/auth/presentations/pages/login_page.dart';
 import 'package:doctor_app/features/auth/presentations/pages/register_page.dart';
 import 'package:doctor_app/features/chat/presentation/chat_page.dart';
-import 'package:doctor_app/features/detail/presentation/detail_page.dart';
+import 'package:doctor_app/features/issue_detail/presentation/issue_detail_page.dart';
 import 'package:doctor_app/features/main/bindings.dart';
 import 'package:doctor_app/features/main/presentation/main_page.dart';
 import 'package:doctor_app/features/onboard/bindings.dart';
@@ -61,7 +61,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.detail,
-      page: () => DetailPage(),
+      page: () => IssueDetailPage(),
       transition: Transition.rightToLeft,
       transitionDuration: const Duration(milliseconds: 400),
     ),

@@ -18,20 +18,23 @@ class MyApp extends StatelessWidget {
     AppConfig.padding = MediaQuery.of(context).padding;
 
     final OnboardController onboardController = Get.put(OnboardController());
-    return ShadApp(
+
+    return ShadApp.custom(
+      appBuilder: (context) {
+        return GetMaterialApp(
+          initialBinding: AppBindings(),
+          scaffoldMessengerKey: Notifier.messengerKey,
+          debugShowCheckedModeBanner: false,
+          translations: AppTranslations(),
+          locale: Locale(onboardController.selectedLang.value ?? "uz"),
+          fallbackLocale: const Locale("en"),
+          initialRoute: AppPages.initial,
+          getPages: AppPages.pages,
+        );
+      },
       theme: ShadThemeData(
         brightness: Brightness.light,
         colorScheme: const ShadZincColorScheme.light(),
-      ),
-      home: GetMaterialApp(
-        initialBinding: AppBindings(),
-        scaffoldMessengerKey: Notifier.messengerKey, // attach here
-        debugShowCheckedModeBanner: false,
-        translations: AppTranslations(),
-        locale: Locale(onboardController.selectedLang.value ?? "uz"),
-        fallbackLocale: const Locale("en"),
-        initialRoute: AppPages.initial,
-        getPages: AppPages.pages,
       ),
     );
   }

@@ -49,6 +49,12 @@ class IssueRepositoryImpl extends IssueRepository {
   }
 
   @override
+  Future<bool> archiveIssue(String issueUuid) async {
+    final response = await dio.put("${ApiConstants.issue}/$issueUuid/archive");
+    return response.statusCode == 200;
+  }
+
+  @override
   Future<bool> sendMessage(String issueUuid, String message) async {
     final response = await dio.post(
       "${ApiConstants.issue}/$issueUuid",

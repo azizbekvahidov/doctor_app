@@ -307,6 +307,15 @@ class AppTranslations extends Translations {
       'select_clinic': 'Klinikani tanlang',
       'create_schedule': 'Jadval yaratish ',
       'create_clinic': 'Klinika yaratish',
+      'yes': 'Ha',
+      'no': 'Yo\'q',
+
+      // issue
+      'archive_alert': 'Arxivga tushurishni istaysizmi?',
+      'archived': 'Arxivlandi',
+      'issue_archived_successfully': 'Muvaffaqiyatli arxivlandi',
+      'no_archived_issues': 'Arxivlar mavjud emas',
+      'archives': 'Arxivlar',
 
       // extra
       'type message': 'Xabarni kiriting',

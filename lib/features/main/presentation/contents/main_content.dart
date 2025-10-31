@@ -25,7 +25,7 @@ class MainContent extends GetView<MainPageController> {
         },
         child: controller.content.value == Contents.home
             ? const HomeContent(key: ValueKey('home'))
-            : const ArchiveContent(key: ValueKey('archive')),
+            : ArchiveContent(key: ValueKey('archive')),
       );
     });
   }

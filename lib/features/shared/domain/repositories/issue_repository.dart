@@ -7,6 +7,8 @@ abstract class IssueRepository {
 
   Future<List<Message>?> getIssueChat(String issueUuid, {int page = 1});
 
+  Future<bool> archiveIssue(String issueUuid);
+
   Future<bool> sendMessage(String issueUuid, String message);
 
   Future<bool> readMessage(String issueUuid, int messageUuid);
