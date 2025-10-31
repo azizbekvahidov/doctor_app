@@ -2,6 +2,7 @@ import 'package:doctor_app/features/chat/domain/models/message.dart';
 import 'package:doctor_app/features/chat/presentation/widgets/chat/message_bubble.dart';
 import 'package:doctor_app/features/chat/presentation/widgets/chat/message_text_field.dart';
 import 'package:doctor_app/features/shared/controllers/issue_controller.dart';
+import 'package:doctor_app/features/shared/domain/models/issue.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -15,7 +16,8 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   bool isConnected = false;
-  String? issueUUID;
+  Issue? issue;
+
   final issueController = Get.find<IssueController>();
 
   final TextEditingController _controller = TextEditingController();
@@ -29,12 +31,12 @@ class _ChatPageState extends State<ChatPage> {
 
   _initialize() async {
     setState(() {
-      issueUUID = Get.arguments;
+      issue = Get.arguments;
     });
-    if (issueUUID != null) {
-      issueController.setIssueUUID(issueUUID!);
-      issueController.getChatForIssue(issueUUID!);
-      issueController.startChatStream(issueUUID!);
+    if (issue != null) {
+      issueController.setIssueUUID(issue!.uuid!);
+      issueController.getChatForIssue(issue!.uuid!);
+      issueController.startChatStream(issue!.uuid!);
     }
     await Future.delayed(Duration(milliseconds: 500));
     setState(() {
@@ -61,7 +63,11 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Chat')),
+      appBar: AppBar(
+        title: isConnected == false
+            ? const Text('Loading...')
+            : Text(issue!.patient!.fullName!),
+      ),
       body: SafeArea(
         child: isConnected == false
             ? Center(child: CircularProgressIndicator())
@@ -96,6 +102,7 @@ class _ChatPageState extends State<ChatPage> {
                                 ? Alignment.centerRight
                                 : Alignment.centerLeft,
                             child: MessageBubble(
+                              isRead: msg.readAt != null,
                               isMine: isMine,
                               message: msg.message ?? '',
                             ),

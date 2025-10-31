@@ -56,4 +56,17 @@ class IssueRepositoryImpl extends IssueRepository {
     );
     return response.statusCode == 201;
   }
+
+  @override
+  Future<bool> deleteMessage(String issueUuid, int messageUuid) async {
+    return false;
+  }
+
+  @override
+  Future<bool> readMessage(String issueUuid, int messageUuid) async {
+    final response = await dio.put(
+      "${ApiConstants.issue}/$issueUuid/$messageUuid/read",
+    );
+    return response.statusCode == 200;
+  }
 }

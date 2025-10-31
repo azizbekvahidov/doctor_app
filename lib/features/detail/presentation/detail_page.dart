@@ -47,7 +47,7 @@ class _DetailPageState extends State<DetailPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.toNamed(Routes.chat, arguments: issue!.uuid);
+          Get.toNamed(Routes.chat, arguments: issue);
         },
         backgroundColor: AppColors.primary,
         child: SvgPicture.asset(AssetFinder.icon('chat'), height: 30),
