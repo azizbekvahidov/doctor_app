@@ -1,12 +1,14 @@
 import 'package:doctor_app/core/design_system/styles/text_styles.dart';
 import 'package:doctor_app/core/design_system/widgets/buttons.dart';
+import 'package:doctor_app/features/shared/domain/models/issue.dart';
 import 'package:flutter/material.dart';
 import 'package:get/utils.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class NewCard extends StatelessWidget {
-  const NewCard({super.key, required this.onClick});
+  const NewCard({super.key, required this.onClick, required this.issue});
 
+  final Issue issue;
   final Function() onClick;
 
   @override
@@ -43,7 +45,7 @@ class NewCard extends StatelessWidget {
                         SizedBox(width: 10),
                         Expanded(
                           child: Text(
-                            "Lorem ipsum dolor sit amet, consec tetur",
+                            issue.issue ?? "",
                             style: WorkSansStyle.bodyLarge,
                           ),
                         ),
@@ -91,7 +93,7 @@ class NewCard extends StatelessWidget {
                   Row(
                     children: [
                       Icon(LucideIcons.mapPin),
-                      Text("Lorem ipsum text"),
+                      Text(issue.address ?? ""),
                     ],
                   ),
                 ],

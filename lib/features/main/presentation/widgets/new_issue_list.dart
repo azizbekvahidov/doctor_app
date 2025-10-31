@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import 'announcement_list.dart';
 import 'new_card.dart';
+
 class NewIssueList extends GetView<IssueController> {
   const NewIssueList({super.key});
 
@@ -14,7 +15,7 @@ class NewIssueList extends GetView<IssueController> {
 
     scrollController.addListener(() {
       if (scrollController.position.pixels >=
-          scrollController.position.maxScrollExtent - 200 &&
+              scrollController.position.maxScrollExtent - 200 &&
           !controller.isMoreLoading.value) {
         controller.getNextPage();
       }
@@ -26,9 +27,7 @@ class NewIssueList extends GetView<IssueController> {
       if (controller.isLoading.value && issues.isEmpty) {
         return const SizedBox(
           height: 260,
-          child: Center(
-            child: CircularProgressIndicator(color: Colors.black),
-          ),
+          child: Center(child: CircularProgressIndicator(color: Colors.black)),
         );
       }
 
@@ -48,40 +47,39 @@ class NewIssueList extends GetView<IssueController> {
             if (index < issues.length) {
               final issue = issues[index];
 
-              // 🌀 Each item animates when it appears
               return AnimatedSwitcher(
                 duration: const Duration(milliseconds: 400),
                 transitionBuilder: (child, animation) {
-                  final offsetAnimation = Tween<Offset>(
-                    begin: const Offset(0.3, 0), // slide from right
-                    end: Offset.zero,
-                  ).animate(CurvedAnimation(
-                    parent: animation,
-                    curve: Curves.easeOutCubic,
-                  ));
+                  final offsetAnimation =
+                      Tween<Offset>(
+                        begin: const Offset(0.3, 0),
+                        end: Offset.zero,
+                      ).animate(
+                        CurvedAnimation(
+                          parent: animation,
+                          curve: Curves.easeOutCubic,
+                        ),
+                      );
 
                   return SlideTransition(
                     position: offsetAnimation,
-                    child: FadeTransition(
-                      opacity: animation,
-                      child: child,
-                    ),
+                    child: FadeTransition(opacity: animation, child: child),
                   );
                 },
                 child: NewCard(
+                  issue: issue,
                   key: ValueKey(issue.id),
                   onClick: () {
-                    Get.toNamed(Routes.detail);
+                    Get.toNamed(Routes.detail, arguments: issue);
                   },
                 ),
               );
             } else {
-              // 🔄 Loading indicator for pagination
               return controller.isMoreLoading.value
                   ? const SizedBox(
-                width: 80,
-                child: Center(child: CircularProgressIndicator()),
-              )
+                      width: 80,
+                      child: Center(child: CircularProgressIndicator()),
+                    )
                   : const SizedBox.shrink();
             }
           },

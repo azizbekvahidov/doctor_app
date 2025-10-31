@@ -1,4 +1,3 @@
-import 'dart:convert';
 class Issue {
   final int? id;
   final String? uuid;
@@ -21,9 +20,7 @@ class Issue {
   factory Issue.fromJson(Map<String, dynamic> json) => Issue(
     id: json["id"],
     uuid: json["uuid"],
-    patient: json["patient"] == null
-        ? null
-        : Patient.fromJson(json["patient"]),
+    patient: json["patient"] == null ? null : Patient.fromJson(json["patient"]),
     issue: json["issue"],
     address: json["address"],
     birthdate: json["birthdate"] == null
@@ -51,13 +48,8 @@ class Patient {
 
   Patient({this.id, this.fullName});
 
-  factory Patient.fromJson(Map<String, dynamic> json) => Patient(
-    id: json["id"],
-    fullName: json["full_name"],
-  );
+  factory Patient.fromJson(Map<String, dynamic> json) =>
+      Patient(id: json["id"], fullName: json["full_name"]);
 
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "full_name": fullName,
-  };
+  Map<String, dynamic> toJson() => {"id": id, "full_name": fullName};
 }

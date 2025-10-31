@@ -117,8 +117,8 @@ class AuthController extends GetxController {
       if (registeredAt.isEmpty) {
         Get.toNamed(Routes.identification);
       } else {
-        // Get.toNamed(Routes.main);
-        myIdRegister(isRegisteredAt: true);
+        Get.toNamed(Routes.main);
+        // myIdRegister(isRegisteredAt: true);
       }
     } catch (e) {
       LogHelper.error("Error:$e");

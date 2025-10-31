@@ -1,6 +1,11 @@
+import 'package:doctor_app/features/chat/domain/models/message.dart';
+
 import '../models/paginated_issues.dart';
 
 abstract class IssueRepository {
-  /// Fetch a paginated list of issues from the API
   Future<PaginatedIssues?> getIssues({int page = 1});
+
+  Future<List<Message>?> getIssueChat(String issueUuid, {int page = 1});
+
+  Future<bool> sendMessage(String issueUuid, String message);
 }
