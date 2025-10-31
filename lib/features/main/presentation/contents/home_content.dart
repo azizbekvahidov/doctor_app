@@ -30,24 +30,7 @@ class HomeContent extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0).copyWith(top: 15),
               child: Column(
-                children: [
-                  const NewIssueList(),
-                  const SizedBox(height: 30),
-                  AnnouncementList(
-                    title: "active_ann".tr,
-                    height: 175,
-                    child: ListView.separated(
-                      itemCount: 15,
-                      separatorBuilder: (_, __) => const SizedBox(width: 10),
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (_, __) => ActiveCard(
-                        onClick: () {
-                          Get.toNamed(Routes.detail);
-                        },
-                      ),
-                    ),
-                  ),
-                ],
+                children: [const ActiveIssueList(), const SizedBox(height: 30)],
               ),
             ),
           ],

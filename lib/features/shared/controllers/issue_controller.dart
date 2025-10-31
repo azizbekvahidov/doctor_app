@@ -11,8 +11,10 @@ import 'package:get/get.dart';
 import '../../chat/domain/models/message.dart';
 
 class IssueController extends GetxController {
-  var issues = <Issue>[].obs;
-  var archivedIssues = <Issue>[].obs;
+  final RxList<Issue> _allIssues = <Issue>[].obs;
+  final RxList<Issue> issues = <Issue>[].obs; // active
+  final RxList<Issue> archivedIssues = <Issue>[].obs;
+
   var currentPage = 1;
   var lastPage = 1;
   var isLoading = false.obs;
@@ -49,12 +51,15 @@ class IssueController extends GetxController {
 
   Future<void> getInitialIssues() async {
     isLoading.value = true;
-
     try {
       final result = await repository.getIssues(page: 1);
-      await Future.delayed(Duration(milliseconds: 1000));
+      await Future.delayed(const Duration(milliseconds: 1000));
+
       if (result != null) {
-        issues.assignAll(result.data);
+        _allIssues.assignAll(result.data);
+        issues.assignAll(activeIssues(result.data));
+        archivedIssues.assignAll(archivedIssuesOnly(result.data));
+
         currentPage = result.meta!.currentPage;
         lastPage = result.meta!.lastPage;
       }
@@ -69,13 +74,32 @@ class IssueController extends GetxController {
     try {
       final nextPage = currentPage + 1;
       final result = await repository.getIssues(page: nextPage);
-      await Future.delayed(Duration(milliseconds: 1000));
+      await Future.delayed(const Duration(milliseconds: 1000));
+
       if (result != null) {
-        issues.addAll(result.data);
+        _allIssues.addAll(result.data);
+        issues.addAll(activeIssues(result.data));
+        archivedIssues.addAll(archivedIssuesOnly(result.data));
+
         currentPage = result.meta!.currentPage;
       }
     } finally {
       isMoreLoading.value = false;
+    }
+  }
+
+  List<Issue> activeIssues(List<Issue> list) =>
+      list.where((e) => e.inactiveAt == null).toList();
+
+  List<Issue> archivedIssuesOnly(List<Issue> list) =>
+      list.where((e) => e.inactiveAt != null).toList();
+
+  Future<void> getArchivedIssues() async {
+    isLoadingArchivedIssues.value = true;
+    try {
+      archivedIssues.assignAll(archivedIssuesOnly(_allIssues));
+    } finally {
+      isLoadingArchivedIssues.value = false;
     }
   }
 
@@ -88,15 +112,6 @@ class IssueController extends GetxController {
     } catch (e) {
       LogHelper.error(e.toString());
     }
-  }
-
-  Future<void> getArchivedIssues() async {
-    isLoadingArchivedIssues.value = true;
-    final archives = issues
-        .where((element) => element.inactiveAt != null)
-        .toList();
-    archivedIssues.value = archives;
-    isLoadingArchivedIssues.value = false;
   }
 
   Future<void> getChatForIssue(String issueUuid) async {

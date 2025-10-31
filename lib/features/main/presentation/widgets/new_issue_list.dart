@@ -6,8 +6,8 @@ import 'package:get/get.dart';
 import 'announcement_list.dart';
 import 'new_card.dart';
 
-class NewIssueList extends GetView<IssueController> {
-  const NewIssueList({super.key});
+class ActiveIssueList extends GetView<IssueController> {
+  const ActiveIssueList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,66 +24,62 @@ class NewIssueList extends GetView<IssueController> {
     return Obx(() {
       final issues = controller.issues;
 
-      if (controller.isLoading.value && issues.isEmpty) {
-        return const SizedBox(
-          height: 260,
-          child: Center(child: CircularProgressIndicator(color: Colors.black)),
-        );
-      }
-
-      if (issues.isEmpty) {
-        return const SizedBox.shrink();
-      }
-
       return AnnouncementList(
-        title: "new_ann".tr,
+        title: "active_ann".tr,
         height: 260,
-        child: ListView.separated(
-          controller: scrollController,
-          scrollDirection: Axis.horizontal,
-          itemCount: issues.length + 1,
-          separatorBuilder: (_, __) => const SizedBox(width: 10),
-          itemBuilder: (context, index) {
-            if (index < issues.length) {
-              final issue = issues[index];
+        child: controller.isLoading.value
+            ? Center(child: CircularProgressIndicator())
+            : issues.isNotEmpty
+            ? ListView.separated(
+                controller: scrollController,
+                scrollDirection: Axis.horizontal,
+                itemCount: issues.length + 1,
+                separatorBuilder: (_, __) => const SizedBox(width: 10),
+                itemBuilder: (context, index) {
+                  if (index < issues.length) {
+                    final issue = issues[index];
 
-              return AnimatedSwitcher(
-                duration: const Duration(milliseconds: 400),
-                transitionBuilder: (child, animation) {
-                  final offsetAnimation =
-                      Tween<Offset>(
-                        begin: const Offset(0.3, 0),
-                        end: Offset.zero,
-                      ).animate(
-                        CurvedAnimation(
-                          parent: animation,
-                          curve: Curves.easeOutCubic,
-                        ),
-                      );
+                    return AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 400),
+                      transitionBuilder: (child, animation) {
+                        final offsetAnimation =
+                            Tween<Offset>(
+                              begin: const Offset(0.3, 0),
+                              end: Offset.zero,
+                            ).animate(
+                              CurvedAnimation(
+                                parent: animation,
+                                curve: Curves.easeOutCubic,
+                              ),
+                            );
 
-                  return SlideTransition(
-                    position: offsetAnimation,
-                    child: FadeTransition(opacity: animation, child: child),
-                  );
+                        return SlideTransition(
+                          position: offsetAnimation,
+                          child: FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          ),
+                        );
+                      },
+                      child: NewCard(
+                        issue: issue,
+                        key: ValueKey(issue.id),
+                        onClick: () {
+                          Get.toNamed(Routes.detail, arguments: issue);
+                        },
+                      ),
+                    );
+                  } else {
+                    return controller.isMoreLoading.value
+                        ? const SizedBox(
+                            width: 80,
+                            child: Center(child: CircularProgressIndicator()),
+                          )
+                        : const SizedBox.shrink();
+                  }
                 },
-                child: NewCard(
-                  issue: issue,
-                  key: ValueKey(issue.id),
-                  onClick: () {
-                    Get.toNamed(Routes.detail, arguments: issue);
-                  },
-                ),
-              );
-            } else {
-              return controller.isMoreLoading.value
-                  ? const SizedBox(
-                      width: 80,
-                      child: Center(child: CircularProgressIndicator()),
-                    )
-                  : const SizedBox.shrink();
-            }
-          },
-        ),
+              )
+            : Center(child: Text("no_active_ann".tr)),
       );
     });
   }

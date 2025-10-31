@@ -1,7 +1,4 @@
-import 'package:doctor_app/core/design_system/styles/app_colors.dart';
 import 'package:doctor_app/core/design_system/styles/text_styles.dart';
-import 'package:doctor_app/core/enums/contents.dart';
-import 'package:doctor_app/core/navigation/routes.dart';
 import 'package:doctor_app/features/main/presentation/controller/main_page_controller.dart';
 import 'package:doctor_app/features/main/presentation/widgets/archived_item.dart';
 import 'package:doctor_app/features/shared/controllers/issue_controller.dart';
