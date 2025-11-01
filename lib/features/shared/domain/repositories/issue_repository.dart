@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:doctor_app/features/chat/domain/models/message.dart';
 
 import '../models/paginated_issues.dart';
@@ -9,7 +11,8 @@ abstract class IssueRepository {
 
   Future<bool> archiveIssue(String issueUuid);
 
-  Future<bool> sendMessage(String issueUuid, String message);
+  Future<bool> sendMessage(String issueUuid, String message, {List<File>? files});
+
 
   Future<bool> readMessage(String issueUuid, int messageUuid);
 

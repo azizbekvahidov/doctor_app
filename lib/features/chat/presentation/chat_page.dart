@@ -1,11 +1,13 @@
+import 'dart:io';
+
 import 'package:doctor_app/features/chat/domain/models/message.dart';
 import 'package:doctor_app/features/chat/presentation/widgets/chat/message_bubble.dart';
 import 'package:doctor_app/features/chat/presentation/widgets/chat/message_text_field.dart';
 import 'package:doctor_app/features/shared/controllers/issue_controller.dart';
 import 'package:doctor_app/features/shared/domain/models/issue.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -21,7 +23,6 @@ class _ChatPageState extends State<ChatPage> {
   final issueController = Get.find<IssueController>();
 
   final TextEditingController _controller = TextEditingController();
-  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
@@ -50,13 +51,33 @@ class _ChatPageState extends State<ChatPage> {
     super.dispose();
   }
 
-  Future<void> _pickFile() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
-      print('Picked file: ${pickedFile.path}');
-      // TODO: upload file if your API supports attachments
-    } else {
-      print('No file selected.');
+  Future<void> _pickFiles() async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        allowMultiple: true,
+        type: FileType.any,
+      );
+
+      if (result != null && result.files.isNotEmpty) {
+        final files = result.paths
+            .whereType<String>()
+            .map((path) => File(path))
+            .toList();
+
+        print('📁 Picked ${files.length} files:');
+        for (final f in files) {
+          print(' - ${f.path}');
+        }
+
+        // Pass a new list copy (prevents concurrent modification)
+        issueController.selectFiles(List<File>.from(files));
+
+        print('✅ Files selected successfully');
+      } else {
+        print('⚠️ No files selected.');
+      }
+    } catch (e) {
+      print('❌ Error picking files: $e');
     }
   }
 
@@ -104,7 +125,7 @@ class _ChatPageState extends State<ChatPage> {
                             child: MessageBubble(
                               isRead: msg.readAt != null,
                               isMine: isMine,
-                              message: msg.message ?? '',
+                              message: msg,
                             ),
                           );
                         },
@@ -115,12 +136,15 @@ class _ChatPageState extends State<ChatPage> {
                   MessageTextField(
                     padding: const EdgeInsets.only(top: 10, bottom: 5),
                     controller: _controller,
-                    onSelectFile: _pickFile,
+                    onSelectFile: _pickFiles,
                     onSend: () async {
                       final text = _controller.text.trim();
-                      if (text.isEmpty) return;
+                      if (text.isEmpty && issueController.files.isEmpty) return;
 
-                      issueController.sendMessage(text);
+                      await issueController.sendMessage(
+                        text,
+                        filesList: issueController.files,
+                      );
 
                       _controller.clear();
                     },

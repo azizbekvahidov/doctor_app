@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:doctor_app/core/services/dio_service.dart';
 import 'package:doctor_app/core/utils/log_helper.dart';
@@ -14,6 +15,7 @@ class IssueController extends GetxController {
   final RxList<Issue> _allIssues = <Issue>[].obs;
   final RxList<Issue> issues = <Issue>[].obs; // active
   final RxList<Issue> archivedIssues = <Issue>[].obs;
+  final RxList<File> files = <File>[].obs;
 
   var currentPage = 1;
   var lastPage = 1;
@@ -139,7 +141,6 @@ class IssueController extends GetxController {
     }
   }
 
-  // Start polling (auto refresh every few seconds)
   void startChatStream(String issueUUID) {
     _chatTimer?.cancel();
     _chatTimer = Timer.periodic(const Duration(milliseconds: 800), (_) async {
@@ -147,11 +148,17 @@ class IssueController extends GetxController {
     });
   }
 
-  sendMessage(String message) async {
+  Future<void> sendMessage(String message, {List<File>? filesList}) async {
     if (activeIssueUuid.value == null) return;
-    bool isSend = await repository.sendMessage(activeIssueUuid.value!, message);
-    if (isSend) {
-      getChatForIssue(activeIssueUuid.value!);
+
+    bool isSent = await repository.sendMessage(
+      activeIssueUuid.value!,
+      message,
+      files: filesList,
+    );
+
+    if (isSent) {
+      await getChatForIssue(activeIssueUuid.value!);
     }
   }
 
@@ -159,10 +166,15 @@ class IssueController extends GetxController {
     activeIssueUuid.value = uuid;
   }
 
+  void selectFiles(List<File> filesList) {
+    files.value = filesList;
+  }
+
   void clearChat() {
     chatMessages.clear();
     _chatTimer?.cancel();
     activeIssueUuid.value = null;
+    files.value = [];
   }
 
   @override

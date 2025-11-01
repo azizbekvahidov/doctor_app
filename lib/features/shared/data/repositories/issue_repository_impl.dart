@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:doctor_app/core/constants/api_constants.dart';
 import 'package:doctor_app/core/utils/log_helper.dart';
@@ -55,12 +57,40 @@ class IssueRepositoryImpl extends IssueRepository {
   }
 
   @override
-  Future<bool> sendMessage(String issueUuid, String message) async {
-    final response = await dio.post(
-      "${ApiConstants.issue}/$issueUuid",
-      data: {"message": message},
-    );
-    return response.statusCode == 201;
+  Future<bool> sendMessage(
+    String issueUuid,
+    String message, {
+    List<File>? files,
+  }) async {
+    print(files);
+    try {
+      final Map<String, dynamic> formMap = {'message': message};
+
+      // only add files if not empty
+      if (files != null && files.isNotEmpty) {
+        formMap['files[]'] = await Future.wait(
+          files.map(
+            (file) async => await MultipartFile.fromFile(
+              file.path,
+              filename: file.path.split('/').last,
+            ),
+          ),
+        );
+      }
+
+      final formData = FormData.fromMap(formMap);
+
+      final response = await dio.post(
+        "${ApiConstants.issue}/$issueUuid",
+        data: formData,
+        options: Options(headers: {'Accept': 'application/json'}),
+      );
+      print(response.statusCode == 201);
+      return response.statusCode == 201;
+    } on DioException catch (e) {
+      LogHelper.error('sendMessage error: ${e.message}');
+      return false;
+    }
   }
 
   @override

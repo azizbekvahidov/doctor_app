@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:doctor_app/core/navigation/routes.dart';
+import 'package:doctor_app/features/auth/presentations/controller/auth_controller.dart';
 import 'package:doctor_app/features/profile/presentation/controllers/cabinet_controller.dart';
 import 'package:doctor_app/features/shared/controllers/user_controller.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ class ProfilePage extends StatelessWidget {
 
   final CabinetController cabinetController = Get.find<CabinetController>();
   final UserController userController = Get.find<UserController>();
+  final AuthController authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
@@ -155,6 +157,7 @@ class ProfilePage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 25),
                 child: PrimaryButton(
+                  onTap: () => authController.logout(),
                   width: double.infinity,
                   child: Text(
                     "log out".tr,

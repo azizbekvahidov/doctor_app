@@ -1,8 +1,9 @@
+import 'package:doctor_app/features/shared/controllers/issue_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class MessageTextField extends StatelessWidget {
-  const MessageTextField({
+  MessageTextField({
     super.key,
     this.padding = EdgeInsets.zero,
     required this.controller,
@@ -15,6 +16,8 @@ class MessageTextField extends StatelessWidget {
   final Function() onSend;
   final Function() onSelectFile;
 
+  final IssueController issueController = Get.find<IssueController>();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -22,10 +25,23 @@ class MessageTextField extends StatelessWidget {
       child: Row(
         children: [
           // File picker icon
-          IconButton(
-            icon: Icon(Icons.attach_file), // File attachment icon
-            onPressed: onSelectFile,
+          Stack(
+            children: [
+              Obx(() {
+                final hasFiles = issueController.files.isNotEmpty;
+                return IconButton(
+                  icon: Icon(
+                    Icons.attach_file,
+                    color: hasFiles
+                        ? Colors.blue
+                        : Colors.grey, // dynamic color
+                  ),
+                  onPressed: onSelectFile,
+                );
+              }),
+            ],
           ),
+
           // TextField for typing message
           Expanded(
             child: TextField(
