@@ -111,7 +111,7 @@ class AppTranslations extends Translations {
       'no_documents': 'Документы отсутствуют',
 
       // price
-      'main_price':'',
+      'main_price': '',
 
       // --- Days ---
       'monday': 'Понедельник',
@@ -344,6 +344,7 @@ class AppTranslations extends Translations {
       'issue_archived_successfully': 'Muvaffaqиятli arxivlandi',
       'no_archived_issues': 'Arxivlar mavjud emas',
       'archives': 'Arxivlar',
+      'no_active_ann': 'Aktiv buyurtmalar mavjud emas',
 
       // --- Chat ---
       'type message': 'Xabarni kiriting',
@@ -352,6 +353,10 @@ class AppTranslations extends Translations {
 
       // --- Notifications ---
       'schedule_was_created_successfully': 'Jadval muvaffaqiyatli yaratildi',
+      'document_was_deleted_successfully': 'Hujjat muvaffaqiyatli o\'chirildi',
+      'document_was_uploaded_successfully': 'Hujjat muvaffaqiyatli yuklandi!',
+      "error_while_creating_schedule":
+          'Jadval yaratishda xatolik. Iltimos qayta urinib ko\'ring.',
     },
   };
 }
