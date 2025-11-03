@@ -1,4 +1,5 @@
 import 'package:get/get_navigation/src/root/internacionalization.dart';
+import 'package:get/get.dart';
 
 class AppTranslations extends Translations {
   @override
@@ -9,12 +10,16 @@ class AppTranslations extends Translations {
       'logout': 'Выход из системы',
       'next': 'Продолжить',
       'dismiss': 'Отменить',
+
+      // --- Announcements ---
       'new_ann': 'Новые заказы',
       'active_ann': 'Активные заказы',
+
+      // --- Personal Info ---
       'first_name': "Имя",
       'last_name': "Фамилия",
-      'personal_info': "Личная информация",
       'middle_name': "Отчество",
+      'personal_info': "Личная информация",
       'phone_number': "Номер телефона",
       'email': "Эл. почта",
       'birthday': "Дата рождения",
@@ -24,11 +29,11 @@ class AppTranslations extends Translations {
       'about_uz': "О себе на узбекском языке",
       'about_ru': "О себе на русском языке",
       'social_networks': "Социальные сети",
-      'select_profession': 'Пожалуйста, выберите вашу специальность',
-      'select_degree': 'Пожалуйста, выберите вашу степень',
       'identification_info': 'Сделайте селфи и пройдите идентификацию',
       'identification': 'Идентификация',
       'register_success': 'Вы успешно зарегистрировались в системе.',
+      'select_profession': 'Пожалуйста, выберите вашу специальность',
+      'select_degree': 'Пожалуйста, выберите вашу степень',
 
       // --- Validation texts ---
       'valid_first_name': 'Пожалуйста, введите ваше имя',
@@ -105,7 +110,10 @@ class AppTranslations extends Translations {
       'delete_document_alert': 'Удалить документ?',
       'no_documents': 'Документы отсутствуют',
 
-      // Days of the week
+      // price
+      'main_price':'',
+
+      // --- Days ---
       'monday': 'Понедельник',
       'tuesday': 'Вторник',
       'wednesday': 'Среда',
@@ -121,23 +129,8 @@ class AppTranslations extends Translations {
       'hour': 'Часы',
       'lunch': 'Обед',
       'work_hours': 'Рабочие часы',
-      'delete': 'Удалить',
-      'cancel': 'Отмена',
-      'first_price': 'Цена первого приёма',
-      'second_price': 'Цена второго приёма',
 
-      // validations
-      'valid_price': 'Пожалуйста, введите цену',
-      'valid_clinic': 'Пожалуйста, введите название клиники',
-      'valid_address': 'Пожалуйста, введите адрес клиники',
-      'valid_region': 'Пожалуйста, выберите регион',
-      'valid_day': 'Пожалуйста, выберите день недели',
-      'valid_work_hours': 'Пожалуйста, введите рабочее время',
-      'valid_first_price': 'Пожалуйста, введите цену первого приёма',
-      'valid_second_price': 'Пожалуйста, введите цену второго приёма',
-      'valid_schedules': 'Пожалуйста, добавьте расписание',
-
-      // Buttons labels
+      // --- Common buttons ---
       'add': 'Добавить',
       'save': 'Сохранить',
       'create': 'Создать',
@@ -151,25 +144,59 @@ class AppTranslations extends Translations {
       'select_clinic': 'Выберите клинику',
       'create_schedule': 'Создать расписание',
       'create_clinic': 'Создать клинику',
+      'delete': 'Удалить',
+      'cancel': 'Отмена',
+      'yes': 'Да',
+      'no': 'Нет',
 
-      // extra
+      // --- Validation for schedule ---
+      'valid_price': 'Пожалуйста, введите цену',
+      'valid_clinic': 'Пожалуйста, введите название клиники',
+      'valid_address': 'Пожалуйста, введите адрес клиники',
+      'valid_region': 'Пожалуйста, выберите регион',
+      'valid_day': 'Пожалуйста, выберите день недели',
+      'valid_work_hours': 'Пожалуйста, введите рабочее время',
+      'valid_first_price': 'Пожалуйста, введите цену первого приёма',
+      'valid_second_price': 'Пожалуйста, введите цену второго приёма',
+      'valid_schedules': 'Пожалуйста, добавьте расписание',
+
+      // --- Prices ---
+      'first_price': 'Цена первого приёма',
+      'second_price': 'Цена второго приёма',
+
+      // --- Issues / Archive ---
+      'archive_alert': 'Отправить в архив?',
+      'archived': 'Архивировано',
+      'issue_archived_successfully': 'Успешно архивировано',
+      'no_archived_issues': 'Архивы отсутствуют',
+      'archives': 'Архивы',
+
+      // --- Chat ---
       'type message': 'Введите сообщение',
       'send': 'Отправить',
       'chats': 'Чаты',
+
+      // --- Notifications ---
+      'schedule_was_created_successfully': 'Расписание успешно создано',
     },
 
+    // ====================== Uzbek ==========================
     'uz_UZ': {
       'hello': 'Salom',
       'login': 'Kirish',
       'logout': 'Tizimdan chiqildi',
       'next': 'Davom etish',
       'dismiss': 'Bekor qilish',
+
+      // --- Announcements ---
       'new_ann': 'Yangi buyurtmalar',
       'active_ann': 'Aktiv buyurtmalar',
+
+      // --- Personal Info ---
       'first_name': "Ism",
       'last_name': "Familiya",
-      'personal_info': "Shaxsiy ma'lumotlar",
       'middle_name': "Otasining ismi",
+      'personal_info': "Shaxsiy ma'lumotlar",
       'phone_number': "Telefon raqam",
       'email': "Email",
       'birthday': "Tug'ilgan kun",
@@ -179,11 +206,11 @@ class AppTranslations extends Translations {
       'about_uz': "O'zbek tilida o'zingiz haqingizda",
       'about_ru': "Rus tilida o'zingiz haqingizda",
       'social_networks': "Ijtimoiy tarmoqlar",
-      'select_profession': 'Iltimos yo\'nalishingizni tanlang',
-      'select_degree': 'Iltimos darajangizni tanlang',
       'identification_info': 'Selfi oling va identifikatsiyadan o\'ting',
       'identification': 'Identifikatsiya',
-      'register_success': 'Siz tizimdan muvaffaqiyatli ro\'yxatdan o\'tdingiz.',
+      'register_success': 'Siz tizimda muvaffaqiyatli ro\'yxatdan o\'tdingiz.',
+      'select_profession': 'Iltimos yo\'nalishingizni tanlang',
+      'select_degree': 'Iltimos darajangizni tanlang',
 
       // --- Validation texts ---
       'valid_first_name': 'Iltimos ismingizni kiriting',
@@ -260,7 +287,7 @@ class AppTranslations extends Translations {
       'delete_document_alert': 'Hujjatni o\'chirmoqchimisiz?',
       'no_documents': 'Hujjatlar mavjud emas',
 
-      // Days of the week
+      // --- Days ---
       'monday': 'Dushanba',
       'tuesday': 'Seshanba',
       'wednesday': 'Chorshanba',
@@ -276,24 +303,8 @@ class AppTranslations extends Translations {
       'hour': 'Soat',
       'lunch': 'Tushlik',
       'work_hours': 'Ish soatlari',
-      'delete': 'O\'chirish',
-      'cancel': 'Bekor qilish',
-      'first_price': 'Birinchi qabul narxi',
-      'second_price': 'Ikkinchi qabul narxi',
 
-      // validations
-      'valid_price': 'Iltimos narxni kiriting',
-      'valid_clinic': 'Iltimos klinika nomini kiriting',
-      'valid_address': 'Iltimos klinika manzilini kiriting',
-      'valid_region': 'Iltimos viloyatni tanlang',
-      'valid_day': 'Iltimos hafta kunini tanlang',
-      'valid_work_hours': 'Iltimos ish vaqtlarini kiriting',
-      'valid_lunch_hours': 'Iltimos tushlik vaqtlarini kiriting',
-      'valid_first_price': 'Iltimos birinchi qabul narxini kiriting',
-      'valid_second_price': 'Iltimos ikkinchi qabul narxini kiriting',
-      'valid_schedules': 'Iltimos jadval qo\'shing',
-
-      // Buttons lables
+      // --- Common buttons ---
       'add': 'Qo\'shish',
       'save': 'Saqlash',
       'create': 'Yaratish',
@@ -305,22 +316,42 @@ class AppTranslations extends Translations {
       'select_time': 'Vaqtni tanlang',
       'select_work_hours': 'Ish vaqtlarini tanlang',
       'select_clinic': 'Klinikani tanlang',
-      'create_schedule': 'Jadval yaratish ',
+      'create_schedule': 'Jadval yaratish',
       'create_clinic': 'Klinika yaratish',
+      'delete': 'O\'chirish',
+      'cancel': 'Bekor qilish',
       'yes': 'Ha',
       'no': 'Yo\'q',
 
-      // issue
+      // --- Validation for schedule ---
+      'valid_price': 'Iltimos narxni kiriting',
+      'valid_clinic': 'Iltimos klinika nomini kiriting',
+      'valid_address': 'Iltimos klinika manzilini kiriting',
+      'valid_region': 'Iltimos viloyatni tanlang',
+      'valid_day': 'Iltimos hafta kunini tanlang',
+      'valid_work_hours': 'Iltimos ish vaqtlarini kiriting',
+      'valid_first_price': 'Iltimos birinchi qabul narxini kiriting',
+      'valid_second_price': 'Iltimos ikkinchi qabul narxini kiriting',
+      'valid_schedules': 'Iltimos jadval qo\'shing',
+
+      // --- Prices ---
+      'first_price': 'Birinchi qabul narxi',
+      'second_price': 'Ikkinchi qabul narxi',
+
+      // --- Issues / Archive ---
       'archive_alert': 'Arxivga tushurishni istaysizmi?',
       'archived': 'Arxivlandi',
-      'issue_archived_successfully': 'Muvaffaqiyatli arxivlandi',
+      'issue_archived_successfully': 'Muvaffaqиятli arxivlandi',
       'no_archived_issues': 'Arxivlar mavjud emas',
       'archives': 'Arxivlar',
 
-      // extra
+      // --- Chat ---
       'type message': 'Xabarni kiriting',
       'send': 'Yuborish',
       'chats': 'Xabarlar',
+
+      // --- Notifications ---
+      'schedule_was_created_successfully': 'Jadval muvaffaqiyatli yaratildi',
     },
   };
 }
