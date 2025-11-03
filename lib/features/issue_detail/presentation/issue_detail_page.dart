@@ -29,6 +29,8 @@ class _IssueDetailPageState extends State<IssueDetailPage> {
   final IssueController issueController = Get.find<IssueController>();
   Issue? issue;
 
+  bool isConnected = false;
+
   @override
   void initState() {
     super.initState();
@@ -62,6 +64,7 @@ class _IssueDetailPageState extends State<IssueDetailPage> {
       issue = Get.arguments;
       if (issue != null) {
         issueController.setIssueUUID(issue!.uuid!);
+        isConnected = true;
       }
     });
   }
@@ -71,7 +74,7 @@ class _IssueDetailPageState extends State<IssueDetailPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Get.back(),
           icon: Icon(Icons.arrow_back),
         ),
         centerTitle: true,
@@ -85,7 +88,6 @@ class _IssueDetailPageState extends State<IssueDetailPage> {
               ),
             ],
             onSelected: (value) {
-              print(value);
               if (value == IssuePopUpMenu.archive) {
                 Get.dialog(
                   Dialog(
@@ -140,12 +142,24 @@ class _IssueDetailPageState extends State<IssueDetailPage> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.toNamed(Routes.chat, arguments: issue);
+      floatingActionButton: Builder(
+        builder: (context) {
+          if (isConnected) {
+            if (issue != null) {
+              if (issue!.inactiveAt != null) {
+                return SizedBox.shrink();
+              }
+            }
+            return FloatingActionButton(
+              onPressed: () {
+                Get.toNamed(Routes.chat, arguments: issue);
+              },
+              backgroundColor: AppColors.primary,
+              child: SvgPicture.asset(AssetFinder.icon('chat'), height: 30),
+            );
+          }
+          return SizedBox.shrink();
         },
-        backgroundColor: AppColors.primary,
-        child: SvgPicture.asset(AssetFinder.icon('chat'), height: 30),
       ),
       body: SafeArea(
         child: issue == null
