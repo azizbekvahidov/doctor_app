@@ -62,7 +62,6 @@ class IssueRepositoryImpl extends IssueRepository {
     String message, {
     List<File>? files,
   }) async {
-    print(files);
     try {
       final Map<String, dynamic> formMap = {'message': message};
 
@@ -85,7 +84,6 @@ class IssueRepositoryImpl extends IssueRepository {
         data: formData,
         options: Options(headers: {'Accept': 'application/json'}),
       );
-      print(response.statusCode == 201);
       return response.statusCode == 201;
     } on DioException catch (e) {
       LogHelper.error('sendMessage error: ${e.message}');

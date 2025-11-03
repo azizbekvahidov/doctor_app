@@ -12,6 +12,7 @@ class ClinicList extends StatelessWidget {
     required this.cabinetController,
     required this.onboardController,
   });
+
   final CabinetController cabinetController;
   final OnboardController onboardController;
 
@@ -43,31 +44,41 @@ class ClinicList extends StatelessWidget {
                       border: Border.all(color: AppColors.subTitleLight),
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: ListView.builder(
-                      itemCount: cabinetController.clinics.length,
-                      itemBuilder: (context, index) {
-                        final clinic = cabinetController.clinics[index];
-                        return ListTile(
-                          title: Text(clinic.name?.ru ?? ""),
-                          subtitle: Text(clinic.address?.ru ?? ""),
-                          onTap: () {
-                            cabinetController.clinicController.text =
-                                onboardController.selectedLang.value == 'ru'
-                                ? clinic.name?.ru ?? ""
-                                : clinic.name?.uz ?? "";
-                            cabinetController.selectClinic(
-                              ClinicRequest(
-                                id: clinic.id,
-                                nameRu: clinic.name?.ru ?? "",
-                                nameUz: clinic.name?.uz ?? "",
-                                addressRu: clinic.address?.ru ?? "",
-                                addressUz: clinic.address?.uz ?? "",
-                                district: clinic.district?.id ?? 0,
-                              ),
-                            );
-                          },
-                        );
-                      },
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: ListView.builder(
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            itemCount: cabinetController.clinics.length,
+                            itemBuilder: (context, index) {
+                              final clinic = cabinetController.clinics[index];
+                              return ListTile(
+                                title: Text(clinic.name?.ru ?? ""),
+                                subtitle: Text(clinic.address?.ru ?? ""),
+
+                                onTap: () {
+                                  cabinetController.clinicController.text =
+                                      onboardController.selectedLang.value ==
+                                          'ru'
+                                      ? clinic.name?.ru ?? ""
+                                      : clinic.name?.uz ?? "";
+
+                                  cabinetController.selectClinic(
+                                    ClinicRequest(
+                                      id: clinic.id,
+                                      nameRu: clinic.name?.ru ?? "",
+                                      nameUz: clinic.name?.uz ?? "",
+                                      addressRu: clinic.address?.ru ?? "",
+                                      addressUz: clinic.address?.uz ?? "",
+                                      district: clinic.district?.id ?? 0,
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],

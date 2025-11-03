@@ -1,7 +1,6 @@
 import 'package:doctor_app/core/design_system/styles/text_styles.dart';
 import 'package:doctor_app/core/design_system/widgets/buttons.dart';
 import 'package:doctor_app/core/design_system/widgets/buttons/float_button.dart';
-import 'package:doctor_app/features/auth/domain/models/user.dart';
 import 'package:doctor_app/features/profile/presentation/controllers/cabinet_controller.dart';
 import 'package:doctor_app/features/profile/presentation/widgets/document_box.dart';
 import 'package:doctor_app/features/shared/controllers/user_controller.dart';
@@ -11,60 +10,9 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 
 class DocumentsPage extends StatelessWidget {
   DocumentsPage({super.key});
+
   final UserController userController = Get.find<UserController>();
   final CabinetController cabinetController = Get.find<CabinetController>();
-
-  void _showCustomDialog(BuildContext context, {required Avatar documentUrl}) {
-    showDialog(
-      context: context,
-      barrierDismissible: true, // tap outside to close
-      builder: (BuildContext context) {
-        return Dialog(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  "delete_document_alert".tr,
-                  style: WorkSansStyle.bodyLarge,
-                ),
-                SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ShadButton.secondary(
-                      decoration: ShadDecoration(
-                        border: ShadBorder.all(
-                          color: Colors.black,
-                          width: 1.5,
-                          radius: BorderRadius.circular(10),
-                        ),
-                      ),
-
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text("cancel".tr, style: WorkSansStyle.bodyLarge),
-                    ),
-                    PrimaryButton(
-                      borderRadius: BorderRadius.circular(10),
-                      bgColor: Colors.red,
-                      onTap: () async {
-                        cabinetController.deleteDocument(documentUrl.id!);
-                        Navigator.of(context).pop();
-                      },
-                      child: Text("delete".tr, style: WorkSansStyle.bodyLarge),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +45,7 @@ class DocumentsPage extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15).copyWith(top: 15),
                 child: Text(
-                  "Дипломы, сертификаты и т.д.",
+                  "documents".tr,
                   style: WorkSansStyle.titleMedium.copyWith(
                     fontWeight: FontWeight.w500,
                   ),
@@ -130,9 +78,66 @@ class DocumentsPage extends StatelessWidget {
                           name: documentUrl.name,
                           url: documentUrl.url,
                           onClick: () {
-                            _showCustomDialog(
-                              context,
-                              documentUrl: documentUrl,
+                            Get.dialog(
+                              Dialog(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 15,
+                                    vertical: 20,
+                                  ),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        "delete_document_alert".tr,
+                                        style: WorkSansStyle.bodyLarge,
+                                      ),
+                                      SizedBox(height: 20),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          ShadButton.secondary(
+                                            decoration: ShadDecoration(
+                                              border: ShadBorder.all(
+                                                color: Colors.black,
+                                                width: 1.5,
+                                                radius: BorderRadius.circular(
+                                                  10,
+                                                ),
+                                              ),
+                                            ),
+
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text(
+                                              "cancel".tr,
+                                              style: WorkSansStyle.bodyLarge,
+                                            ),
+                                          ),
+                                          PrimaryButton(
+                                            borderRadius: BorderRadius.circular(
+                                              10,
+                                            ),
+                                            bgColor: Colors.red,
+                                            onTap: () async {
+                                              cabinetController.deleteDocument(
+                                                documentUrl.id!,
+                                              );
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text(
+                                              "delete".tr,
+                                              style: WorkSansStyle.bodyLarge,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                             );
                           },
                         );

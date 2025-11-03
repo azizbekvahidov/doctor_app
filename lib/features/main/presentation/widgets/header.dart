@@ -1,4 +1,3 @@
-import 'package:doctor_app/core/enums/contents.dart';
 import 'package:doctor_app/core/utils/asset_finder.dart';
 import 'package:doctor_app/core/design_system/widgets/circle.dart';
 import 'package:doctor_app/core/design_system/styles/app_colors.dart';

@@ -2,7 +2,8 @@ import 'package:doctor_app/core/design_system/styles/text_styles.dart';
 import 'package:doctor_app/core/design_system/widgets/buttons/float_button.dart';
 import 'package:doctor_app/core/navigation/routes.dart';
 import 'package:doctor_app/features/profile/presentation/controllers/cabinet_controller.dart';
-import 'package:doctor_app/features/profile/presentation/widgets/schedule_item.dart';
+
+import 'package:doctor_app/features/profile/presentation/widgets/schedule_list.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -50,16 +51,7 @@ class _WorkInfoPageState extends State<WorkInfoPage> {
               ),
             );
           } else {
-            return ListView.separated(
-              padding: const EdgeInsets.symmetric().copyWith(top: 20),
-              shrinkWrap: true,
-              itemBuilder: (context, index) {
-                final schedule = cabinetController.schedules[index];
-                return ScheduleItem(schedule: schedule);
-              },
-              separatorBuilder: (context, index) => SizedBox(height: 10),
-              itemCount: cabinetController.schedules.length,
-            );
+            return ScheduleList(schedules: cabinetController.schedules);
           }
         }),
       ),

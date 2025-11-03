@@ -136,7 +136,7 @@ class IssueController extends GetxController {
   void markMessagesAsRead(List<Message> messages, issueUuid) async {
     for (var message in messages) {
       if (message.from == 'patient' && message.readAt == null) {
-        final isRead = await repository.readMessage(issueUuid, message.id!);
+        await repository.readMessage(issueUuid, message.id!);
       }
     }
   }

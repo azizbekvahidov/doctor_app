@@ -36,6 +36,7 @@ class CabinetController extends GetxController {
   RxList<Schedule> schedules = RxList<Schedule>([]);
   RxList<Clinic> clinics = RxList<Clinic>([]);
   RxList<Region> regions = RxList<Region>([]);
+  RxList<Clinic> selectedClinics = RxList<Clinic>([]);
 
   // Selected clinic and region
   Rxn<ClinicRequest> selectedClinicRequest = Rxn(null);
@@ -138,6 +139,16 @@ class CabinetController extends GetxController {
     }
   }
 
+  addSelectClinic(Clinic clinic) {
+    if (selectedClinics.contains(clinic)) {
+      selectedClinics.remove(clinic);
+    } else {
+      selectedClinics.add(clinic);
+    }
+  }
+
+  selectSchedule(Schedule schedule) {}
+
   pickupDocuments() async {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles();
@@ -189,7 +200,7 @@ class CabinetController extends GetxController {
         regions.value = data;
         break;
       case Error(:final message, :final code):
-        print("Error: $message (code: $code)");
+        LogHelper.error("Error: $message (code: $code)");
     }
   }
 
@@ -203,32 +214,46 @@ class CabinetController extends GetxController {
   }
 
   create() async {
-    Map<String, dynamic> scheduleRequestData = {
-      "clinic_id": selectedClinicRequest.value?.id,
-      "clinic": selectedClinicRequest.value!.toMap(),
-      "price": double.tryParse(priceController.text),
-      "second_price": double.tryParse(secondPriceController.text),
-      "schedule": selectedSchedules.map((e) => e.toJson()).toList(),
-    };
-    LogHelper.info("Schedule Request Data: $scheduleRequestData");
-    final isCreated = await repository.createSchedule(scheduleRequestData);
-    if (isCreated) {
-      Notifier.showSnackbar(
-        duration: Duration(milliseconds: 1500),
-        backgroundColor: AppColors.success,
-        content: Text("schedule_was_created_successfully".tr),
-      );
-
-      Get.back();
-      getSchedules();
-      reset();
-    } else {
-      Notifier.showSnackbar(
-        duration: Duration(milliseconds: 1500),
-        backgroundColor: AppColors.red,
-        content: Text("error_while_creating_schedule".tr),
-      );
+    isCreating.value = true;
+    try {
+      Map<String, dynamic> scheduleRequestData = {
+        "clinic_id": selectedClinicRequest.value?.id,
+        "clinic": selectedClinicRequest.value!.toMap(),
+        "price": double.tryParse(priceController.text),
+        "second_price": double.tryParse(secondPriceController.text),
+        "schedule": selectedSchedules.map((e) => e.toJson()).toList(),
+      };
+      LogHelper.info("Schedule Request Data: $scheduleRequestData");
+      final isCreated = await repository.createSchedule(scheduleRequestData);
+      await Future.delayed(Duration(milliseconds: 500));
+      if (isCreated) {
+        Notifier.showSnackbar(
+          duration: Duration(milliseconds: 1500),
+          backgroundColor: AppColors.success,
+          content: Text("schedule_was_created_successfully".tr),
+        );
+        Get.back();
+        getSchedules();
+        reset();
+      } else {
+        Notifier.showSnackbar(
+          duration: Duration(milliseconds: 1500),
+          backgroundColor: AppColors.red,
+          content: Text("error_while_creating_schedule".tr),
+        );
+      }
+    } catch (e) {
+      Notifier.showSnackbar(content: Text("Error: ${e.toString()}"));
+    } finally {
+      isCreating.value = false;
     }
+  }
+
+  bool isSelected(Clinic clinic) {
+    final foundClinic = selectedClinics.firstWhereOrNull(
+      (element) => element.id == clinic.id,
+    );
+    return foundClinic != null;
   }
 
   void reset() {
@@ -242,5 +267,9 @@ class CabinetController extends GetxController {
 
   removeSchedule(ScheduleElement scheduleElement) {
     selectedSchedules.remove(scheduleElement);
+  }
+
+  void removeSelectedClinic(Clinic clinic) {
+    selectedClinics.remove(clinic);
   }
 }

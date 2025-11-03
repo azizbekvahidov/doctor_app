@@ -1,6 +1,6 @@
 import 'package:doctor_app/features/main/presentation/contents/archive_content.dart';
 import 'package:doctor_app/features/profile/presentation/profile_page.dart';
-import 'package:doctor_app/features/shared/controllers/issue_event.dart';
+
 import 'package:doctor_app/features/shared/controllers/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -47,6 +47,7 @@ class _MainPageState extends State<MainPage> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.white,
         currentIndex: index,
         onTap: (i) => setState(() => index = i),
         items: const [

@@ -30,10 +30,18 @@ class MyApp extends StatelessWidget {
           fallbackLocale: const Locale("en"),
           initialRoute: AppPages.initial,
           getPages: AppPages.pages,
+          theme: ThemeData(
+            scaffoldBackgroundColor: Colors.white, // 👈 all Scaffolds
+            appBarTheme: const AppBarTheme(
+              backgroundColor: Colors.white,
+              elevation: 0,
+            ),
+          ),
         );
       },
       theme: ShadThemeData(
         brightness: Brightness.light,
+
         colorScheme: const ShadZincColorScheme.light(),
       ),
     );

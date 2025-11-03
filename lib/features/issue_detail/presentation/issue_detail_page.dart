@@ -1,6 +1,5 @@
 import 'package:doctor_app/core/design_system/styles/app_colors.dart';
 import 'package:doctor_app/core/design_system/styles/text_styles.dart';
-import 'package:doctor_app/core/design_system/widgets/buttons.dart';
 import 'package:doctor_app/core/enums/issue_pop_up_menu.dart';
 import 'package:doctor_app/core/navigation/routes.dart';
 import 'package:doctor_app/core/utils/asset_finder.dart';
@@ -12,7 +11,7 @@ import 'package:doctor_app/features/shared/controllers/issue_controller.dart';
 import 'package:doctor_app/features/shared/domain/models/issue.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:get/get.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 

@@ -1,4 +1,3 @@
-import 'package:doctor_app/core/navigation/routes.dart';
 import 'package:doctor_app/features/main/presentation/widgets/header.dart';
 import 'package:doctor_app/features/main/presentation/widgets/new_issue_list.dart';
 import 'package:flutter/material.dart';

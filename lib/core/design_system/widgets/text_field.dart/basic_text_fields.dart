@@ -40,11 +40,11 @@ class BasicTextField extends StatelessWidget {
       placeholder: hintText,
       decoration: ShadDecoration(
         border: ShadBorder.all(
-          color: Colors.grey, // default border color
+          color: Colors.grey,
           radius: BorderRadius.circular(10),
         ),
         focusedBorder: ShadBorder.all(
-          color: Colors.grey, // border when focused
+          color: Colors.grey,
           width: 1,
           radius: BorderRadius.circular(10),
         ),

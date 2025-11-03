@@ -160,7 +160,7 @@ class ProfilePage extends StatelessWidget {
                   onTap: () => authController.logout(),
                   width: double.infinity,
                   child: Text(
-                    "log out".tr,
+                    "logout".tr,
                     style: WorkSansStyle.labelLarge.copyWith(
                       fontWeight: FontWeight.w500,
                     ),

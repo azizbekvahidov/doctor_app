@@ -357,6 +357,9 @@ class AppTranslations extends Translations {
       'document_was_uploaded_successfully': 'Hujjat muvaffaqiyatli yuklandi!',
       "error_while_creating_schedule":
           'Jadval yaratishda xatolik. Iltimos qayta urinib ko\'ring.',
+
+      // place holders
+      'search_clinic': 'Klinika nomini kiriting',
     },
   };
 }

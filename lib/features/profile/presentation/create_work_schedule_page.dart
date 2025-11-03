@@ -15,7 +15,6 @@ import 'package:doctor_app/features/profile/presentation/controllers/cabinet_con
 import 'package:doctor_app/features/profile/presentation/widgets/add_schedule_time_dialog.dart';
 import 'package:doctor_app/features/profile/presentation/widgets/clinic_list.dart';
 import 'package:doctor_app/features/profile/presentation/widgets/schedule_table.dart';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -80,6 +79,7 @@ class _CreateWorkSchedulePageState extends State<CreateWorkSchedulePage> {
                     InputTitle(text: "clinic".tr),
                     const SizedBox(height: 8),
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Expanded(
                           child: Obx(() {
@@ -179,7 +179,12 @@ class _CreateWorkSchedulePageState extends State<CreateWorkSchedulePage> {
 
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10),
-                child: SaveButton(onClick: save),
+                child: Obx(
+                  () => SaveButton(
+                    onClick: save,
+                    isLoading: cabinetController.isCreating.value,
+                  ),
+                ),
               ),
             ],
           ),

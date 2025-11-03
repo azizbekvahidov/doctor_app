@@ -73,7 +73,8 @@ class _CreateWorkPlacePageState extends State<CreateWorkPlacePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(),
+      backgroundColor: AppColors.white,
+      appBar: AppBar(backgroundColor: Colors.white),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 15),
@@ -282,7 +283,12 @@ class _CreateWorkPlacePageState extends State<CreateWorkPlacePage> {
 
                 Padding(
                   padding: EdgeInsets.only(bottom: 10),
-                  child: SaveButton(onClick: saveClinic),
+                  child: Obx(
+                    () => SaveButton(
+                      onClick: saveClinic,
+                      isLoading: cabinetController.isCreating.value,
+                    ),
+                  ),
                 ),
               ],
             ),
