@@ -24,6 +24,7 @@ class CabinetController extends GetxController {
   // Loading states
   RxBool isAvatarLoading = RxBool(false);
   RxBool isDocumentUploading = RxBool(false);
+  RxBool isCreating = RxBool(false);
   RxBool isDeleting = RxBool(false);
   RxBool showClinic = RxBool(false);
 
@@ -74,7 +75,7 @@ class CabinetController extends GetxController {
         Notifier.showSnackbar(
           duration: Duration(milliseconds: 1500),
           backgroundColor: AppColors.success,
-          content: Text("Document was uploaded successfully!"),
+          content: Text("document_was_uploaded_successfully".tr),
         );
       }
     } catch (e) {
