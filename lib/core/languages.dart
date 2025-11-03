@@ -184,7 +184,7 @@ class AppTranslations extends Translations {
     'uz_UZ': {
       'hello': 'Salom',
       'login': 'Kirish',
-      'logout': 'Tizimdan chiqildi',
+      'logout': 'Tizimdan chiqish',
       'next': 'Davom etish',
       'dismiss': 'Bekor qilish',
 
