@@ -31,15 +31,6 @@ class _CreateWorkSchedulePageState extends State<CreateWorkSchedulePage> {
 
   final OnboardController onboardController = Get.find<OnboardController>();
 
-  Future<void> showAddScheduleDialog(BuildContext context) async {
-    await showDialog(
-      context: context,
-      builder: (context) {
-        return AddScheduleTimeDialog(cabinetController: cabinetController);
-      },
-    );
-  }
-
   save() {
     if (!cabinetController.formKey.currentState!.validate()) {
       Future.delayed(const Duration(milliseconds: 1000), () {
@@ -168,7 +159,11 @@ class _CreateWorkSchedulePageState extends State<CreateWorkSchedulePage> {
                             ),
                             CreateButton(
                               onClick: () {
-                                showAddScheduleDialog(context);
+                                Get.dialog(
+                                  AddScheduleTimeDialog(
+                                    cabinetController: cabinetController,
+                                  ),
+                                );
                               },
                             ),
                           ],
