@@ -64,7 +64,9 @@ class Header extends StatelessWidget {
               alignment: Alignment.center,
               children: [
                 InkWell(
-                  onTap: () => mainPageController.setContent(Contents.archive),
+                  onTap: () {
+
+                  },
                   borderRadius: BorderRadius.circular(50),
                   child: Circle(
                     bgColor: AppColors.lightGray,
