@@ -114,7 +114,7 @@ class CabinetController extends GetxController {
         userController.setUser(responseData.user!);
         Notifier.showSnackbar(
           backgroundColor: AppColors.success,
-          content: Text("Document was deleted successfully!"),
+          content: Text("document_was_deleted_successfully".tr),
         );
       }
     } catch (e) {
@@ -215,7 +215,7 @@ class CabinetController extends GetxController {
       Notifier.showSnackbar(
         duration: Duration(milliseconds: 1500),
         backgroundColor: AppColors.success,
-        content: Text("Schedule was created successfully!"),
+        content: Text("schedule_was_created_successfully".tr),
       );
 
       Get.back();
@@ -225,7 +225,7 @@ class CabinetController extends GetxController {
       Notifier.showSnackbar(
         duration: Duration(milliseconds: 1500),
         backgroundColor: AppColors.red,
-        content: Text("Failed to create schedule. Please try again."),
+        content: Text("error_while_creating_schedule".tr),
       );
     }
   }
