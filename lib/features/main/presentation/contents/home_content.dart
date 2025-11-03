@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../shared/controllers/issue_controller.dart';
-import '../widgets/active_card.dart';
-import '../widgets/announcement_list.dart';
 
 class HomeContent extends StatelessWidget {
   const HomeContent({super.key});

@@ -16,7 +16,7 @@ class ArchiveContent extends GetView<MainPageController> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          "archive".tr,
+          "archives".tr,
           style: WorkSansStyle.headline3.copyWith(fontWeight: FontWeight.w500),
         ),
       ),
