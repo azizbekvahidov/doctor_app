@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 
 class ScheduleItem extends StatelessWidget {
   const ScheduleItem({super.key, required this.schedule});
+
   final Schedule schedule;
 
   @override
@@ -39,7 +40,7 @@ class ScheduleItem extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 Text(
-                  "${"main_price".tr}: ${PriceFormatter.format(double.parse(schedule.price!.main.toString()))}",
+                  "${"first_price".tr}: ${PriceFormatter.format(double.parse(schedule.price!.main.toString()))}",
                   style: WorkSansStyle.titleMedium.copyWith(fontSize: 16),
                 ),
                 SizedBox(height: 10),

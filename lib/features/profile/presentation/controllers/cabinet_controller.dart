@@ -57,8 +57,8 @@ class CabinetController extends GetxController {
     super.onInit();
     repository = CabinetRepositoryIml(DioService().createDio());
     commonRepository = CommonRepositoryIml(DioService().createDio());
-    // getSchedules();
-    // getRegions();
+    getSchedules();
+    getRegions();
   }
 
   uploadDocument() async {
