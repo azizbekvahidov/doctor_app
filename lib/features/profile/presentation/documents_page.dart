@@ -8,11 +8,31 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
-class DocumentsPage extends StatelessWidget {
+class DocumentsPage extends StatefulWidget {
   DocumentsPage({super.key});
 
+  @override
+  State<DocumentsPage> createState() => _DocumentsPageState();
+}
+
+class _DocumentsPageState extends State<DocumentsPage> {
   final UserController userController = Get.find<UserController>();
   final CabinetController cabinetController = Get.find<CabinetController>();
+
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    loadingDocuments();
+  }
+
+  loadingDocuments() async {
+    await Future.delayed(const Duration(seconds: 1));
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,117 +59,114 @@ class DocumentsPage extends StatelessWidget {
           floatingActionButton: FloatButton(
             onClick: () => cabinetController.pickupDocuments(),
           ),
-          body: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15).copyWith(top: 15),
-                child: Text(
-                  "documents".tr,
-                  style: WorkSansStyle.titleMedium.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 15),
-              Obx(() {
-                if (userController.user.value!.documents!.isEmpty) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 50),
-                    child: Center(
-                      child: Text(
-                        "no_documents".tr,
-                        style: WorkSansStyle.bodyLarge,
-                      ),
-                    ),
-                  );
-                } else {
-                  return Expanded(
-                    child: ListView.separated(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 18,
-                        vertical: 10,
-                      ),
-                      itemCount: userController.user.value!.documents!.length,
-                      itemBuilder: (context, index) {
-                        final documentUrl =
-                            userController.user.value!.documents![index];
-                        return DocumentBox(
-                          name: documentUrl.name,
-                          url: documentUrl.url,
-                          onClick: () {
-                            Get.dialog(
-                              Dialog(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 15,
-                                    vertical: 20,
-                                  ),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        "delete_document_alert".tr,
-                                        style: WorkSansStyle.bodyLarge,
-                                      ),
-                                      SizedBox(height: 20),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          ShadButton.secondary(
-                                            decoration: ShadDecoration(
-                                              border: ShadBorder.all(
-                                                color: Colors.black,
-                                                width: 1.5,
-                                                radius: BorderRadius.circular(
-                                                  10,
-                                                ),
-                                              ),
-                                            ),
-
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Text(
-                                              "cancel".tr,
-                                              style: WorkSansStyle.bodyLarge,
-                                            ),
-                                          ),
-                                          PrimaryButton(
-                                            borderRadius: BorderRadius.circular(
-                                              10,
-                                            ),
-                                            bgColor: Colors.red,
-                                            onTap: () async {
-                                              cabinetController.deleteDocument(
-                                                documentUrl.id!,
-                                              );
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Text(
-                                              "delete".tr,
-                                              style: WorkSansStyle.bodyLarge,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
+          body: isLoading
+              ? Center(child: CircularProgressIndicator())
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 15),
+                    Obx(() {
+                      if (userController.user.value!.documents!.isEmpty) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 50),
+                          child: Center(
+                            child: Text(
+                              "no_documents".tr,
+                              style: WorkSansStyle.bodyLarge,
+                            ),
+                          ),
                         );
-                      },
-                      separatorBuilder: (context, index) =>
-                          const SizedBox(height: 15),
-                    ),
-                  );
-                }
-              }),
-            ],
-          ),
+                      } else {
+                        return Expanded(
+                          child: ListView.separated(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 18,
+                              vertical: 10,
+                            ),
+                            itemCount:
+                                userController.user.value!.documents!.length,
+                            itemBuilder: (context, index) {
+                              final documentUrl =
+                                  userController.user.value!.documents![index];
+                              return DocumentBox(
+                                name: documentUrl.name,
+                                url: documentUrl.url,
+                                onClick: () {
+                                  Get.dialog(
+                                    Dialog(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 15,
+                                          vertical: 20,
+                                        ),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text(
+                                              "delete_document_alert".tr,
+                                              style: WorkSansStyle.bodyLarge,
+                                            ),
+                                            SizedBox(height: 20),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                ShadButton.secondary(
+                                                  decoration: ShadDecoration(
+                                                    border: ShadBorder.all(
+                                                      color: Colors.black,
+                                                      width: 1.5,
+                                                      radius:
+                                                          BorderRadius.circular(
+                                                            10,
+                                                          ),
+                                                    ),
+                                                  ),
+
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: Text(
+                                                    "cancel".tr,
+                                                    style:
+                                                        WorkSansStyle.bodyLarge,
+                                                  ),
+                                                ),
+                                                PrimaryButton(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  bgColor: Colors.red,
+                                                  onTap: () async {
+                                                    cabinetController
+                                                        .deleteDocument(
+                                                          documentUrl.id!,
+                                                        );
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: Text(
+                                                    "delete".tr,
+                                                    style:
+                                                        WorkSansStyle.bodyLarge,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(height: 15),
+                          ),
+                        );
+                      }
+                    }),
+                  ],
+                ),
         ),
         Obx(() {
           if (cabinetController.isDeleting.value ||
