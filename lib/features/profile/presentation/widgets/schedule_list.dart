@@ -10,7 +10,10 @@ class ScheduleList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      padding: const EdgeInsets.symmetric().copyWith(top: 20),
+      padding: const EdgeInsets.symmetric().copyWith(
+        top: 20,
+        bottom: 5,
+      ),
       shrinkWrap: true,
       itemBuilder: (context, index) {
         final schedule = schedules[index];
