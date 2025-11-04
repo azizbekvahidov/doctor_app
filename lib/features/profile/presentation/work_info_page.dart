@@ -43,6 +43,9 @@ class _WorkInfoPageState extends State<WorkInfoPage> {
       ),
       body: SafeArea(
         child: Obx(() {
+          if (cabinetController.isSchedulesLoading.value) {
+            return const Center(child: CircularProgressIndicator());
+          }
           if (cabinetController.schedules.isEmpty) {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 50),
@@ -50,9 +53,8 @@ class _WorkInfoPageState extends State<WorkInfoPage> {
                 child: Text("no_schedules".tr, style: WorkSansStyle.bodyLarge),
               ),
             );
-          } else {
-            return ScheduleList(schedules: cabinetController.schedules);
           }
+          return ScheduleList(schedules: cabinetController.schedules);
         }),
       ),
     );
