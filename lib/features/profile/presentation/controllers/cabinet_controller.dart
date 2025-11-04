@@ -24,9 +24,11 @@ class CabinetController extends GetxController {
   // Loading states
   RxBool isAvatarLoading = RxBool(false);
   RxBool isDocumentUploading = RxBool(false);
+  RxBool isDocumentsLoading = RxBool(false);
   RxBool isCreating = RxBool(false);
   RxBool isDeleting = RxBool(false);
   RxBool showClinic = RxBool(false);
+  RxBool isSchedulesLoading = RxBool(false);
 
   // documents and avatar paths
   RxString selectedAvatarPath = RxString('');
@@ -59,7 +61,6 @@ class CabinetController extends GetxController {
     super.onInit();
     repository = CabinetRepositoryIml(DioService().createDio());
     commonRepository = CommonRepositoryIml(DioService().createDio());
-    getSchedules();
     getRegions();
   }
 
@@ -163,8 +164,11 @@ class CabinetController extends GetxController {
   }
 
   getSchedules() async {
+    isSchedulesLoading.value = true;
+    await Future.delayed(Duration(milliseconds: 500));
     final fetchedSchedules = await repository.getSchedules();
     schedules.value = fetchedSchedules;
+    isSchedulesLoading.value = false;
   }
 
   getClinics(String query) async {
