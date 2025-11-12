@@ -148,6 +148,7 @@ class AppTranslations extends Translations {
       'cancel': 'Отмена',
       'yes': 'Да',
       'no': 'Нет',
+      'accept': 'Принять',
 
       // --- Validation for schedule ---
       'valid_price': 'Пожалуйста, введите цену',
@@ -322,6 +323,8 @@ class AppTranslations extends Translations {
       'cancel': 'Bekor qilish',
       'yes': 'Ha',
       'no': 'Yo\'q',
+      // accepts
+      'accept': 'Qabul qilish',
 
       // --- Validation for schedule ---
       'valid_price': 'Iltimos narxni kiriting',
