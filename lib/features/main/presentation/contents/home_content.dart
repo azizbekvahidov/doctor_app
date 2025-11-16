@@ -1,3 +1,4 @@
+import 'package:doctor_app/core/design_system/styles/app_colors.dart';
 import 'package:doctor_app/features/main/presentation/widgets/header.dart';
 import 'package:doctor_app/features/main/presentation/widgets/new_issue_list.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,8 @@ class HomeContent extends StatelessWidget {
     final issueController = Get.find<IssueController>();
 
     return RefreshIndicator(
-      color: Colors.black,
+      color: AppColors.primary,
+
       onRefresh: () async {
         // 👇 refresh all needed sections
         await issueController.getInitialIssues();

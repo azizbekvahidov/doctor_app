@@ -134,7 +134,7 @@ class _ChatPageState extends State<ChatPage> {
                   ),
 
                   MessageTextField(
-                    padding: const EdgeInsets.only(top: 10, bottom: 5),
+                    padding: const EdgeInsets.only(top: 10, bottom: 5, left: 10,right: 10),
                     controller: _controller,
                     onSelectFile: _pickFiles,
                     onSend: () async {

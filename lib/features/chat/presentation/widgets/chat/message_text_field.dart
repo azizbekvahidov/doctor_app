@@ -1,3 +1,4 @@
+import 'package:doctor_app/core/design_system/styles/app_colors.dart';
 import 'package:doctor_app/features/shared/controllers/issue_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -29,20 +30,15 @@ class MessageTextField extends StatelessWidget {
             children: [
               Obx(() {
                 final hasFiles = issueController.files.isNotEmpty;
-                return IconButton(
-                  icon: Icon(
-                    Icons.attach_file,
-                    color: hasFiles
-                        ? Colors.blue
-                        : Colors.grey, // dynamic color
-                  ),
-                  onPressed: onSelectFile,
+                return MessageTextFieldFunctionIconItem(
+                  onClick: onSelectFile,
+                  icon: Icons.attach_file,
                 );
               }),
             ],
           ),
 
-          // TextField for typing message
+          SizedBox(width: 8),
           Expanded(
             child: TextField(
               controller: controller,
@@ -61,12 +57,35 @@ class MessageTextField extends StatelessWidget {
               ),
             ),
           ),
-          // Send button icon
-          IconButton(
-            icon: Icon(Icons.send), // Send message icon
-            onPressed: onSend,
-          ),
+          SizedBox(width: 8),
+          MessageTextFieldFunctionIconItem(onClick: onSend, icon: Icons.send),
         ],
+      ),
+    );
+  }
+}
+
+class MessageTextFieldFunctionIconItem extends StatelessWidget {
+  const MessageTextFieldFunctionIconItem({
+    super.key,
+    required this.onClick,
+    required this.icon,
+  });
+
+  final Function() onClick;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onClick,
+      child: Container(
+        padding: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: AppColors.sendIcon,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Icon(icon, color: AppColors.white),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:doctor_app/core/design_system/widgets/loader.dart';
 import 'package:doctor_app/core/navigation/routes.dart';
 import 'package:doctor_app/features/shared/controllers/issue_controller.dart';
 import 'package:flutter/material.dart';
@@ -28,13 +29,13 @@ class ActiveIssueList extends GetView<IssueController> {
         title: "active_ann".tr,
         height: 260,
         child: controller.isLoading.value
-            ? Center(child: CircularProgressIndicator())
+            ? Center(child: Loader())
             : issues.isNotEmpty
             ? ListView.separated(
                 controller: scrollController,
                 scrollDirection: Axis.horizontal,
                 itemCount: issues.length + 1,
-                separatorBuilder: (_, __) => const SizedBox(width: 10),
+                separatorBuilder: (_, __) => const SizedBox(width: 0),
                 itemBuilder: (context, index) {
                   if (index < issues.length) {
                     final issue = issues[index];
@@ -61,12 +62,17 @@ class ActiveIssueList extends GetView<IssueController> {
                           ),
                         );
                       },
-                      child: NewCard(
-                        issue: issue,
-                        key: ValueKey(issue.id),
-                        onClick: () {
-                          Get.toNamed(Routes.detail, arguments: issue);
-                        },
+                      child: Container(
+                        padding: EdgeInsets.all(10),
+                        width: 280,
+                        height: 200,
+                        child: NewCard(
+                          issue: issue,
+                          key: ValueKey(issue.id),
+                          onClick: () {
+                            Get.toNamed(Routes.detail, arguments: issue);
+                          },
+                        ),
                       ),
                     );
                   } else {

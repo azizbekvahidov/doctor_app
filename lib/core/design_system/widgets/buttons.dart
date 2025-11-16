@@ -11,8 +11,9 @@ class PrimaryButton extends StatelessWidget {
     this.child,
     this.onTap,
     this.bgColor = AppColors.primary,
-    this.borderRadius = const BorderRadius.all(Radius.circular(16)),
+    this.borderRadius = const BorderRadius.all(Radius.circular(0)),
   });
+
   final double? width;
   final Widget? child;
   final Function()? onTap;
@@ -22,7 +23,12 @@ class PrimaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ShadButton(
-      decoration: ShadDecoration(border: ShadBorder(radius: borderRadius)),
+      decoration: ShadDecoration(
+        // border: ShadBorder(radius: borderRadius),
+        gradient: LinearGradient(
+          colors: [AppColors.bottomItemColor, AppColors.primary],
+        ),
+      ),
       backgroundColor: bgColor,
       onPressed: onTap,
 
