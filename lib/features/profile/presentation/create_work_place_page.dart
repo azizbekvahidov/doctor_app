@@ -1,61 +1,92 @@
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:doctor_app/core/design_system/styles/app_colors.dart';
 import 'package:doctor_app/core/design_system/styles/text_styles.dart';
-import 'package:doctor_app/core/design_system/widgets/buttons.dart';
+import 'package:doctor_app/core/design_system/widgets/buttons/ready_buttons.dart';
 import 'package:doctor_app/core/design_system/widgets/text_field.dart/basic_text_fields.dart';
 import 'package:doctor_app/core/design_system/widgets/text_field.dart/input_title.dart';
+import 'package:doctor_app/core/utils/log_helper.dart';
+import 'package:doctor_app/features/onboard/controller/onboard_controller.dart';
+import 'package:doctor_app/features/profile/domain/models/clinic_request.dart';
+import 'package:doctor_app/features/profile/domain/models/schedule.dart';
+import 'package:doctor_app/features/profile/presentation/controllers/cabinet_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get_utils/src/extensions/internacionalization.dart';
-import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:get/get.dart';
 
-class CreateWorkPlacePage extends StatelessWidget {
-  CreateWorkPlacePage({super.key});
+class CreateWorkPlacePage extends StatefulWidget {
+  const CreateWorkPlacePage({super.key});
 
-  final TextEditingController ruNameOfClinicController =
-      TextEditingController();
-  final TextEditingController uzNameOfClinicController =
-      TextEditingController();
-  final TextEditingController ruAddressOfClinicController =
-      TextEditingController();
-  final TextEditingController uzAddressOfClinicController =
-      TextEditingController();
+  @override
+  State<CreateWorkPlacePage> createState() => _CreateWorkPlacePageState();
+}
 
-  final List<String> medicalProfessionsKeys = [
-    "general_practitioner",
-    "dentist",
-    "surgeon",
-    "therapist",
-    "pediatrician",
-    "cardiologist",
-    "neurologist",
-    "oncologist",
-    "orthopedist",
-    "gynecologist",
-    "urologist",
-    "dermatologist",
-    "psychiatrist",
-    "radiologist",
-    "ophthalmologist",
-    "anesthesiologist",
-    "endocrinologist",
-    "family_doctor",
-  ];
+class _CreateWorkPlacePageState extends State<CreateWorkPlacePage> {
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  TextEditingController ruNameOfClinicController = TextEditingController();
+  TextEditingController uzNameOfClinicController = TextEditingController();
+  TextEditingController ruAddressOfClinicController = TextEditingController();
+  TextEditingController uzAddressOfClinicController = TextEditingController();
+
+  int selectedRegionId = -1;
+
+  Region? selectedRegion;
+
+  CabinetController cabinetController = Get.find<CabinetController>();
+
+  OnboardController onboardController = Get.find<OnboardController>();
+
+  saveClinic() async {
+    if (formKey.currentState!.validate() && selectedRegionId > 0) {
+      final clinic = ClinicRequest(
+        addressRu: ruAddressOfClinicController.text,
+        addressUz: uzAddressOfClinicController.text,
+        nameRu: ruNameOfClinicController.text,
+        nameUz: uzNameOfClinicController.text,
+        district: selectedRegionId,
+      );
+      LogHelper.info("Saving clinic: ${clinic.toJson()}");
+      cabinetController.selectClinic(clinic);
+      Get.back();
+    } else {
+      LogHelper.error("Form is not valid or region not selected");
+      await Future.delayed(Duration(milliseconds: 1000));
+      formKey.currentState!.reset();
+    }
+  }
+
+  @override
+  void dispose() {
+    ruAddressOfClinicController.dispose();
+    uzAddressOfClinicController.dispose();
+    ruNameOfClinicController.dispose();
+    uzNameOfClinicController.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    cabinetController.getRegions();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      resizeToAvoidBottomInset: false,
+      backgroundColor: AppColors.white,
+      appBar: AppBar(backgroundColor: Colors.white),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 15),
           child: Form(
+            key: formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
                   children: [
                     SizedBox(
-                      height: 270,
+                      height: 320,
                       child: DefaultTabController(
                         length: 2,
                         child: Column(
@@ -67,7 +98,7 @@ class CreateWorkPlacePage extends StatelessWidget {
                               ],
                             ),
                             SizedBox(
-                              height: 210,
+                              height: 260,
                               child: TabBarView(
                                 children: [
                                   Column(
@@ -82,7 +113,8 @@ class CreateWorkPlacePage extends StatelessWidget {
                                           BasicTextFormField(
                                             controller:
                                                 uzNameOfClinicController,
-                                            errorText: "",
+                                            errorText:
+                                                "valid_name_of_clinic".tr,
                                           ),
                                         ],
                                       ),
@@ -96,7 +128,8 @@ class CreateWorkPlacePage extends StatelessWidget {
                                           ),
                                           SizedBox(height: 10),
                                           BasicTextFormField(
-                                            errorText: "",
+                                            errorText:
+                                                "valid_address_of_clinic".tr,
                                             controller:
                                                 uzAddressOfClinicController,
                                           ),
@@ -114,7 +147,8 @@ class CreateWorkPlacePage extends StatelessWidget {
                                           InputTitle(text: "name_of_clinic".tr),
                                           SizedBox(height: 10),
                                           BasicTextFormField(
-                                            errorText: "",
+                                            errorText:
+                                                "valid_name_of_clinic".tr,
                                             controller:
                                                 ruNameOfClinicController,
                                           ),
@@ -130,7 +164,8 @@ class CreateWorkPlacePage extends StatelessWidget {
                                           ),
                                           SizedBox(height: 10),
                                           BasicTextFormField(
-                                            errorText: "",
+                                            errorText:
+                                                "valid_address_of_clinic".tr,
                                             controller:
                                                 ruAddressOfClinicController,
                                           ),
@@ -145,50 +180,86 @@ class CreateWorkPlacePage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    FormField(
-                      initialValue: medicalProfessionsKeys[0],
-                      builder: (field) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            InputTitle(text: "region".tr),
-                            SizedBox(height: 8),
-                            CustomDropdown<String>(
-                              decoration: CustomDropdownDecoration(
-                                closedBorder: Border.all(color: AppColors.grey),
-                                expandedBorder: Border.all(
-                                  color: AppColors.grey,
-                                ),
-                              ),
-                              hintText: 'select_profession'.tr,
-                              initialItem: medicalProfessionsKeys[0].tr,
-                              items: medicalProfessionsKeys
-                                  .map((key) => key.tr)
-                                  .toList(),
-
-                              onChanged: (value) {},
-                            ),
-                            if (field.hasError)
-                              Padding(
-                                padding: const EdgeInsets.only(top: 6),
-                                child: Text(
-                                  field.errorText!,
-                                  style: const TextStyle(
-                                    color: Colors.red,
-                                    fontSize: 12,
+                    Obx(() {
+                      return FormField(
+                        initialValue: cabinetController.regions.isNotEmpty
+                            ? onboardController.selectedLang.value == 'ru'
+                                  ? cabinetController.regions[0].name!.ru
+                                  : cabinetController.regions[0].name!.uz
+                            : null,
+                        builder: (field) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              InputTitle(text: "region".tr),
+                              SizedBox(height: 8),
+                              CustomDropdown<String>(
+                                decoration: CustomDropdownDecoration(
+                                  closedBorder: Border.all(
+                                    color: AppColors.grey,
+                                  ),
+                                  expandedBorder: Border.all(
+                                    color: AppColors.grey,
                                   ),
                                 ),
+                                hintText: 'select_region'.tr,
+                                initialItem: selectedRegion != null
+                                    ? onboardController.selectedLang.value ==
+                                              'ru'
+                                          ? selectedRegion!.name!.ru
+                                          : selectedRegion!.name!.uz
+                                    : null,
+                                items: cabinetController.regions
+                                    .map(
+                                      (region) =>
+                                          onboardController
+                                                  .selectedLang
+                                                  .value ==
+                                              'ru'
+                                          ? region.name!.ru!
+                                          : region.name!.uz!,
+                                    )
+                                    .toList(),
+
+                                onChanged: (value) {
+                                  final foundRegion = cabinetController.regions
+                                      .firstWhere(
+                                        (region) =>
+                                            (onboardController
+                                                        .selectedLang
+                                                        .value ==
+                                                    'ru'
+                                                ? region.name!.ru
+                                                : region.name!.uz) ==
+                                            value,
+                                      );
+                                  setState(() {
+                                    selectedRegion = foundRegion;
+                                    selectedRegionId = foundRegion.id!;
+                                  });
+                                },
                               ),
-                          ],
-                        );
-                      },
-                      validator: (value) {
-                        // if (selectedDay == null) {
-                        //   return "valid_weekday".tr;
-                        // }
-                        // return null;
-                      },
-                    ),
+                              if (field.hasError)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 6),
+                                  child: Text(
+                                    field.errorText!,
+                                    style: WorkSansStyle.label.copyWith(
+                                      color: AppColors.red,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          );
+                        },
+                        validator: (value) {
+                          if (selectedRegionId <= 0) {
+                            return "valid_region".tr;
+                          }
+                          return null;
+                        },
+                      );
+                    }),
                     SizedBox(height: 20),
                     Container(
                       width: double.infinity,
@@ -210,12 +281,12 @@ class CreateWorkPlacePage extends StatelessWidget {
                   ],
                 ),
 
-                PrimaryButton(
-                  width: double.infinity,
-                  child: Text(
-                    "save".tr,
-                    style: WorkSansStyle.labelLarge.copyWith(
-                      fontWeight: FontWeight.w500,
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10),
+                  child: Obx(
+                    () => SaveButton(
+                      onClick: saveClinic,
+                      isLoading: cabinetController.isCreating.value,
                     ),
                   ),
                 ),

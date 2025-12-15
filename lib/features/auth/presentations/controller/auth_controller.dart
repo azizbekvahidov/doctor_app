@@ -1,4 +1,4 @@
-import 'package:doctor_app/core/pages/routes.dart';
+import 'package:doctor_app/core/navigation/routes.dart';
 import 'package:doctor_app/core/services/secure_storage_service.dart';
 import 'package:doctor_app/core/utils/log_helper.dart';
 import 'package:doctor_app/core/utils/notifier.dart';
@@ -117,8 +117,7 @@ class AuthController extends GetxController {
       if (registeredAt.isEmpty) {
         Get.toNamed(Routes.identification);
       } else {
-        Get.toNamed(Routes.main);
-        // myIdRegister(isRegisteredAt: true);
+        myIdRegister(isRegisteredAt: true);
       }
     } catch (e) {
       LogHelper.error("Error:$e");
@@ -203,17 +202,6 @@ class AuthController extends GetxController {
     isAuthorization.value = false;
     await secureStorageService.deleteToken();
     await secureStorageService.deleteUser();
-    Notifier.showSnackbar(
-      content: Text(
-        'logout'.tr,
-        style: WorkSansStyle.titleSmall.copyWith(
-          fontWeight: FontWeight.w500,
-          fontSize: 15,
-        ),
-      ),
-      backgroundColor: Colors.green,
-      duration: Duration(milliseconds: 1500),
-    );
-    Get.offAllNamed(Routes.login);
+    Get.offAllNamed(Routes.onboard);
   }
 }

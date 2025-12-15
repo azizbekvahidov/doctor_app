@@ -1,180 +1,58 @@
 import 'dart:async';
 
-import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:doctor_app/core/design_system/styles/app_colors.dart';
 import 'package:doctor_app/core/design_system/styles/text_styles.dart';
-import 'package:doctor_app/core/design_system/widgets/buttons.dart';
+
+import 'package:doctor_app/core/design_system/widgets/buttons/create_button.dart';
+import 'package:doctor_app/core/design_system/widgets/buttons/ready_buttons.dart';
 import 'package:doctor_app/core/design_system/widgets/text_field.dart/basic_text_fields.dart';
 import 'package:doctor_app/core/design_system/widgets/text_field.dart/input_title.dart';
-import 'package:doctor_app/core/pages/routes.dart';
-import 'package:doctor_app/core/utils/asset_finder.dart';
+import 'package:doctor_app/core/navigation/routes.dart';
+import 'package:doctor_app/core/utils/notifier.dart';
+import 'package:doctor_app/features/onboard/controller/onboard_controller.dart';
 
+import 'package:doctor_app/features/profile/presentation/controllers/cabinet_controller.dart';
+import 'package:doctor_app/features/profile/presentation/widgets/add_schedule_time_dialog.dart';
+import 'package:doctor_app/features/profile/presentation/widgets/clinic_list.dart';
+import 'package:doctor_app/features/profile/presentation/widgets/schedule_table.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_utils/src/extensions/export.dart';
-import 'package:shadcn_ui/shadcn_ui.dart';
 
-import 'widgets/time_picker_button.dart';
+class CreateWorkSchedulePage extends StatefulWidget {
+  const CreateWorkSchedulePage({super.key});
 
-class CreateWorkSchedulePage extends StatelessWidget {
-  CreateWorkSchedulePage({super.key});
-  final List<String> medicalProfessionsKeys = [
-    "general_practitioner",
-    "dentist",
-    "surgeon",
-    "therapist",
-    "pediatrician",
-    "cardiologist",
-    "neurologist",
-    "oncologist",
-    "orthopedist",
-    "gynecologist",
-    "urologist",
-    "dermatologist",
-    "psychiatrist",
-    "radiologist",
-    "ophthalmologist",
-    "anesthesiologist",
-    "endocrinologist",
-    "family_doctor",
-  ];
+  @override
+  State<CreateWorkSchedulePage> createState() => _CreateWorkSchedulePageState();
+}
 
-  String? selectedDay;
+class _CreateWorkSchedulePageState extends State<CreateWorkSchedulePage> {
+  final CabinetController cabinetController = Get.find<CabinetController>();
 
-  Future<void> showAddScheduleDialog(BuildContext context) async {
-    String? selectedDay;
-    TimeOfDay? workStart;
-    TimeOfDay? workEnd;
-    TimeOfDay? lunchStart;
-    TimeOfDay? lunchEnd;
+  final OnboardController onboardController = Get.find<OnboardController>();
 
-    final days = [
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-      "Sunday",
-    ];
+  save() {
+    if (!cabinetController.formKey.currentState!.validate()) {
+      Future.delayed(const Duration(milliseconds: 1000), () {
+        cabinetController.formKey.currentState!.reset();
+      });
+      return;
+    }
+    if (cabinetController.selectedSchedules.isEmpty) {
+      Notifier.showSnackbar(
+        duration: Duration(seconds: 2),
+        fromBottom: 160,
+        content: Text("valid_schedules".tr, style: WorkSansStyle.label),
+        backgroundColor: AppColors.red,
+      );
+      return;
+    }
+    cabinetController.create();
+  }
 
-    await showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          contentPadding: const EdgeInsets.all(20),
-          content: StatefulBuilder(
-            builder: (context, setState) {
-              return SizedBox(
-                width: 350,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    // Title
-                    Center(
-                      child: Text(
-                        "add_schedule".tr,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Dropdown
-                    DropdownButtonFormField<String>(
-                      value: selectedDay,
-                      hint: Text("select_weekday".tr),
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      items: days
-                          .map(
-                            (day) =>
-                                DropdownMenuItem(value: day, child: Text(day)),
-                          )
-                          .toList(),
-                      onChanged: (value) => setState(() => selectedDay = value),
-                    ),
-
-                    const SizedBox(height: 20),
-                    Text(
-                      "opening_hours".tr,
-                      style: TextStyle(color: Colors.grey[700]),
-                    ),
-
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TimePickerButton(
-                            label: workStart,
-                            onPick: (t) => setState(() => workStart = t),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: TimePickerButton(
-                            label: workEnd,
-                            onPick: (t) => setState(() => workEnd = t),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 20),
-                    Text(
-                      "lunch_time".tr,
-                      style: TextStyle(color: Colors.grey[700]),
-                    ),
-
-                    const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TimePickerButton(
-                            label: lunchStart,
-                            onPick: (t) => setState(() => lunchStart = t),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: TimePickerButton(
-                            label: lunchEnd,
-                            onPick: (t) => setState(() => lunchEnd = t),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    PrimaryButton(
-                      onTap: () {
-                        // TODO: Handle save logic
-                        Navigator.pop(context);
-                      },
-                      child: Text(
-                        "add_day".tr,
-                        style: TextStyle(fontSize: 16, color: Colors.white),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        );
-      },
-    );
+  @override
+  void dispose() {
+    cabinetController.reset();
+    super.dispose();
   }
 
   @override
@@ -187,202 +65,129 @@ class CreateWorkSchedulePage extends StatelessWidget {
         centerTitle: true,
         backgroundColor: AppColors.white,
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            InputTitle(text: "clinic".tr),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Expanded(
-                  child: FormField(
-                    initialValue: medicalProfessionsKeys[0],
-                    builder: (field) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomDropdown<String>(
-                            decoration: CustomDropdownDecoration(
-                              closedBorder: Border.all(color: AppColors.grey),
-                              expandedBorder: Border.all(color: AppColors.grey),
-                            ),
-                            hintText: 'select_profession'.tr,
-                            initialItem: medicalProfessionsKeys[0].tr,
-                            items: medicalProfessionsKeys
-                                .map((key) => key.tr)
-                                .toList(),
-
-                            onChanged: (value) {},
-                          ),
-                          if (field.hasError)
-                            Padding(
-                              padding: const EdgeInsets.only(top: 6),
-                              child: Text(
-                                field.errorText!,
-                                style: const TextStyle(
-                                  color: Colors.red,
-                                  fontSize: 12,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Form(
+                key: cabinetController.formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    InputTitle(text: "clinic".tr),
+                    const SizedBox(height: 8),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: Obx(() {
+                            if (cabinetController.selectedClinicRequest.value !=
+                                null) {
+                              cabinetController.clinicController.text =
+                                  onboardController.selectedLang.value == 'uz'
+                                  ? cabinetController
+                                        .selectedClinicRequest
+                                        .value!
+                                        .nameUz
+                                  : cabinetController
+                                        .selectedClinicRequest
+                                        .value!
+                                        .nameRu;
+                            }
+                            return BasicTextFormField(
+                              controller: cabinetController.clinicController,
+                              onChanged: (query) {
+                                cabinetController.getClinics(query);
+                              },
+                              errorText: 'valid_clinic'.tr,
+                              trailing: GestureDetector(
+                                onTap: () => cabinetController.toggleClinic(),
+                                child: Obx(
+                                  () => cabinetController.clinics.isNotEmpty
+                                      ? cabinetController.showClinic.value
+                                            ? Icon(Icons.arrow_drop_up)
+                                            : Icon(Icons.arrow_drop_down)
+                                      : SizedBox.shrink(),
                                 ),
                               ),
+                            );
+                          }),
+                        ),
+                        SizedBox(width: 10),
+                        CreateButton(
+                          onClick: () => Get.toNamed(Routes.createWorkPlace),
+                        ),
+                      ],
+                    ),
+                    ClinicList(
+                      cabinetController: cabinetController,
+                      onboardController: onboardController,
+                    ),
+
+                    const SizedBox(height: 20),
+                    InputTitle(text: "first_price".tr),
+                    const SizedBox(height: 8),
+                    BasicTextFormField(
+                      errorText: "valid_first_price".tr,
+                      controller: cabinetController.priceController,
+                      textInputType: TextInputType.number,
+                    ),
+                    const SizedBox(height: 20),
+                    InputTitle(text: "second_price".tr),
+                    const SizedBox(height: 8),
+                    BasicTextFormField(
+                      errorText: "valid_second_price".tr,
+                      controller: cabinetController.secondPriceController,
+                      textInputType: TextInputType.number,
+                    ),
+                    const SizedBox(height: 20),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Title
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox.shrink(),
+                            Center(
+                              child: Text(
+                                "schedule".tr,
+                                style: WorkSansStyle.titleMedium.copyWith(),
+                              ),
                             ),
-                        ],
-                      );
-                    },
-                    validator: (value) {
-                      if (selectedDay == null) {
-                        return "valid_weekday".tr;
-                      }
-                      return null;
-                    },
-                  ),
-                ),
-                SizedBox(width: 10),
-                InkWell(
-                  splashColor: Colors.transparent,
-                  hoverColor: Colors.transparent,
-                  borderRadius: BorderRadius.circular(15),
-                  child: SvgPicture.asset(
-                    AssetFinder.icon('add_work'),
-                    color: AppColors.primary,
-                    width: 28,
-                    height: 28,
-                  ),
-                  onTap: () => Get.toNamed(Routes.createWorkPlace),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            InputTitle(text: "Цена первого приема".tr),
-            const SizedBox(height: 8),
-            BasicTextFormField(
-              errorText: "Цена первого приема",
-              controller: TextEditingController(),
-            ),
-            const SizedBox(height: 20),
-            InputTitle(text: "Цена последующих приемов".tr),
-            const SizedBox(height: 8),
-            BasicTextFormField(
-              errorText: "Цена последующих приемов",
-              controller: TextEditingController(),
-            ),
-            const SizedBox(height: 20),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Title
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox.shrink(),
-                    Center(
-                      child: Text(
-                        "schedule".tr,
-                        style: WorkSansStyle.titleMedium.copyWith(),
-                      ),
-                    ),
-                    InkWell(
-                      splashColor: Colors.transparent,
-                      hoverColor: Colors.transparent,
-                      borderRadius: BorderRadius.circular(15),
-                      child: SvgPicture.asset(
-                        AssetFinder.icon('add_work'),
-                        color: AppColors.primary,
-                        width: 28,
-                        height: 28,
-                      ),
-                      onTap: () {
-                        showAddScheduleDialog(context);
-                      },
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-
-                Table(
-                  border: TableBorder.symmetric(
-                    inside: BorderSide.none,
-                    outside: BorderSide.none,
-                  ),
-                  columnWidths: const {
-                    0: FlexColumnWidth(2),
-                    1: FlexColumnWidth(1.5),
-                    2: FlexColumnWidth(1.5),
-                  },
-                  children: [
-                    // Header row
-                    TableRow(
-                      children: [
-                        Text("day".tr, style: WorkSansStyle.body),
-                        Center(
-                          child: Text("hour".tr, style: WorkSansStyle.body),
+                            CreateButton(
+                              onClick: () {
+                                Get.dialog(
+                                  AddScheduleTimeDialog(
+                                    cabinetController: cabinetController,
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
                         ),
-                        Center(
-                          child: Text("lunch".tr, style: WorkSansStyle.body),
-                        ),
-                      ],
-                    ),
+                        const SizedBox(height: 10),
 
-                    const TableRow(
-                      children: [SizedBox(height: 8), SizedBox(), SizedBox()],
-                    ),
-
-                    // Rows
-                    TableRow(
-                      children: [
-                        const Text("Понедельник:"),
-                        Center(child: Text("9.30-17.15")),
-                        Center(child: Text("12.00-13.30")),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        const Text("Вторник:"),
-                        Center(child: Text("9.30-17.15")),
-                        Center(child: Text("12.00-13.30")),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        const Text("Среда:"),
-                        Center(child: Text("9.30-17.15")),
-                        Center(child: Text("12.00-13.30")),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        const Text("Четверг:"),
-                        Center(child: Text("9.30-17.15")),
-                        Center(child: Text("12.00-13.30")),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        const Text("Пятница:"),
-                        Center(child: Text("9.30-17.15")),
-                        Center(child: Text("12.00-13.30")),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        const Text("Суббота:"),
-                        Center(child: Text("9.30-17.15")),
-                        Center(child: Text("12.00-13.30")),
-                      ],
-                    ),
-                    TableRow(
-                      children: [
-                        const Text("Воскресенье:"),
-                        Center(child: Text("9.30-17.15")),
-                        Center(child: Text("12.00-13.30")),
+                        ScheduleTable(cabinetController: cabinetController),
                       ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          ],
+              ),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Obx(
+                  () => SaveButton(
+                    onClick: save,
+                    isLoading: cabinetController.isCreating.value,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

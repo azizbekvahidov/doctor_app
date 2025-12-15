@@ -53,6 +53,7 @@ class IdentificationPage extends GetView<AuthController> {
                 padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Obx(
                   () => PrimaryButton(
+                    // onTap: () => Get.toNamed(Routes.onboard),
                     onTap: () => controller.myIdRegister(),
                     child: controller.isAuthorization.value
                         ? Center(

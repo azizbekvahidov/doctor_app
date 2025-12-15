@@ -3,13 +3,13 @@ import 'package:doctor_app/core/design_system/styles/app_colors.dart';
 import 'package:doctor_app/core/design_system/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 
-class LangButton extends StatelessWidget {
+class LanguageSelectButton extends StatelessWidget {
   final String lang;
   final Function() onTap;
   final Color? bgColor;
   final bool isSelected;
 
-  const LangButton({
+  const LanguageSelectButton({
     super.key,
     required this.lang,
     required this.onTap,

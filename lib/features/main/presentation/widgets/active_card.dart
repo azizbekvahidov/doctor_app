@@ -1,10 +1,12 @@
 import 'package:doctor_app/core/design_system/styles/text_styles.dart';
+import 'package:doctor_app/features/shared/domain/models/issue.dart';
 import 'package:flutter/material.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class ActiveCard extends StatelessWidget {
-  const ActiveCard({super.key, this.onClick});
+  const ActiveCard({super.key, this.onClick, required this.active});
 
+  final Issue active;
   final Function()? onClick;
 
   @override
@@ -40,7 +42,7 @@ class ActiveCard extends StatelessWidget {
                         SizedBox(width: 10),
                         Expanded(
                           child: Text(
-                            "Lorem ipsum dolor sit amet, consec tetur",
+                            active.issue ?? "No description",
                             style: WorkSansStyle.bodyLarge,
                           ),
                         ),

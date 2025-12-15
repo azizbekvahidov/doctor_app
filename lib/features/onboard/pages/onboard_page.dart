@@ -1,3 +1,4 @@
+import 'package:doctor_app/core/design_system/widgets/loader.dart';
 import 'package:doctor_app/features/onboard/controller/onboard_controller.dart';
 import 'package:flutter/material.dart';
 
@@ -24,9 +25,7 @@ class _OnboardPageState extends State<OnboardPage> {
     return Scaffold(
       body: Center(
         child: Obx(
-          () => controller.isLoading.value
-              ? CircularProgressIndicator()
-              : SizedBox.shrink(),
+          () => controller.isLoading.value ? Loader() : SizedBox.shrink(),
         ),
       ),
     );

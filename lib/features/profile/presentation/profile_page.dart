@@ -1,4 +1,9 @@
-import 'package:doctor_app/core/pages/routes.dart';
+import 'dart:io';
+
+import 'package:doctor_app/core/navigation/routes.dart';
+import 'package:doctor_app/features/auth/presentations/controller/auth_controller.dart';
+import 'package:doctor_app/features/profile/presentation/controllers/cabinet_controller.dart';
+import 'package:doctor_app/features/shared/controllers/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:doctor_app/core/design_system/styles/app_colors.dart';
@@ -9,7 +14,11 @@ import 'package:doctor_app/core/utils/asset_finder.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+  ProfilePage({super.key});
+
+  final CabinetController cabinetController = Get.find<CabinetController>();
+  final UserController userController = Get.find<UserController>();
+  final AuthController authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
@@ -29,31 +38,77 @@ class ProfilePage extends StatelessWidget {
                   Stack(
                     alignment: Alignment.bottomRight,
                     children: [
-                      Circle(),
-                      Container(
-                        padding: EdgeInsets.all(7),
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.lightGray,
-                        ),
-                        child: SvgPicture.asset(AssetFinder.icon('edit')),
+                      Obx(() {
+                        if (cabinetController.isAvatarLoading.value) {
+                          return Circle(
+                            child: Padding(
+                              padding: EdgeInsets.all(30),
+
+                              child: CircularProgressIndicator(),
+                            ),
+                          );
+                        }
+                        if (cabinetController
+                            .selectedAvatarPath
+                            .value
+                            .isNotEmpty) {
+                          return Circle(
+                            child: Image.file(
+                              File(cabinetController.selectedAvatarPath.value),
+                              fit: BoxFit.cover,
+                            ),
+                          );
+                        } else {
+                          return Circle(
+                            child: Image.network(
+                              userController.user.value!.avatar!.url ??
+                                  "https://img.freepik.com/free-photo/female-doctor-hospital-with-stethoscope_23-2148827774.jpg?semt=ais_hybrid&w=740&q=80",
+                              fit: BoxFit.cover,
+                            ),
+                          );
+                        }
+                      }),
+                      Obx(
+                        () => cabinetController.isAvatarLoading.value
+                            ? SizedBox.shrink()
+                            : ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: SizedBox(
+                                  width: 35,
+                                  height: 35,
+                                  child: Material(
+                                    color: AppColors.lightGray,
+                                    child: InkWell(
+                                      splashColor: Colors.black12,
+                                      onTap: () async => await cabinetController
+                                          .selectAvatarFile(),
+                                      child: Padding(
+                                        padding: EdgeInsets.all(6),
+                                        child: SvgPicture.asset(
+                                          AssetFinder.icon('edit'),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
                       ),
                     ],
                   ),
                   SizedBox(height: 10),
-                  RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      style: WorkSansStyle.titleLarge.copyWith(
-                        color: Colors.black,
+                  Obx(
+                    () => RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        style: WorkSansStyle.titleLarge.copyWith(
+                          color: Colors.black,
+                        ),
+                        text: userController.user.value!.firstName,
+                        children: [
+                          TextSpan(text: "\n"),
+                          TextSpan(text: userController.user.value!.lastName),
+                        ],
                       ),
-                      text: "Akhmadjon",
-                      children: [
-                        TextSpan(text: "\n"),
-                        TextSpan(text: "Akbarov"),
-                      ],
                     ),
                   ),
                   SizedBox(height: 30),
@@ -102,9 +157,10 @@ class ProfilePage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 25),
                 child: PrimaryButton(
+                  onTap: () => authController.logout(),
                   width: double.infinity,
                   child: Text(
-                    "log out".tr,
+                    "logout".tr,
                     style: WorkSansStyle.labelLarge.copyWith(
                       fontWeight: FontWeight.w500,
                     ),

@@ -1,4 +1,5 @@
 import 'package:get/get_navigation/src/root/internacionalization.dart';
+import 'package:get/get.dart';
 
 class AppTranslations extends Translations {
   @override
@@ -7,52 +8,59 @@ class AppTranslations extends Translations {
       'hello': 'Привет',
       'login': 'Войти',
       'logout': 'Выход из системы',
-      'next': 'Дальше',
-      'dismiss': 'Отмена',
+      'next': 'Продолжить',
+      'dismiss': 'Отменить',
+
+      // --- Announcements ---
       'new_ann': 'Новые заказы',
       'active_ann': 'Активные заказы',
+
+      // --- Personal Info ---
       'first_name': "Имя",
       'last_name': "Фамилия",
-      'personal_info': "Личная информация",
       'middle_name': "Отчество",
+      'personal_info': "Личная информация",
       'phone_number': "Номер телефона",
-      'email': "Электронная почта",
+      'email': "Эл. почта",
       'birthday': "Дата рождения",
-      'experience': "Опыт",
-      'degree': "Степень",
-      'profession': "Специальность",
+      'experience': "Ваш опыт",
+      'degree': "Ваша степень",
+      'profession': "Ваша специальность",
       'about_uz': "О себе на узбекском языке",
       'about_ru': "О себе на русском языке",
       'social_networks': "Социальные сети",
-      'select_profession': 'Выберите специальность',
-      'select_degree': 'Выберите степень',
       'identification_info': 'Сделайте селфи и пройдите идентификацию',
       'identification': 'Идентификация',
       'register_success': 'Вы успешно зарегистрировались в системе.',
+      'select_profession': 'Пожалуйста, выберите вашу специальность',
+      'select_degree': 'Пожалуйста, выберите вашу степень',
 
       // --- Validation texts ---
-      'valid_first_name': 'Введите имя',
-      'valid_last_name': 'Введите фамилию',
-      'valid_middle_name': 'Введите отчество',
-      'valid_phone_number': 'Введите номер телефона',
-      'valid_email': 'Введите почту',
-      'valid_birthday': 'Введите дату рождения',
-      'valid_experience': 'Введите опыт',
-      'valid_degree': 'Выберите степень',
-      'valid_profession': 'Выберите специальность',
-      'valid_about_uz': 'Введите информацию о себе на узбекском языке',
-      'valid_about_ru': 'Введите информацию о себе на русском языке',
-      'valid_social_networks': 'Введите информацию о социальных сетях',
-      'valid_language': 'Выберите язык',
-      'valid_pnfl': 'Введите JSHSHR',
+      'valid_first_name': 'Пожалуйста, введите ваше имя',
+      'valid_last_name': 'Пожалуйста, введите вашу фамилию',
+      'valid_middle_name': 'Пожалуйста, введите отчество',
+      'valid_phone_number': 'Пожалуйста, введите ваш номер телефона',
+      'valid_email': 'Пожалуйста, введите вашу эл. почту',
+      'valid_birthday': 'Пожалуйста, введите дату рождения',
+      'valid_experience': 'Пожалуйста, введите ваш опыт',
+      'valid_degree': 'Пожалуйста, выберите степень',
+      'valid_profession': 'Пожалуйста, выберите специальность',
+      'valid_about_uz':
+          'Пожалуйста, введите информацию о себе на узбекском языке',
+      'valid_about_ru':
+          'Пожалуйста, введите информацию о себе на русском языке',
+      'valid_social_networks':
+          'Пожалуйста, введите информацию о социальных сетях',
+      'valid_language': 'Пожалуйста, выберите язык',
+      'valid_pnfl': 'Пожалуйста, введите ваш ПИНФЛ!',
 
       // --- Medical Degrees ---
       'bachelor': 'Бакалавр',
       'master': 'Магистр',
-      'phd': 'Кандидат наук (PhD)',
+      'phd': 'PhD (Доктор философии)',
       'docent': 'Доцент',
       'professor': 'Профессор',
-      'resident': 'Ординатор',
+      'resident': 'Резидент',
       'intern': 'Интерн',
       'specialist': 'Специалист',
       'doctor_sciences': 'Доктор наук',
@@ -82,26 +90,114 @@ class AppTranslations extends Translations {
       'diagnosis': 'Диагноз',
       'card': 'Карта',
 
-      // profile
+      // --- Profile ---
       'documents': 'Документы',
-      'work_and_schedule': 'Место работы и графики',
+      'work_and_schedule': 'Место работы и расписания',
       'profile': 'Профиль',
+
+      // --- Work and Schedule ---
       'add_work_place': 'Добавить место работы',
+      'add_day': 'Добавить день',
+      'add_schedule': "Добавить рабочие часы",
+      'select_weekday': "Выберите день недели",
+      'lunch_time': "Время обеда",
+      'opening_hours': "Рабочее время",
+      'name_of_clinic': "Название клиники",
+      'address_of_clinic': "Адрес клиники",
+      'region': "Регион",
+      'place': "Место работы",
+      'schedule': "Расписание",
+      'delete_document_alert': 'Удалить документ?',
+      'no_documents': 'Документы отсутствуют',
+
+      // price
+      'main_price': '',
+
+      // --- Days ---
+      'monday': 'Понедельник',
+      'tuesday': 'Вторник',
+      'wednesday': 'Среда',
+      'thursday': 'Четверг',
+      'friday': 'Пятница',
+      'saturday': 'Суббота',
+      'sunday': 'Воскресенье',
+
+      'no_schedules': 'Расписаний нет',
+      'clinic': 'Клиника',
+      'address': 'Адрес',
+      'day': 'День',
+      'hour': 'Часы',
+      'lunch': 'Обед',
+      'work_hours': 'Рабочие часы',
+
+      // --- Common buttons ---
+      'add': 'Добавить',
+      'save': 'Сохранить',
+      'create': 'Создать',
+      'upload': 'Загрузить',
+      'select_file': 'Выберите файл',
+      'select_region': 'Выберите регион',
+      'select_language': 'Выберите язык',
+      'select_day': 'Выберите день',
+      'select_time': 'Выберите время',
+      'select_work_hours': 'Выберите рабочие часы',
+      'select_clinic': 'Выберите клинику',
+      'create_schedule': 'Создать расписание',
+      'create_clinic': 'Создать клинику',
+      'delete': 'Удалить',
+      'cancel': 'Отмена',
+      'yes': 'Да',
+      'no': 'Нет',
+      'accept': 'Принять',
+
+      // --- Validation for schedule ---
+      'valid_price': 'Пожалуйста, введите цену',
+      'valid_clinic': 'Пожалуйста, введите название клиники',
+      'valid_address': 'Пожалуйста, введите адрес клиники',
+      'valid_region': 'Пожалуйста, выберите регион',
+      'valid_day': 'Пожалуйста, выберите день недели',
+      'valid_work_hours': 'Пожалуйста, введите рабочее время',
+      'valid_first_price': 'Пожалуйста, введите цену первого приёма',
+      'valid_second_price': 'Пожалуйста, введите цену второго приёма',
+      'valid_schedules': 'Пожалуйста, добавьте расписание',
+
+      // --- Prices ---
+      'first_price': 'Цена первого приёма',
+      'second_price': 'Цена второго приёма',
+
+      // --- Issues / Archive ---
+      'archive_alert': 'Отправить в архив?',
+      'archived': 'Архивировано',
+      'issue_archived_successfully': 'Успешно архивировано',
+      'no_archived_issues': 'Архивы отсутствуют',
+      'archives': 'Архивы',
+
+      // --- Chat ---
+      'type message': 'Введите сообщение',
+      'send': 'Отправить',
+      'chats': 'Чаты',
+
+      // --- Notifications ---
+      'schedule_was_created_successfully': 'Расписание успешно создано',
     },
+
+    // ====================== Uzbek ==========================
     'uz_UZ': {
-      'select_profession': 'Iltimos yo\'nalishingizni tanlang',
-      'select_degree': 'Iltimos darajangizni tanlang',
       'hello': 'Salom',
       'login': 'Kirish',
-      'logout': 'Tizimdan chiqildi',
+      'logout': 'Tizimdan chiqish',
       'next': 'Davom etish',
       'dismiss': 'Bekor qilish',
+
+      // --- Announcements ---
       'new_ann': 'Yangi buyurtmalar',
       'active_ann': 'Aktiv buyurtmalar',
+
+      // --- Personal Info ---
       'first_name': "Ism",
       'last_name': "Familiya",
-      'personal_info': "Shaxsiy ma'lumotlar",
       'middle_name': "Otasining ismi",
+      'personal_info': "Shaxsiy ma'lumotlar",
       'phone_number': "Telefon raqam",
       'email': "Email",
       'birthday': "Tug'ilgan kun",
@@ -113,7 +209,9 @@ class AppTranslations extends Translations {
       'social_networks': "Ijtimoiy tarmoqlar",
       'identification_info': 'Selfi oling va identifikatsiyadan o\'ting',
       'identification': 'Identifikatsiya',
-      'register_success': 'Siz tizimdan muvaffaqiyatli ro\'yxatdan o\'tdingiz.',
+      'register_success': 'Siz tizimda muvaffaqiyatli ro\'yxatdan o\'tdingiz.',
+      'select_profession': 'Iltimos yo\'nalishingizni tanlang',
+      'select_degree': 'Iltimos darajangizni tanlang',
 
       // --- Validation texts ---
       'valid_first_name': 'Iltimos ismingizni kiriting',
@@ -164,18 +262,18 @@ class AppTranslations extends Translations {
       'endocrinologist': 'Endokrinolog',
       'family_doctor': 'Oilaviy shifokor',
 
-      // patient info
+      // --- Patient Info ---
       'patient_information': 'Bemor ma\'lumotlari',
       'analysis_data': 'Analiz natijasi',
       'diagnosis': 'Diagnos',
       'card': 'Karta',
 
-      // profile
+      // --- Profile ---
       'documents': 'Hujjatlar',
       'work_and_schedule': 'Ish joyi va jadvallari',
       'profile': 'Profil',
 
-      // work and schedule
+      // --- Work and Schedule ---
       'add_work_place': 'Ish joyini qo\'shing',
       'add_day': 'Kun qo\'shish',
       'add_schedule': "Ish vaqtlarini qo'shish",
@@ -187,8 +285,84 @@ class AppTranslations extends Translations {
       'region': "Viloyat",
       'place': "Ish joyi",
       'schedule': "Ish jadvali",
-      'day': "Kun",
-      'hour': 'Soat', "lunch": "Tushlik",
+      'delete_document_alert': 'Hujjatni o\'chirmoqchimisiz?',
+      'no_documents': 'Hujjatlar mavjud emas',
+
+      // --- Days ---
+      'monday': 'Dushanba',
+      'tuesday': 'Seshanba',
+      'wednesday': 'Chorshanba',
+      'thursday': 'Payshanba',
+      'friday': 'Juma',
+      'saturday': 'Shanba',
+      'sunday': 'Yakshanba',
+
+      'no_schedules': 'Jadvallar mavjud emas',
+      'clinic': 'Klinika',
+      'address': 'Manzil',
+      'day': 'Kun',
+      'hour': 'Soat',
+      'lunch': 'Tushlik',
+      'work_hours': 'Ish soatlari',
+
+      // --- Common buttons ---
+      'add': 'Qo\'shish',
+      'save': 'Saqlash',
+      'create': 'Yaratish',
+      'upload': 'Yuklash',
+      'select_file': 'Faylni tanlang',
+      'select_region': 'Viloyatni tanlang',
+      'select_language': 'Tilni tanlang',
+      'select_day': 'Kun tanlash',
+      'select_time': 'Vaqtni tanlang',
+      'select_work_hours': 'Ish vaqtlarini tanlang',
+      'select_clinic': 'Klinikani tanlang',
+      'create_schedule': 'Jadval yaratish',
+      'create_clinic': 'Klinika yaratish',
+      'delete': 'O\'chirish',
+      'cancel': 'Bekor qilish',
+      'yes': 'Ha',
+      'no': 'Yo\'q',
+      // accepts
+      'accept': 'Qabul qilish',
+
+      // --- Validation for schedule ---
+      'valid_price': 'Iltimos narxni kiriting',
+      'valid_clinic': 'Iltimos klinika nomini kiriting',
+      'valid_address': 'Iltimos klinika manzilini kiriting',
+      'valid_region': 'Iltimos viloyatni tanlang',
+      'valid_day': 'Iltimos hafta kunini tanlang',
+      'valid_work_hours': 'Iltimos ish vaqtlarini kiriting',
+      'valid_first_price': 'Iltimos birinchi qabul narxini kiriting',
+      'valid_second_price': 'Iltimos ikkinchi qabul narxini kiriting',
+      'valid_schedules': 'Iltimos jadval qo\'shing',
+
+      // --- Prices ---
+      'first_price': 'Birinchi qabul narxi',
+      'second_price': 'Ikkinchi qabul narxi',
+
+      // --- Issues / Archive ---
+      'archive_alert': 'Arxivga tushurishni istaysizmi?',
+      'archived': 'Arxivlandi',
+      'issue_archived_successfully': 'Muvaffaqиятli arxivlandi',
+      'no_archived_issues': 'Arxivlar mavjud emas',
+      'archives': 'Arxivlar',
+      'no_active_ann': 'Aktiv buyurtmalar mavjud emas',
+
+      // --- Chat ---
+      'type message': 'Xabarni kiriting',
+      'send': 'Yuborish',
+      'chats': 'Xabarlar',
+
+      // --- Notifications ---
+      'schedule_was_created_successfully': 'Jadval muvaffaqiyatli yaratildi',
+      'document_was_deleted_successfully': 'Hujjat muvaffaqiyatli o\'chirildi',
+      'document_was_uploaded_successfully': 'Hujjat muvaffaqiyatli yuklandi!',
+      "error_while_creating_schedule":
+          'Jadval yaratishda xatolik. Iltimos qayta urinib ko\'ring.',
+
+      // place holders
+      'search_clinic': 'Klinika nomini kiriting',
     },
   };
 }

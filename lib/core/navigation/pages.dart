@@ -1,8 +1,8 @@
-import 'package:doctor_app/core/bindings/app_bindings.dart';
 import 'package:doctor_app/features/auth/presentations/pages/identification_page.dart';
 import 'package:doctor_app/features/auth/presentations/pages/login_page.dart';
 import 'package:doctor_app/features/auth/presentations/pages/register_page.dart';
-import 'package:doctor_app/features/detail/presentation/detail_page.dart';
+import 'package:doctor_app/features/chat/presentation/chat_page.dart';
+import 'package:doctor_app/features/issue_detail/presentation/issue_detail_page.dart';
 import 'package:doctor_app/features/main/bindings.dart';
 import 'package:doctor_app/features/main/presentation/main_page.dart';
 import 'package:doctor_app/features/onboard/bindings.dart';
@@ -14,6 +14,7 @@ import 'package:doctor_app/features/profile/presentation/documents_page.dart';
 import 'package:doctor_app/features/profile/presentation/work_info_page.dart';
 import 'package:get/get.dart';
 
+import '../../features/chat/presentation/chats_page.dart';
 import 'routes.dart';
 
 class AppPages {
@@ -29,7 +30,7 @@ class AppPages {
     GetPage(
       name: Routes.onboard,
       page: () => OnboardPage(),
-      binding: AppBindings(),
+      binding: OnBoardBindings(),
     ),
     GetPage(
       name: Routes.lang,
@@ -60,7 +61,7 @@ class AppPages {
     ),
     GetPage(
       name: Routes.detail,
-      page: () => DetailPage(),
+      page: () => IssueDetailPage(),
       transition: Transition.rightToLeft,
       transitionDuration: const Duration(milliseconds: 400),
     ),
@@ -85,6 +86,19 @@ class AppPages {
     GetPage(
       name: Routes.createWorkPlace,
       page: () => CreateWorkPlacePage(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+
+    GetPage(
+      name: Routes.chat,
+      page: () => ChatPage(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 400),
+    ),
+    GetPage(
+      name: Routes.chats,
+      page: () => ChatsPage(),
       transition: Transition.rightToLeft,
       transitionDuration: const Duration(milliseconds: 400),
     ),

@@ -8,6 +8,7 @@ class Notifier {
   static showSnackbar({
     Duration duration = const Duration(milliseconds: 600),
     Color backgroundColor = Colors.red,
+    int fromBottom = 190,
     required Widget content,
   }) async {
     messengerKey.currentState?.clearSnackBars();
@@ -17,7 +18,7 @@ class Notifier {
       duration: duration,
       behavior: SnackBarBehavior.floating,
       margin: EdgeInsets.only(
-        bottom: AppConfig.screenSize.height - 150,
+        bottom: AppConfig.screenSize.height - fromBottom,
         left: 15,
         right: 15,
       ),

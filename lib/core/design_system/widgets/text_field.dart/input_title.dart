@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../styles/app_colors.dart';
 import '../../styles/text_styles.dart';
 
 class InputTitle extends StatelessWidget {
@@ -11,7 +10,9 @@ class InputTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: WorkSansStyle.label.copyWith(color: AppColors.subtitleSecond),
+      style: WorkSansStyle.label.copyWith(
+        color: Colors.black.withValues(alpha: 0.6),
+      ),
     );
   }
 }
