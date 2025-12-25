@@ -29,7 +29,6 @@ class PnflInput extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
             inputFormatters: [maskFormatter],
             keyboardType: TextInputType.number,
-            style: const TextStyle(color: Colors.black87),
             decoration: ShadDecoration(
               border: ShadBorder.all(
                 color: hasError ? Colors.red : AppColors.grey,

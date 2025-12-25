@@ -81,4 +81,9 @@ class SecureStorageService {
       LogHelper.error("Deleting $key: $e");
     }
   }
+
+  // Public read/write methods for general use
+  Future<String?> read(String key) async => await _read(key);
+
+  Future<void> write(String key, String value) async => await _write(key, value);
 }

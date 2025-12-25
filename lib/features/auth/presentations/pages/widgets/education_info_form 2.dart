@@ -94,9 +94,6 @@ class _EducationInfoFormState extends State<EducationInfoForm> {
                     decoration: CustomDropdownDecoration(
                       closedBorder: Border.all(color: AppColors.grey),
                       expandedBorder: Border.all(color: AppColors.grey),
-                      headerStyle: const TextStyle(color: Colors.black87),
-                      listItemStyle: const TextStyle(color: Colors.black87),
-                      hintStyle: TextStyle(color: AppColors.grey),
                     ),
                     hintText: 'select_profession'.tr,
                     initialItem:
@@ -145,9 +142,6 @@ class _EducationInfoFormState extends State<EducationInfoForm> {
                     decoration: CustomDropdownDecoration(
                       closedBorder: Border.all(color: AppColors.grey),
                       expandedBorder: Border.all(color: AppColors.grey),
-                      headerStyle: const TextStyle(color: Colors.black87),
-                      listItemStyle: const TextStyle(color: Colors.black87),
-                      hintStyle: TextStyle(color: AppColors.grey),
                     ),
                     hintText: 'select_degree'.tr,
                     initialItem: widget.selectedDegreeController.text.isEmpty

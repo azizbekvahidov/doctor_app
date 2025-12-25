@@ -37,6 +37,11 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+
+    lint {
+        disable += listOf("InnerclassSeparator", "Instantiatable", "MissingClass")
+        checkReleaseBuilds = false
+    }
 }
 
 flutter {

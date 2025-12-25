@@ -201,6 +201,9 @@ class _CreateWorkPlacePageState extends State<CreateWorkPlacePage> {
                                   expandedBorder: Border.all(
                                     color: AppColors.grey,
                                   ),
+                                  headerStyle: const TextStyle(color: Colors.black87),
+                                  listItemStyle: const TextStyle(color: Colors.black87),
+                                  hintStyle: TextStyle(color: AppColors.grey),
                                 ),
                                 hintText: 'select_region'.tr,
                                 initialItem: selectedRegion != null

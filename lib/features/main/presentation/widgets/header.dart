@@ -1,94 +1,100 @@
-import 'package:doctor_app/core/utils/asset_finder.dart';
-import 'package:doctor_app/core/design_system/widgets/circle.dart';
 import 'package:doctor_app/core/design_system/styles/app_colors.dart';
-import 'package:doctor_app/core/design_system/styles/text_styles.dart';
+import 'package:doctor_app/core/design_system/widgets/avatar_with_status.dart';
+import 'package:doctor_app/core/design_system/widgets/unread_badge.dart';
 import 'package:doctor_app/features/auth/presentations/controller/auth_controller.dart';
-import 'package:doctor_app/features/main/presentation/controller/main_page_controller.dart';
-
 import 'package:doctor_app/features/shared/controllers/user_controller.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 class Header extends StatelessWidget {
   Header({super.key});
 
   final AuthController authController = Get.find<AuthController>();
-
-  final MainPageController mainPageController = Get.find<MainPageController>();
-
   final UserController userController = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? Colors.white : Colors.black87;
+    final subtitleColor = isDark ? AppColors.darkTextSecondary : AppColors.grey;
+
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Obx(() {
-            if (userController.user.value == null) return SizedBox.shrink();
+            if (userController.user.value == null) return const SizedBox.shrink();
             final user = userController.user.value;
             return GestureDetector(
               onTap: () => authController.logout(),
               child: Row(
                 children: [
-                  Circle(
-                    height: 70,
-                    width: 70,
-                    child: Image.network(
-                      userController.user.value!.avatar!.url ??
-                          "https://img.freepik.com/free-photo/female-doctor-hospital-with-stethoscope_23-2148827774.jpg?semt=ais_hybrid&w=740&q=80",
-                      fit: BoxFit.cover,
-                    ),
+                  AvatarWithStatus(
+                    imageUrl: user!.avatar?.url,
+                    size: 55,
+                    name: user.firstName,
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 12),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(user!.firstName!, style: WorkSansStyle.titleLarge),
-                      Text(user.lastName!, style: WorkSansStyle.titleLarge),
+                      Text(
+                        '${'hi_doctor'.tr} ${user.firstName ?? ''},',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: textColor,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        'how_are_you'.tr,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: subtitleColor,
+                        ),
+                      ),
                     ],
                   ),
                 ],
               ),
             );
           }),
-          Spacer(),
-          Container(
-            decoration: BoxDecoration(shape: BoxShape.circle),
-            height: 65,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                InkWell(
-                  onTap: () {
-
-                  },
-                  borderRadius: BorderRadius.circular(50),
-                  child: Circle(
-                    bgColor: AppColors.lightGray,
-                    border: Border.all(color: Colors.transparent),
-                    width: 50,
-                    height: 50,
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: SvgPicture.asset(AssetFinder.icon('notification')),
+          const Spacer(),
+          // Notification bell
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(14),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 2),
                     ),
-                  ),
+                  ],
                 ),
-                Positioned(
-                  right: -2,
-                  top: 0,
-                  child: ShadBadge(
-                    shape: CircleBorder(),
-                    backgroundColor: AppColors.red,
-                    child: Text('5', style: WorkSansStyle.labelLarge),
-                  ),
+                child: Icon(
+                  LucideIcons.bell,
+                  color: AppColors.accentPink,
+                  size: 24,
                 ),
-              ],
-            ),
+              ),
+              const Positioned(
+                right: -4,
+                top: -4,
+                child: UnreadBadge(
+                  count: 1,
+                  size: 20,
+                ),
+              ),
+            ],
           ),
         ],
       ),

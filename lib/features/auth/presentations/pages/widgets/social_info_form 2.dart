@@ -78,7 +78,6 @@ class _SocialInfoFormState extends State<SocialInfoForm> {
                                       ),
                                     ),
                                     minHeight: 170,
-                                    style: const TextStyle(color: Colors.black87),
                                     decoration: ShadDecoration(
                                       border: ShadBorder.all(
                                         color: AppColors.grey,
@@ -126,7 +125,6 @@ class _SocialInfoFormState extends State<SocialInfoForm> {
                                       ),
                                     ),
                                     minHeight: 170,
-                                    style: const TextStyle(color: Colors.black87),
                                     decoration: ShadDecoration(
                                       border: ShadBorder.all(
                                         color: AppColors.grey,

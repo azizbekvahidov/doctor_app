@@ -1,9 +1,13 @@
-import 'package:doctor_app/features/main/presentation/contents/archive_content.dart';
+import 'package:doctor_app/core/design_system/styles/app_colors.dart';
+import 'package:doctor_app/core/design_system/widgets/unread_badge.dart';
+import 'package:doctor_app/features/add/presentation/add_page.dart';
+import 'package:doctor_app/features/chat/presentation/chats_page.dart';
 import 'package:doctor_app/features/profile/presentation/profile_page.dart';
-
+import 'package:doctor_app/features/qr/presentation/qr_page.dart';
 import 'package:doctor_app/features/shared/controllers/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'contents/main_content.dart';
 
@@ -20,9 +24,11 @@ class _MainPageState extends State<MainPage> {
   int index = 0;
 
   final List<Widget> pages = [
-    MainContent(key: ValueKey("home")),
-    ArchiveContent(key: ValueKey("archive")),
-    ProfilePage(key: ValueKey("profile")),
+    MainContent(key: const ValueKey("home")),
+    ChatsPage(key: const ValueKey("chats")),
+    QRPage(key: const ValueKey("qr")),
+    AddPage(key: const ValueKey("add")),
+    ProfilePage(key: const ValueKey("profile")),
   ];
 
   @override
@@ -33,6 +39,9 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgColor = isDark ? AppColors.darkSurface : Colors.white;
+
     return Scaffold(
       body: SafeArea(
         child: AnimatedSwitcher(
@@ -49,10 +58,10 @@ class _MainPageState extends State<MainPage> {
       bottomNavigationBar: Container(
         padding: const EdgeInsets.symmetric(
           vertical: 10,
-          horizontal: 25,
+          horizontal: 16,
         ).copyWith(bottom: 20),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: bgColor,
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.07),
@@ -64,40 +73,75 @@ class _MainPageState extends State<MainPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildNavItem(Icons.home, "Home", 0),
-            _buildNavItem(Icons.search, "Search", 1),
-            _buildNavItem(Icons.person, "Profile", 2),
+            _buildNavItem(LucideIcons.stethoscope, 0),
+            _buildNavItemWithBadge(LucideIcons.messageCircle, 1, 2),
+            _buildNavItem(LucideIcons.qrCode, 2),
+            _buildNavItem(LucideIcons.filePlus, 3),
+            _buildNavItem(LucideIcons.user, 4),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildNavItem(IconData icon, String label, int i) {
+  Widget _buildNavItem(IconData icon, int i) {
     final bool isSelected = i == index;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final selectedColor = AppColors.primary;
+    final unselectedColor = isDark ? AppColors.darkTextSecondary : AppColors.grey;
 
     return GestureDetector(
       onTap: () => setState(() => index = i),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.teal.withOpacity(0.1) : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
+          color: isSelected ? selectedColor.withOpacity(0.15) : Colors.transparent,
+          borderRadius: BorderRadius.circular(16),
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+        child: Icon(
+          icon,
+          color: isSelected ? selectedColor : unselectedColor,
+          size: 24,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNavItemWithBadge(IconData icon, int i, int badgeCount) {
+    final bool isSelected = i == index;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final selectedColor = AppColors.primary;
+    final unselectedColor = isDark ? AppColors.darkTextSecondary : AppColors.grey;
+
+    return GestureDetector(
+      onTap: () => setState(() => index = i),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+        decoration: BoxDecoration(
+          color: isSelected ? selectedColor.withOpacity(0.15) : Colors.transparent,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Stack(
+          clipBehavior: Clip.none,
           children: [
-            Icon(icon, color: isSelected ? Colors.teal : Colors.grey, size: 26),
-            // const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-                color: isSelected ? Colors.teal : Colors.grey,
-              ),
+            Icon(
+              icon,
+              color: isSelected ? selectedColor : unselectedColor,
+              size: 24,
             ),
+            if (badgeCount > 0)
+              Positioned(
+                right: -8,
+                top: -8,
+                child: UnreadBadge(
+                  count: badgeCount,
+                  size: 18,
+                ),
+              ),
           ],
         ),
       ),

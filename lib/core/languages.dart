@@ -176,9 +176,25 @@ class AppTranslations extends Translations {
       'type message': 'Введите сообщение',
       'send': 'Отправить',
       'chats': 'Чаты',
+      'search': 'Поиск...',
 
       // --- Notifications ---
       'schedule_was_created_successfully': 'Расписание успешно создано',
+
+      // --- New UI translations ---
+      'hi_doctor': 'Привет Др',
+      'how_are_you': 'Как у вас сегодня дела?',
+      'consults_for_today': 'Консультации на сегодня',
+      'of': 'из',
+      'completed': 'Завершено',
+      'consult_history': 'История консультаций',
+      'patient_management': 'Управление пациентами',
+      'free_consult': 'Бесплатная консультация',
+      'news': 'новости',
+      'search_placeholder': 'Поиск пациента, проблемы...',
+      'qr_scanner': 'QR Сканер',
+      'coming_soon': 'Скоро будет доступно',
+      'add_new': 'Добавить новое',
     },
 
     // ====================== Uzbek ==========================
@@ -353,6 +369,7 @@ class AppTranslations extends Translations {
       'type message': 'Xabarni kiriting',
       'send': 'Yuborish',
       'chats': 'Xabarlar',
+      'search': 'Qidirish...',
 
       // --- Notifications ---
       'schedule_was_created_successfully': 'Jadval muvaffaqiyatli yaratildi',
@@ -363,6 +380,21 @@ class AppTranslations extends Translations {
 
       // place holders
       'search_clinic': 'Klinika nomini kiriting',
+
+      // --- New UI translations ---
+      'hi_doctor': 'Salom Dr',
+      'how_are_you': 'Bugun qalaysiz?',
+      'consults_for_today': 'Bugungi konsultatsiyalar',
+      'of': 'dan',
+      'completed': 'Bajarilgan',
+      'consult_history': 'Konsultatsiya tarixi',
+      'patient_management': 'Bemorlarni boshqarish',
+      'free_consult': 'Bepul konsultatsiya',
+      'news': 'yangilik',
+      'search_placeholder': 'Bemor, muammo qidirish...',
+      'qr_scanner': 'QR Skaner',
+      'coming_soon': 'Tez orada',
+      'add_new': 'Yangi qo\'shish',
     },
   };
 }

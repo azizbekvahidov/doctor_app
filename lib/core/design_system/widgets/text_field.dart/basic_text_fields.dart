@@ -38,6 +38,7 @@ class BasicTextField extends StatelessWidget {
       trailing: trailing,
       padding: EdgeInsets.symmetric(vertical: 14, horizontal: 10),
       placeholder: hintText,
+      style: const TextStyle(color: Colors.black87),
       decoration: ShadDecoration(
         border: ShadBorder.all(
           color: Colors.grey,
