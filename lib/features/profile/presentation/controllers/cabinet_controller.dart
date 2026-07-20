@@ -165,10 +165,15 @@ class CabinetController extends GetxController {
 
   getSchedules() async {
     isSchedulesLoading.value = true;
-    await Future.delayed(Duration(milliseconds: 500));
-    final fetchedSchedules = await repository.getSchedules();
-    schedules.value = fetchedSchedules;
-    isSchedulesLoading.value = false;
+    try {
+      await Future.delayed(Duration(milliseconds: 500));
+      final fetchedSchedules = await repository.getSchedules();
+      schedules.value = fetchedSchedules;
+    } catch (e) {
+      LogHelper.error("❌ Failed to load schedules: $e");
+    } finally {
+      isSchedulesLoading.value = false;
+    }
   }
 
   getClinics(String query) async {
@@ -218,11 +223,20 @@ class CabinetController extends GetxController {
   }
 
   create() async {
+    final clinic = selectedClinicRequest.value;
+    if (clinic == null) {
+      Notifier.showSnackbar(
+        duration: Duration(milliseconds: 1500),
+        backgroundColor: AppColors.red,
+        content: Text("Iltimos, avval klinikani tanlang"),
+      );
+      return;
+    }
     isCreating.value = true;
     try {
       Map<String, dynamic> scheduleRequestData = {
-        "clinic_id": selectedClinicRequest.value?.id,
-        "clinic": selectedClinicRequest.value!.toMap(),
+        "clinic_id": clinic.id,
+        "clinic": clinic.toMap(),
         "price": double.tryParse(priceController.text),
         "second_price": double.tryParse(secondPriceController.text),
         "schedule": selectedSchedules.map((e) => e.toJson()).toList(),

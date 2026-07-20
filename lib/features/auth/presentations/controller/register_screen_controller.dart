@@ -27,18 +27,16 @@ class RegisterScreenController extends GetxController {
         firstName: user.firstName,
         lastName: user.lastName,
         middleName: user.middleName,
-        birthday: DateFormatter.birthday(user.birthdate!),
+        birthday: user.birthdate != null
+            ? DateFormatter.birthday(user.birthdate!)
+            : null,
         phoneNumber: user.phone,
         email: user.email,
-        aboutRu: user.description!.ru,
-        aboutUz: user.description!.uz,
-        experienceForm: user.settings!.experienceFrom,
-        instagramUsername: user.socialNetwork != null
-            ? user.socialNetwork!.instagram
-            : "",
-        telegramUsername: user.socialNetwork != null
-            ? user.socialNetwork!.telegram
-            : "",
+        aboutRu: user.description?.ru,
+        aboutUz: user.description?.uz,
+        experienceForm: user.settings?.experienceFrom,
+        instagramUsername: user.socialNetwork?.instagram ?? "",
+        telegramUsername: user.socialNetwork?.telegram ?? "",
       );
     }
   }

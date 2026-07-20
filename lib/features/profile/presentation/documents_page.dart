@@ -66,7 +66,9 @@ class _DocumentsPageState extends State<DocumentsPage> {
                   children: [
                     const SizedBox(height: 15),
                     Obx(() {
-                      if (userController.user.value!.documents!.isEmpty) {
+                      final documents =
+                          userController.user.value?.documents ?? [];
+                      if (documents.isEmpty) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 50),
                           child: Center(
@@ -83,11 +85,9 @@ class _DocumentsPageState extends State<DocumentsPage> {
                               horizontal: 18,
                               vertical: 10,
                             ),
-                            itemCount:
-                                userController.user.value!.documents!.length,
+                            itemCount: documents.length,
                             itemBuilder: (context, index) {
-                              final documentUrl =
-                                  userController.user.value!.documents![index];
+                              final documentUrl = documents[index];
 
                               return FutureBuilder<void>(
                                 future: Future.delayed(

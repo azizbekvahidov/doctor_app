@@ -33,6 +33,7 @@ class IssueController extends GetxController {
 
   // === Chat related ===
   Timer? _chatTimer;
+  final Set<int> _markedReadIds = {};
   var chatMessages = <Message>[].obs;
   var chatLoading = false.obs;
   RxnString activeIssueUuid = RxnString(null);
@@ -62,9 +63,11 @@ class IssueController extends GetxController {
         issues.assignAll(activeIssues(result.data));
         archivedIssues.assignAll(archivedIssuesOnly(result.data));
 
-        currentPage = result.meta!.currentPage;
-        lastPage = result.meta!.lastPage;
+        currentPage = result.meta?.currentPage ?? currentPage;
+        lastPage = result.meta?.lastPage ?? lastPage;
       }
+    } catch (e) {
+      LogHelper.error("getInitialIssues failed: $e");
     } finally {
       isLoading.value = false;
     }
@@ -83,8 +86,10 @@ class IssueController extends GetxController {
         issues.addAll(activeIssues(result.data));
         archivedIssues.addAll(archivedIssuesOnly(result.data));
 
-        currentPage = result.meta!.currentPage;
+        currentPage = result.meta?.currentPage ?? currentPage;
       }
+    } catch (e) {
+      LogHelper.error("getNextPage failed: $e");
     } finally {
       isMoreLoading.value = false;
     }
@@ -135,8 +140,20 @@ class IssueController extends GetxController {
 
   void markMessagesAsRead(List<Message> messages, issueUuid) async {
     for (var message in messages) {
-      if (message.from == 'patient' && message.readAt == null) {
-        await repository.readMessage(issueUuid, message.id!);
+      final id = message.id;
+      // Skip already-marked ids so the 800ms poll doesn't re-PUT /read every
+      // tick, and guard each call so a failed read doesn't throw uncaught.
+      if (message.from == 'patient' &&
+          message.readAt == null &&
+          id != null &&
+          !_markedReadIds.contains(id)) {
+        _markedReadIds.add(id);
+        try {
+          await repository.readMessage(issueUuid, id);
+        } catch (e) {
+          _markedReadIds.remove(id); // allow a retry on the next cycle
+          LogHelper.error("markMessagesAsRead failed: $e");
+        }
       }
     }
   }
@@ -175,6 +192,18 @@ class IssueController extends GetxController {
     _chatTimer?.cancel();
     activeIssueUuid.value = null;
     files.value = [];
+    _markedReadIds.clear();
+  }
+
+  /// Wipes all cached per-account state. Called on logout so the next user
+  /// never sees the previous doctor's issues or chat.
+  void reset() {
+    _allIssues.clear();
+    issues.clear();
+    archivedIssues.clear();
+    currentPage = 1;
+    lastPage = 1;
+    clearChat();
   }
 
   @override

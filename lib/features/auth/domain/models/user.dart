@@ -128,8 +128,9 @@ class User {
     "last_name": lastName,
     "first_name": firstName,
     "middle_name": middleName,
-    "birthdate":
-        "${birthdate!.year.toString().padLeft(4, '0')}-${birthdate!.month.toString().padLeft(2, '0')}-${birthdate!.day.toString().padLeft(2, '0')}",
+    "birthdate": birthdate == null
+        ? null
+        : "${birthdate!.year.toString().padLeft(4, '0')}-${birthdate!.month.toString().padLeft(2, '0')}-${birthdate!.day.toString().padLeft(2, '0')}",
     "email": email,
     "phone": phone,
     "degree": degree?.toJson(),

@@ -12,15 +12,18 @@ class AuthRepositoryIml extends AuthRepository {
   @override
   Future<AuthData?> login(pinfl) async {
     try {
-      AuthData? loginData = AuthData();
       final Response response = await dio.post(
         ApiConstants.login,
         data: {'pinfl': pinfl},
       );
-      if (response.statusCode == 200) {
-        loginData = AuthData.fromJson(response.data['data']);
+      final status = response.statusCode ?? 0;
+      // Only treat a 2xx carrying a data payload as a successful login; anything
+      // else (204, redirect, empty body) must be null so the caller doesn't
+      // force-unwrap a half-empty AuthData.
+      if (status >= 200 && status < 300 && response.data?['data'] != null) {
+        return AuthData.fromJson(response.data['data']);
       }
-      return loginData;
+      return null;
     } on DioException catch (e) {
       LogHelper.error("Failed Login: ${e.toString()}");
       return null;
@@ -48,10 +51,7 @@ class AuthRepositoryIml extends AuthRepository {
       );
       return response.statusCode == 200;
     } on DioException catch (e) {
-      // LogHelper.info(e.requestOptions.headers.toString());
-      // LogHelper.info(e.response!.statusCode!.toString());
-      // // LogHelper.error(e.requestOptions.uri.toString());
-      LogHelper.error(e.response!.data.toString());
+      LogHelper.error(e.response?.data.toString() ?? e.message ?? e.toString());
       return false;
     } catch (e) {
       return false;

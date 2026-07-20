@@ -87,7 +87,7 @@ class _ChatPageState extends State<ChatPage> {
       appBar: AppBar(
         title: isConnected == false
             ? const Text('Loading...')
-            : Text(issue!.patient!.fullName!),
+            : Text(issue?.patient?.fullName ?? ''),
       ),
       body: SafeArea(
         child: isConnected == false

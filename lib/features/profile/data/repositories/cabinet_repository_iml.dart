@@ -14,8 +14,6 @@ class CabinetRepositoryIml extends CabinetRepository {
 
   @override
   Future<ResponseData> uploadAvatar(File file) async {
-    late ResponseData responseData;
-
     var formData = FormData.fromMap({
       "avatar": await MultipartFile.fromFile(file.path),
       "_method": "patch",
@@ -24,15 +22,16 @@ class CabinetRepositoryIml extends CabinetRepository {
     try {
       final response = await dio.post(ApiConstants.avatar, data: formData);
 
-      if (response.statusCode == 200) {
+      if (_isSuccess(response.statusCode)) {
         final user = User.fromJson(response.data['data']);
         LogHelper.info("✅ Upload successful: ${user.toJson()}");
-        responseData = ResponseData(
-          isSuccess: response.data['success'],
-          user: user,
-        );
+        return ResponseData(isSuccess: response.data['success'], user: user);
       }
-      return responseData;
+
+      LogHelper.error(
+        "❌ Upload failed: ${response.statusCode} - ${response.data}",
+      );
+      return ResponseData(isSuccess: false);
     } on DioException {
       rethrow;
     }
@@ -40,8 +39,6 @@ class CabinetRepositoryIml extends CabinetRepository {
 
   @override
   Future<ResponseData> uploadDocument(documentFile) async {
-    late ResponseData responseData;
-
     var formData = FormData.fromMap({
       "document": await MultipartFile.fromFile(documentFile.path),
       "_method": "put",
@@ -50,25 +47,25 @@ class CabinetRepositoryIml extends CabinetRepository {
     try {
       final response = await dio.post(ApiConstants.document, data: formData);
 
-      if (response.statusCode == 200) {
+      if (_isSuccess(response.statusCode)) {
         final user = User.fromJson(response.data['data']);
         LogHelper.info("✅ Upload successful: ${user.toJson()}");
-        responseData = ResponseData(
-          isSuccess: response.data['success'],
-          user: user,
-        );
-      } else {
-        LogHelper.error(
-          "❌ Upload failed: ${response.statusCode} - ${response.data}",
-        );
+        return ResponseData(isSuccess: response.data['success'], user: user);
       }
-      return responseData;
+
+      LogHelper.error(
+        "❌ Upload failed: ${response.statusCode} - ${response.data}",
+      );
+      return ResponseData(isSuccess: false);
     } on DioException catch (e) {
-      LogHelper.error("❌ Dio error during upload: ${e.response!.data}");
-      LogHelper.error("❌ Dio error during upload: ${e.response!.statusCode}");
+      LogHelper.error("❌ Dio error during upload: ${e.response?.data}");
+      LogHelper.error("❌ Dio error during upload: ${e.response?.statusCode}");
       rethrow;
     }
   }
+
+  bool _isSuccess(int? statusCode) =>
+      statusCode != null && statusCode >= 200 && statusCode < 300;
 
   @override
   Future<ResponseData> deleteDocument(documentId) async {
@@ -101,7 +98,7 @@ class CabinetRepositoryIml extends CabinetRepository {
       return response.statusCode == 201;
     } on DioException catch (e) {
       LogHelper.error(
-        "❌ Dio error during schedule creation: ${e.response!.data}",
+        "❌ Dio error during schedule creation: ${e.response?.data}",
       );
       rethrow;
     } catch (e) {

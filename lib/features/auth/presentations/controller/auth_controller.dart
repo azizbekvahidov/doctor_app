@@ -6,6 +6,8 @@ import 'package:doctor_app/features/auth/domain/models/auth_data.dart';
 import 'package:doctor_app/features/auth/domain/models/personal_data_form.dart';
 import 'package:doctor_app/features/auth/domain/repository/auth_repository.dart';
 import 'package:doctor_app/features/auth/presentations/controller/register_screen_controller.dart';
+import 'package:doctor_app/features/shared/controllers/issue_controller.dart';
+import 'package:doctor_app/features/shared/controllers/user_controller.dart';
 
 import 'package:doctor_app/features/onboard/controller/onboard_controller.dart';
 
@@ -108,10 +110,23 @@ class AuthController extends GetxController {
       }
       token = authData.token;
       user = authData.user;
+      if (token == null || user == null) {
+        isAuthorization.value = false;
+        Notifier.showSnackbar(
+          content: Text(
+            'JSHSHR bo\'yicha ma\'lumotlar mavjud emas!',
+            style: WorkSansStyle.titleSmall.copyWith(
+              fontWeight: FontWeight.w500,
+              fontSize: 15,
+            ),
+          ),
+        );
+        return;
+      }
       await secureStorageService.saveUser(user!.toRawJson());
       await secureStorageService.saveToken(token!);
-      String registeredAt = authData.user!.registeredAt != null
-          ? authData.user!.registeredAt.toString()
+      String registeredAt = user!.registeredAt != null
+          ? user!.registeredAt.toString()
           : "";
       isAuthorization.value = false;
       if (registeredAt.isEmpty) {
@@ -130,25 +145,22 @@ class AuthController extends GetxController {
         Get.find<RegisterScreenController>();
 
     try {
-      PersonalFormData persondalData =
-          registerScreenController.personalFormData.value!;
+      PersonalFormData? personalData =
+          registerScreenController.personalFormData.value;
+      if (personalData == null) {
+        return;
+      }
       final lang = await secureStorageService.getLang();
-      persondalData = persondalData.copyWith(language: lang);
-      final personalDataMap = persondalData.prepareJsonToSend(
+      personalData = personalData.copyWith(language: lang);
+      final personalDataMap = personalData.prepareJsonToSend(
         degreeId: 1,
         professionId: 1,
-        degreeObject:
-            degrees[registerScreenController.personalFormData.value!.degree],
-        professionObject:
-            professions[registerScreenController
-                .personalFormData
-                .value!
-                .profession],
+        degreeObject: degrees[personalData.degree],
+        professionObject: professions[personalData.profession],
       );
 
       final isRegistered = await authRepository.register(personalDataMap);
       if (isRegistered) {
-        isAuthorization.value = false;
         Notifier.showSnackbar(
           duration: Duration(seconds: 2),
           backgroundColor: Colors.green,
@@ -156,9 +168,20 @@ class AuthController extends GetxController {
         );
         await Future.delayed(Duration(milliseconds: 2250));
         await Get.offAllNamed(Routes.onboard);
+      } else {
+        Notifier.showSnackbar(
+          duration: Duration(seconds: 2),
+          backgroundColor: Colors.red,
+          content: Text(
+            "Ma'lumotlarni saqlashda xatolik yuz berdi",
+            style: WorkSansStyle.label,
+          ),
+        );
       }
     } catch (e) {
       LogHelper.error(e.toString());
+    } finally {
+      isAuthorization.value = false;
     }
   }
 
@@ -200,8 +223,30 @@ class AuthController extends GetxController {
 
   Future<void> logout() async {
     isAuthorization.value = false;
+
+    // Best-effort server-side session invalidation; proceed with local cleanup
+    // even if it fails so the device never stays logged in.
+    try {
+      await authRepository.logout();
+    } catch (e) {
+      LogHelper.error("Server logout failed: $e");
+    }
+
     await secureStorageService.deleteToken();
     await secureStorageService.deleteUser();
+
+    // Clear cached per-account state so a subsequent login can't see the
+    // previous doctor's profile, issues, or chat.
+    if (Get.isRegistered<UserController>()) {
+      Get.find<UserController>().user.value = null;
+    }
+    if (Get.isRegistered<IssueController>()) {
+      Get.find<IssueController>().reset();
+    }
+
+    user = null;
+    token = null;
+
     Get.offAllNamed(Routes.onboard);
   }
 }

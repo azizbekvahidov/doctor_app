@@ -52,8 +52,13 @@ class IssueRepositoryImpl extends IssueRepository {
 
   @override
   Future<bool> archiveIssue(String issueUuid) async {
-    final response = await dio.put("${ApiConstants.issue}/$issueUuid/archive");
-    return response.statusCode == 200;
+    try {
+      final response = await dio.put("${ApiConstants.issue}/$issueUuid/archive");
+      return response.statusCode == 200;
+    } on DioException catch (e) {
+      LogHelper.error('archiveIssue error: ${e.message}');
+      return false;
+    }
   }
 
   @override
@@ -98,9 +103,14 @@ class IssueRepositoryImpl extends IssueRepository {
 
   @override
   Future<bool> readMessage(String issueUuid, int messageUuid) async {
-    final response = await dio.put(
-      "${ApiConstants.issue}/$issueUuid/$messageUuid/read",
-    );
-    return response.statusCode == 200;
+    try {
+      final response = await dio.put(
+        "${ApiConstants.issue}/$issueUuid/$messageUuid/read",
+      );
+      return response.statusCode == 200;
+    } on DioException catch (e) {
+      LogHelper.error('readMessage error: ${e.message}');
+      return false;
+    }
   }
 }
