@@ -189,7 +189,7 @@ class CabinetController extends GetxController {
         clinics.value = data;
         break;
       case Error(:final message, :final code):
-        print("Error: $message (code: $code)");
+        LogHelper.error("getClinics failed: $message (code: $code)");
     }
     if (clinics.isEmpty) {
       showClinic.value = false;

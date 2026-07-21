@@ -16,7 +16,7 @@ class CreateButton extends StatelessWidget {
       onTap: onClick,
       child: SvgPicture.asset(
         AssetFinder.icon('add_work'),
-        color: AppColors.primary,
+        colorFilter: const ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
         width: 28,
         height: 28,
       ),

@@ -10,11 +10,11 @@ class AuthRepositoryIml extends AuthRepository {
   AuthRepositoryIml(this.dio);
 
   @override
-  Future<AuthData?> login(pinfl) async {
+  Future<AuthData?> login({required String pinfl, String? code}) async {
     try {
       final Response response = await dio.post(
         ApiConstants.login,
-        data: {'pinfl': pinfl},
+        data: {'pinfl': pinfl, if (code != null) 'code': code},
       );
       final status = response.statusCode ?? 0;
       // Only treat a 2xx carrying a data payload as a successful login; anything

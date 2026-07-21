@@ -1,264 +1,6 @@
-// import 'package:doctor_app/core/design_system/styles/app_colors.dart';
-// import 'package:doctor_app/core/design_system/styles/text_styles.dart';
-// import 'package:doctor_app/core/design_system/widgets/buttons.dart';
-// import 'package:doctor_app/core/enums/issue_pop_up_menu.dart';
-// import 'package:doctor_app/core/navigation/routes.dart';
-// import 'package:doctor_app/core/utils/asset_finder.dart';
-// import 'package:doctor_app/core/utils/formatters.dart';
-//
-// import 'package:doctor_app/features/issue_detail/presentation/widgets/patient_row_detail_info.dart';
-// import 'package:doctor_app/features/issue_detail/presentation/widgets/section_info.dart';
-// import 'package:doctor_app/features/shared/controllers/issue_controller.dart';
-// import 'package:doctor_app/features/shared/domain/models/issue.dart';
-//
-// import 'package:flutter/material.dart';
-//
-// import 'package:get/get.dart';
-// import 'package:shadcn_ui/shadcn_ui.dart';
-//
-// import '../../shared/controllers/issue_event.dart';
-//
-// class IssueDetailPage extends StatefulWidget {
-//   const IssueDetailPage({super.key});
-//
-//   @override
-//   State<IssueDetailPage> createState() => _IssueDetailPageState();
-// }
-//
-// class _IssueDetailPageState extends State<IssueDetailPage> {
-//   final IssueController issueController = Get.find<IssueController>();
-//   Issue? issue;
-//
-//   bool isConnected = false;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     getIssue();
-//     ever<IssueEvent?>(issueController.uiEvent, (event) {
-//       if (event is Archive) {
-//         Get.snackbar(
-//           "",
-//           "",
-//           snackPosition: SnackPosition.BOTTOM,
-//           backgroundColor: Colors.green,
-//           margin: const EdgeInsets.all(16),
-//           borderRadius: 8,
-//           snackStyle: SnackStyle.FLOATING,
-//           titleText: Text(
-//             "archived".tr,
-//             style: WorkSansStyle.labelLarge.copyWith(color: Colors.white),
-//           ),
-//           messageText: Text(
-//             "issue_archived_successfully".tr,
-//             style: WorkSansStyle.label.copyWith(color: Colors.white),
-//           ),
-//         );
-//       }
-//     });
-//   }
-//
-//   getIssue() async {
-//     await Future.delayed(Duration(milliseconds: 500));
-//     setState(() {
-//       issue = Get.arguments;
-//       if (issue != null) {
-//         issueController.setIssueUUID(issue!.uuid!);
-//         isConnected = true;
-//       }
-//     });
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         leading: IconButton(
-//           onPressed: () => Get.back(),
-//           icon: Icon(Icons.arrow_back),
-//         ),
-//         centerTitle: true,
-//         title: Text("${"card".tr} №23"),
-//         actions: [
-//           PopupMenuButton(
-//             itemBuilder: (BuildContext context) => [
-//               PopupMenuItem<IssuePopUpMenu>(
-//                 value: IssuePopUpMenu.archive,
-//                 child: Text('archive'.tr),
-//               ),
-//             ],
-//             onSelected: (value) {
-//               if (value == IssuePopUpMenu.archive) {
-//                 Get.dialog(
-//                   Dialog(
-//                     shape: RoundedRectangleBorder(
-//                       borderRadius: BorderRadius.circular(16),
-//                     ),
-//                     child: Padding(
-//                       padding: const EdgeInsets.all(20),
-//                       child: Column(
-//                         mainAxisSize: MainAxisSize.min,
-//                         crossAxisAlignment: CrossAxisAlignment.center,
-//                         children: [
-//                           const Icon(Icons.archive_outlined, size: 48),
-//                           const SizedBox(height: 16),
-//                           Text(
-//                             "archive_alert".tr,
-//                             textAlign: TextAlign.center,
-//                             style: Get.textTheme.titleMedium?.copyWith(
-//                               fontWeight: FontWeight.w600,
-//                             ),
-//                           ),
-//
-//                           const SizedBox(height: 24),
-//                           Row(
-//                             children: [
-//                               Expanded(
-//                                 child: ShadButton.secondary(
-//                                   child: Text('no'.tr),
-//                                   onPressed: () => Get.back(),
-//                                 ),
-//                               ),
-//                               const SizedBox(width: 12),
-//                               Expanded(
-//                                 child: ShadButton(
-//                                   backgroundColor: AppColors.primary,
-//                                   child: Text('yes'.tr),
-//                                   onPressed: () {
-//                                     issueController.archiveIssue();
-//                                     Get.back();
-//                                   },
-//                                 ),
-//                               ),
-//                             ],
-//                           ),
-//                         ],
-//                       ),
-//                     ),
-//                   ),
-//                 );
-//               }
-//             },
-//           ),
-//         ],
-//       ),
-//       floatingActionButton: true
-//           ? Row(
-//               mainAxisAlignment: MainAxisAlignment.center,
-//               children: [
-//                 PrimaryButton(onTap: () {}, child: Text("accept".tr)),
-//                 ShadButton.secondary(
-//                   child: Text('cancel'.tr),
-//                   onPressed: () {},
-//                 ),
-//               ],
-//             )
-//           : Builder(
-//               builder: (context) {
-//                 if (isConnected) {
-//                   if (issue != null) {
-//                     if (issue!.inactiveAt != null) {
-//                       return SizedBox.shrink();
-//                     }
-//                   }
-//                   return FloatingActionButton(
-//                     onPressed: () {
-//                       Get.toNamed(Routes.chat, arguments: issue);
-//                     },
-//                     backgroundColor: AppColors.primary,
-//                     child: SvgPicture.asset(
-//                       AssetFinder.icon('chat'),
-//                       height: 30,
-//                     ),
-//                   );
-//                 }
-//                 return SizedBox.shrink();
-//               },
-//             ),
-//       body: SafeArea(
-//         child: issue == null
-//             ? Center(child: CircularProgressIndicator(color: Colors.black))
-//             : ListView(
-//                 padding: EdgeInsets.symmetric(horizontal: 15),
-//                 children: [
-//                   Text(
-//                     "patient_information".tr,
-//                     style: WorkSansStyle.headline4,
-//                   ),
-//
-//                   Padding(
-//                     padding: const EdgeInsets.symmetric(vertical: 15),
-//                     child: Column(
-//                       children: [
-//                         PatientRowDetailInfo(
-//                           label: "first_name".tr,
-//                           value: "Akhmad",
-//                         ),
-//                         SizedBox(height: 10),
-//                         PatientRowDetailInfo(
-//                           label: "last_name".tr,
-//                           value: "Akhmad",
-//                         ),
-//                         SizedBox(height: 10),
-//                         PatientRowDetailInfo(
-//                           label: "middle_name".tr,
-//                           value: "Akhmad",
-//                         ),
-//                         SizedBox(height: 10),
-//                         PatientRowDetailInfo(
-//                           label: "birthday".tr,
-//                           value: DateFormatter.birthday(DateTime.now()),
-//                         ),
-//                         SizedBox(height: 10),
-//                         PatientRowDetailInfo(
-//                           label: "address".tr,
-//                           value: "г. Ташкент, Навоий кучаси",
-//                         ),
-//                         SizedBox(height: 10),
-//                         PatientRowDetailInfo(
-//                           label: "complaint".tr,
-//                           value:
-//                               "фываолдфыов афылваождф ыловадфыоваджфыо вждалофыжвало",
-//                         ),
-//                       ],
-//                     ),
-//                   ),
-//                   SectionInfo(
-//                     title: "analysis_data".tr,
-//                     text:
-//                         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-//                   ),
-//
-//                   Container(
-//                     margin: EdgeInsets.symmetric(vertical: 15),
-//                     decoration: BoxDecoration(
-//                       border: Border.all(),
-//                       borderRadius: BorderRadius.circular(16),
-//                     ),
-//                     height: 180,
-//                     child: Center(
-//                       child: Text("Image", style: WorkSansStyle.headline2),
-//                     ),
-//                   ),
-//
-//                   SectionInfo(
-//                     title: "diagnosis".tr,
-//                     text:
-//                         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-//                   ),
-//                 ],
-//               ),
-//       ),
-//     );
-//   }
-// }
-
-import 'package:doctor_app/core/design_system/styles/app_colors.dart';
-import 'package:doctor_app/core/design_system/styles/text_styles.dart';
-import 'package:doctor_app/core/design_system/widgets/buttons.dart';
+import 'package:doctor_app/core/design_system/widgets/v2/v2.dart';
 import 'package:doctor_app/core/enums/issue_pop_up_menu.dart';
 import 'package:doctor_app/core/navigation/routes.dart';
-import 'package:doctor_app/core/utils/asset_finder.dart';
 import 'package:doctor_app/core/utils/formatters.dart';
 import 'package:doctor_app/features/issue_detail/presentation/widgets/patient_row_detail_info.dart';
 import 'package:doctor_app/features/issue_detail/presentation/widgets/section_info.dart';
@@ -266,8 +8,7 @@ import 'package:doctor_app/features/shared/controllers/issue_controller.dart';
 import 'package:doctor_app/features/shared/domain/models/issue.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shadcn_ui/shadcn_ui.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
 import '../../shared/controllers/issue_event.dart';
 
 class IssueDetailPage extends StatefulWidget {
@@ -292,21 +33,13 @@ class _IssueDetailPageState extends State<IssueDetailPage> {
     ever<IssueEvent?>(issueController.uiEvent, (event) {
       if (event is Archive) {
         Get.snackbar(
-          "",
-          "",
+          "archived".tr,
+          "issue_archived_successfully".tr,
           snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.green,
+          backgroundColor: AppColors.success,
+          colorText: Colors.white,
           margin: const EdgeInsets.all(16),
-          borderRadius: 8,
-          snackStyle: SnackStyle.FLOATING,
-          titleText: Text(
-            "archived".tr,
-            style: WorkSansStyle.labelLarge.copyWith(color: Colors.white),
-          ),
-          messageText: Text(
-            "issue_archived_successfully".tr,
-            style: WorkSansStyle.label.copyWith(color: Colors.white),
-          ),
+          borderRadius: 14,
         );
       }
     });
@@ -329,57 +62,52 @@ class _IssueDetailPageState extends State<IssueDetailPage> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => Get.back(),
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back_rounded),
         ),
         centerTitle: true,
-        title: Text("${"card".tr} №23"),
+        title: Text("card".tr, style: AppText.title.copyWith(fontSize: 18)),
         actions: [
-          PopupMenuButton(
-            itemBuilder: (BuildContext context) => [
+          PopupMenuButton<IssuePopUpMenu>(
+            icon: const Icon(Icons.more_horiz_rounded, color: AppColors.ink),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
+            ),
+            itemBuilder: (context) => [
               PopupMenuItem<IssuePopUpMenu>(
                 value: IssuePopUpMenu.archive,
-                child: Text('archive'.tr),
+                child: Text('archive'.tr, style: AppText.body),
               ),
             ],
             onSelected: (value) {
-              if (value == IssuePopUpMenu.archive) {
-                _showArchiveDialog();
-              }
+              if (value == IssuePopUpMenu.archive) _showArchiveDialog();
             },
           ),
         ],
       ),
-
       floatingActionButton: isAccepted
           ? FloatingActionButton(
               backgroundColor: AppColors.primary,
-              onPressed: () {
-                Get.toNamed(Routes.chat, arguments: issue);
-              },
-              child: SvgPicture.asset(AssetFinder.icon('chat'), height: 28),
+              onPressed: () => Get.toNamed(Routes.chat, arguments: issue),
+              child: const Icon(Icons.chat_bubble_rounded, color: Colors.white),
             )
           : null,
-
       bottomNavigationBar:
           (!isAccepted && issue != null && issue!.inactiveAt == null)
           ? SafeArea(
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 12,
-                ),
+                padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
-                      child: ShadButton.secondary(
-                        child: Text('cancel'.tr),
+                      child: AppButton(
+                        label: 'cancel'.tr,
+                        kind: AppButtonKind.ghost,
+                        block: true,
                         onPressed: () {
-                          setState(() => isAccepted = false);
                           Get.snackbar(
                             "declined".tr,
                             "appointment_declined".tr,
-                            backgroundColor: Colors.red,
+                            backgroundColor: AppColors.danger,
                             colorText: Colors.white,
                           );
                         },
@@ -387,14 +115,16 @@ class _IssueDetailPageState extends State<IssueDetailPage> {
                     ),
                     const SizedBox(width: 12),
                     Expanded(
-                      child: PrimaryButton(
-                        child: Text('accept'.tr),
-                        onTap: () {
+                      child: AppButton(
+                        label: 'accept'.tr,
+                        kind: AppButtonKind.success,
+                        block: true,
+                        onPressed: () {
                           setState(() => isAccepted = true);
                           Get.snackbar(
                             "accepted".tr,
                             "appointment_accepted".tr,
-                            backgroundColor: Colors.green,
+                            backgroundColor: AppColors.success,
                             colorText: Colors.white,
                           );
                         },
@@ -405,73 +135,70 @@ class _IssueDetailPageState extends State<IssueDetailPage> {
               ),
             )
           : null,
-
       body: SafeArea(
         child: issue == null
-            ? const Center(
-                child: CircularProgressIndicator(color: Colors.black),
-              )
+            ? const Center(child: CircularProgressIndicator())
             : ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 15),
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
                 children: [
-                  Text(
-                    "patient_information".tr,
-                    style: WorkSansStyle.headline4,
-                  ),
-                  const SizedBox(height: 15),
-
-                  // Example patient info
-                  Column(
-                    children: [
-                      PatientRowDetailInfo(
-                        label: "first_name".tr,
-                        value: issue?.patient?.fullName ?? "Akhmad",
-                      ),
-                      const SizedBox(height: 10),
-                      PatientRowDetailInfo(
-                        label: "birthday".tr,
-                        value: DateFormatter.birthday(
-                          issue?.birthdate ?? DateTime.now(),
+                  Text("patient_information".tr, style: AppText.micro),
+                  const SizedBox(height: 12),
+                  AppCard(
+                    child: Column(
+                      children: [
+                        PatientRowDetailInfo(
+                          label: "first_name".tr,
+                          value: issue?.patient?.fullName ?? "—",
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      PatientRowDetailInfo(
-                        label: "address".tr,
-                        value: issue?.address ?? "г. Ташкент, Навоий кучаси",
-                      ),
-                      const SizedBox(height: 10),
-                      PatientRowDetailInfo(
-                        label: "complaint".tr,
-                        value:
-                            issue?.issue ??
-                            "фываолдфыов афылваождф ыловадфыоваджфыо вждалофыжвало",
-                      ),
-                    ],
+                        const SizedBox(height: 12),
+                        PatientRowDetailInfo(
+                          label: "birthday".tr,
+                          value: DateFormatter.birthday(
+                            issue?.birthdate ?? DateTime.now(),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        PatientRowDetailInfo(
+                          label: "address".tr,
+                          value: issue?.address ?? "—",
+                        ),
+                        const SizedBox(height: 12),
+                        PatientRowDetailInfo(
+                          label: "complaint".tr,
+                          value: issue?.issue ?? "—",
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 20),
-
-                  SectionInfo(
-                    title: "analysis_data".tr,
-                    text:
-                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry...",
+                  AppCard(
+                    child: SectionInfo(
+                      title: "analysis_data".tr,
+                      text: issue?.issue ?? "—",
+                    ),
                   ),
-
+                  const SizedBox(height: 14),
                   Container(
-                    margin: const EdgeInsets.symmetric(vertical: 15),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.lightGray),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
                     height: 180,
-                    child: Center(
-                      child: Text("Image", style: WorkSansStyle.headline2),
+                    decoration: BoxDecoration(
+                      color: AppColors.surface2,
+                      borderRadius: AppRadii.cardR,
+                      border: Border.all(color: AppColors.border, width: 1.5),
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.image_outlined,
+                        size: 40,
+                        color: AppColors.ink3,
+                      ),
                     ),
                   ),
-
-                  SectionInfo(
-                    title: "diagnosis".tr,
-                    text:
-                        "Lorem Ipsum is simply dummy text of the printing and typesetting industry...",
+                  const SizedBox(height: 14),
+                  AppCard(
+                    child: SectionInfo(
+                      title: "diagnosis".tr,
+                      text: "—",
+                    ),
                   ),
                 ],
               ),
@@ -482,36 +209,49 @@ class _IssueDetailPageState extends State<IssueDetailPage> {
   void _showArchiveDialog() {
     Get.dialog(
       Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        backgroundColor: AppColors.surface,
+        shape: RoundedRectangleBorder(borderRadius: AppRadii.cardR),
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(24),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Icon(Icons.archive_outlined, size: 48),
+              Container(
+                width: 64,
+                height: 64,
+                alignment: Alignment.center,
+                decoration: const BoxDecoration(
+                  color: AppColors.warningTint,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.archive_rounded,
+                  size: 30,
+                  color: AppColors.warning,
+                ),
+              ),
               const SizedBox(height: 16),
               Text(
                 "archive_alert".tr,
                 textAlign: TextAlign.center,
-                style: Get.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+                style: AppText.headline,
               ),
               const SizedBox(height: 24),
               Row(
                 children: [
                   Expanded(
-                    child: ShadButton.secondary(
-                      child: Text('no'.tr),
+                    child: AppButton(
+                      label: 'no'.tr,
+                      kind: AppButtonKind.ghost,
+                      block: true,
                       onPressed: () => Get.back(),
                     ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: ShadButton(
-                      backgroundColor: AppColors.primary,
-                      child: Text('yes'.tr),
+                    child: AppButton(
+                      label: 'yes'.tr,
+                      block: true,
                       onPressed: () {
                         issueController.archiveIssue();
                         Get.back();

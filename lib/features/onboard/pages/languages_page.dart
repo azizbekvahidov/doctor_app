@@ -1,8 +1,7 @@
+import 'package:doctor_app/core/design_system/widgets/v2/v2.dart';
 import 'package:doctor_app/core/navigation/routes.dart';
-import 'package:doctor_app/core/design_system/widgets/buttons.dart';
 import 'package:doctor_app/core/utils/notifier.dart';
 import 'package:doctor_app/features/onboard/controller/onboard_controller.dart';
-import 'package:doctor_app/core/design_system/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,12 +15,22 @@ class LanguagesPage extends GetView<OnboardController> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 32).copyWith(bottom: 10),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 24,
+          ).copyWith(top: 12, bottom: 16),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SizedBox(),
+              Text(
+                "I Need Doctor",
+                style: AppText.display.copyWith(color: AppColors.primary),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                "Tilni tanlang · Выберите язык",
+                style: AppText.body.copyWith(color: AppColors.ink2),
+              ),
+              const Spacer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -32,7 +41,7 @@ class LanguagesPage extends GetView<OnboardController> {
                       isSelected: controller.selectedLang.value == "uz",
                     ),
                   ),
-                  SizedBox(width: 30),
+                  const SizedBox(width: 30),
                   Obx(
                     () => LanguageSelectButton(
                       lang: "Ru",
@@ -42,38 +51,21 @@ class LanguagesPage extends GetView<OnboardController> {
                   ),
                 ],
               ),
-              Obx(() {
-                return PrimaryButton(
-                  onTap: () {
-                    if (controller.selectedLang.value == null) {
-                      Notifier.showSnackbar(
-                        duration: Durations.extralong1,
-                        content: Text(
-                          "Iltimos tilni tanlang!",
-                          style: WorkSansStyle.label.copyWith(fontSize: 15),
-                        ),
-                      );
-                      return;
-                    }
-                    Get.toNamed(Routes.login);
-                  },
-
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 250),
-                    transitionBuilder: (child, animation) =>
-                        ScaleTransition(scale: animation, child: child),
-                    child: Text(
-                      "next".tr,
-                      key: ValueKey(
-                        controller.selectedLang.value,
-                      ), // important!
-                      style: WorkSansStyle.labelLarge.copyWith(
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                );
-              }),
+              const Spacer(),
+              AppButton(
+                label: "next".tr,
+                block: true,
+                onPressed: () {
+                  if (controller.selectedLang.value == null) {
+                    Notifier.showSnackbar(
+                      duration: Durations.extralong1,
+                      content: Text("Iltimos tilni tanlang!", style: AppText.body),
+                    );
+                    return;
+                  }
+                  Get.toNamed(Routes.login);
+                },
+              ),
             ],
           ),
         ),

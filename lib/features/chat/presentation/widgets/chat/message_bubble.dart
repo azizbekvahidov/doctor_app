@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:doctor_app/core/design_system/styles/text_styles.dart';
+import 'package:doctor_app/core/design_system/widgets/v2/v2.dart';
 import 'package:doctor_app/features/chat/domain/models/message.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -25,11 +25,9 @@ class MessageBubble extends StatefulWidget {
   State<MessageBubble> createState() => _MessageBubbleState();
 }
 
-class _MessageBubbleState extends State<MessageBubble>
-    with SingleTickerProviderStateMixin {
+class _MessageBubbleState extends State<MessageBubble> {
   double _opacity = 0.0;
   double _scale = 0.9;
-  bool _downloading = false;
 
   @override
   void initState() {
@@ -56,20 +54,15 @@ class _MessageBubbleState extends State<MessageBubble>
 
   Future<void> _onAttachmentTap(String url, [String? fileName]) async {
     try {
-      setState(() => _downloading = true);
       Get.dialog(
         const Center(child: CircularProgressIndicator()),
         barrierDismissible: false,
       );
-
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         final dir = await getTemporaryDirectory();
-        final name =
-            fileName ??
-            url.split('/').last.split('?').first; // extract filename from URL
-        final filePath = '${dir.path}/$name';
-        final file = File(filePath);
+        final name = fileName ?? url.split('/').last.split('?').first;
+        final file = File('${dir.path}/$name');
         await file.writeAsBytes(response.bodyBytes);
         await OpenFilex.open(file.path);
       } else {
@@ -78,14 +71,19 @@ class _MessageBubbleState extends State<MessageBubble>
     } catch (e) {
       Get.snackbar('Error', 'Cannot open file: $e');
     } finally {
-      if (mounted) setState(() => _downloading = false);
       if (Get.isDialogOpen ?? false) Get.back();
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final bool mine = widget.isMine;
     final hasAttachments = widget.message.attachments?.isNotEmpty ?? false;
+    final Color bubble = mine ? AppColors.primary : AppColors.surface2;
+    final Color onBubble = mine ? Colors.white : AppColors.ink;
+    final Color meta = mine
+        ? Colors.white.withValues(alpha: 0.75)
+        : AppColors.ink3;
 
     return AnimatedOpacity(
       opacity: _opacity,
@@ -99,22 +97,19 @@ class _MessageBubbleState extends State<MessageBubble>
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 300),
             child: Container(
-              margin: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 10),
-              padding: const EdgeInsets.all(10.0),
+              margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: widget.isMine ? Color(0xFF2774FF) : Colors.grey[300],
+                color: bubble,
                 borderRadius: BorderRadius.only(
-                  topLeft: const Radius.circular(12.0),
-                  topRight: const Radius.circular(12.0),
-                  bottomLeft: Radius.circular(widget.isMine ? 16 : 0),
-                  bottomRight: Radius.circular(widget.isMine ? 0.0 : 16),
+                  topLeft: const Radius.circular(18),
+                  topRight: const Radius.circular(18),
+                  bottomLeft: Radius.circular(mine ? 18 : 4),
+                  bottomRight: Radius.circular(mine ? 4 : 18),
                 ),
               ),
-              alignment: widget.isMine
-                  ? Alignment.centerRight
-                  : Alignment.centerLeft,
               child: Column(
-                crossAxisAlignment: widget.isMine
+                crossAxisAlignment: mine
                     ? CrossAxisAlignment.end
                     : CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
@@ -129,15 +124,15 @@ class _MessageBubbleState extends State<MessageBubble>
                           onTap: () => _onAttachmentTap(a.url!, a.fileName),
                           child: isImage
                               ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(12),
                                   child: CachedNetworkImage(
                                     imageUrl: a.url!,
-                                    width: 120,
-                                    height: 120,
+                                    width: 140,
+                                    height: 140,
                                     fit: BoxFit.cover,
                                     placeholder: (c, _) => Container(
-                                      width: 120,
-                                      height: 120,
+                                      width: 140,
+                                      height: 140,
                                       color: Colors.black12,
                                       child: const Center(
                                         child: CircularProgressIndicator(
@@ -146,9 +141,9 @@ class _MessageBubbleState extends State<MessageBubble>
                                       ),
                                     ),
                                     errorWidget: (c, _, __) => Container(
-                                      width: 120,
-                                      height: 120,
-                                      color: Colors.grey,
+                                      width: 140,
+                                      height: 140,
+                                      color: AppColors.surface2,
                                       child: const Icon(Icons.broken_image),
                                     ),
                                   ),
@@ -156,30 +151,30 @@ class _MessageBubbleState extends State<MessageBubble>
                               : Container(
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: 10,
-                                    vertical: 6,
+                                    vertical: 8,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: widget.isMine
-                                        ? Colors.white.withOpacity(0.2)
-                                        : Colors.black12,
-                                    borderRadius: BorderRadius.circular(8),
+                                    color: mine
+                                        ? Colors.white.withValues(alpha: 0.2)
+                                        : AppColors.surface,
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Icon(
-                                        Icons.insert_drive_file,
+                                        Icons.insert_drive_file_rounded,
                                         size: 22,
-                                        color: widget.isMine
-                                            ? Colors.white
-                                            : Colors.black87,
+                                        color: onBubble,
                                       ),
-                                      const SizedBox(width: 5),
+                                      const SizedBox(width: 6),
                                       SizedBox(
                                         width: 150,
                                         child: Text(
                                           a.fileName ?? 'Attachment',
-                                          style: WorkSansStyle.label,
+                                          style: AppText.caption.copyWith(
+                                            color: onBubble,
+                                          ),
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 1,
                                         ),
@@ -195,34 +190,26 @@ class _MessageBubbleState extends State<MessageBubble>
                   if ((widget.message.message ?? '').isNotEmpty)
                     Text(
                       widget.message.message ?? '',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: widget.isMine ? Colors.white : Colors.black,
-                      ),
+                      style: AppText.body.copyWith(color: onBubble),
                     ),
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 4),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         widget.message.createdAt != null
-                            ? DateFormat(
-                                "HH:mm",
-                              ).format(widget.message.createdAt!)
+                            ? DateFormat("HH:mm").format(widget.message.createdAt!)
                             : '',
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: widget.isMine
-                              ? Colors.white70
-                              : Colors.black54,
-                        ),
+                        style: AppText.caption.copyWith(fontSize: 11, color: meta),
                       ),
-                      if (widget.isMine)
+                      if (mine) ...[
+                        const SizedBox(width: 4),
                         Icon(
-                          widget.isRead ? Icons.done_all : Icons.check,
-                          size: 16,
-                          color: widget.isRead ? Colors.white : Colors.white70,
+                          widget.isRead ? Icons.done_all_rounded : Icons.check_rounded,
+                          size: 15,
+                          color: widget.isRead ? Colors.white : meta,
                         ),
+                      ],
                     ],
                   ),
                 ],

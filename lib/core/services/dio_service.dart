@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:doctor_app/core/constants/api_constants.dart';
 import 'package:doctor_app/core/navigation/routes.dart';
+import 'package:doctor_app/core/services/alice_service.dart';
 import 'package:doctor_app/core/services/secure_storage_service.dart';
 import 'package:get/get.dart';
 
@@ -45,6 +46,13 @@ class DioService {
         },
       ),
     );
+
+    // Dev-only HTTP inspector. Added last so it observes the final request
+    // (including the auth header). Null / skipped when dev mode is off.
+    final aliceInterceptor = AliceService.dioInterceptor;
+    if (aliceInterceptor != null) {
+      dio.interceptors.add(aliceInterceptor);
+    }
 
     return dio;
   }

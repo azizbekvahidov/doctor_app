@@ -1,4 +1,4 @@
-import 'package:doctor_app/core/design_system/styles/app_colors.dart';
+import 'package:doctor_app/core/design_system/widgets/v2/v2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,59 +8,60 @@ class ChatsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: AppColors.white,
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back_rounded),
         ),
         centerTitle: true,
-        title: Text("chats".tr),
+        title: Text("chats".tr, style: AppText.title.copyWith(fontSize: 18)),
       ),
       body: SafeArea(
-        child: ListView(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          children: List.generate(5, (index) {
-            return Card(
-              child: ListTile(
-                onTap: () {
-                  // TODO: go to conversation page
-                },
-                leading: const CircleAvatar(
-                  radius: 20.0,
-                  backgroundColor: Colors.blue,
-                  child: Text(
-                    "A", // Initials or user avatar
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-                title: const Text(
-                  "Akhmadjon",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
-                ),
-                subtitle: Text(
-                  "Hi",
-                  style: TextStyle(color: Colors.grey[600], fontSize: 14.0),
-                ),
-                trailing: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "9:36 am",
-                      style: TextStyle(color: Colors.grey[500], fontSize: 12.0),
+        child: ListView.separated(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+          itemCount: 5,
+          separatorBuilder: (_, __) => const SizedBox(height: 10),
+          itemBuilder: (context, index) {
+            return AppCard(
+              padding: 12,
+              onTap: () {
+                // TODO: open the conversation (Phase 1 — Reverb chat)
+              },
+              child: Row(
+                children: [
+                  const AppAvatar(size: 46, initials: "A"),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          "Akhmadjon",
+                          style: AppText.body.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          "Hi",
+                          style: AppText.caption.copyWith(
+                            color: AppColors.ink3,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                tileColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-
-                // Adding shadow for depth
+                  ),
+                  Text(
+                    "9:36",
+                    style: AppText.caption.copyWith(color: AppColors.ink3),
+                  ),
+                ],
               ),
             );
-          }),
+          },
         ),
       ),
     );

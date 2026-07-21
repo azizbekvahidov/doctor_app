@@ -1,89 +1,98 @@
-import 'package:doctor_app/core/utils/asset_finder.dart';
-import 'package:doctor_app/core/design_system/widgets/circle.dart';
-import 'package:doctor_app/core/design_system/styles/app_colors.dart';
-import 'package:doctor_app/core/design_system/styles/text_styles.dart';
-import 'package:doctor_app/features/main/presentation/controller/main_page_controller.dart';
-
+import 'package:doctor_app/core/design_system/widgets/v2/v2.dart';
 import 'package:doctor_app/features/shared/controllers/user_controller.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-import 'package:shadcn_ui/shadcn_ui.dart';
 
 class Header extends StatelessWidget {
   Header({super.key});
-
-  final MainPageController mainPageController = Get.find<MainPageController>();
 
   final UserController userController = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 6),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Obx(() {
-            final user = userController.user.value;
-            if (user == null) return SizedBox.shrink();
-            final avatarUrl = user.avatar?.url;
-            return Row(
-              children: [
-                Circle(
-                  height: 70,
-                  width: 70,
-                  child: Image.network(
-                    (avatarUrl != null && avatarUrl.isNotEmpty)
-                        ? avatarUrl
-                        : "https://img.freepik.com/free-photo/female-doctor-hospital-with-stethoscope_23-2148827774.jpg?semt=ais_hybrid&w=740&q=80",
-                    fit: BoxFit.cover,
+          Expanded(
+            child: Obx(() {
+              final user = userController.user.value;
+              if (user == null) return const SizedBox.shrink();
+              final first = user.firstName ?? '';
+              final last = user.lastName ?? '';
+              final initials = [
+                if (first.isNotEmpty) first[0],
+                if (last.isNotEmpty) last[0],
+              ].join().toUpperCase();
+              return Row(
+                children: [
+                  AppAvatar(
+                    size: 52,
+                    initials: initials,
+                    imageUrl: user.avatar?.url,
                   ),
-                ),
-                SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(user.firstName ?? '', style: WorkSansStyle.titleLarge),
-                    Text(user.lastName ?? '', style: WorkSansStyle.titleLarge),
-                  ],
-                ),
-              ],
-            );
-          }),
-          Spacer(),
-          Container(
-            decoration: BoxDecoration(shape: BoxShape.circle),
-            height: 65,
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                InkWell(
-                  onTap: () {
-
-                  },
-                  borderRadius: BorderRadius.circular(50),
-                  child: Circle(
-                    bgColor: AppColors.lightGray,
-                    border: Border.all(color: Colors.transparent),
-                    width: 50,
-                    height: 50,
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: SvgPicture.asset(AssetFinder.icon('notification')),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text("Salom 👋", style: AppText.caption),
+                        Text(
+                          "$first $last".trim(),
+                          style: AppText.title.copyWith(fontSize: 18),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                Positioned(
-                  right: -2,
-                  top: 0,
-                  child: ShadBadge(
-                    shape: CircleBorder(),
-                    backgroundColor: AppColors.red,
-                    child: Text('5', style: WorkSansStyle.labelLarge),
-                  ),
-                ),
-              ],
+                ],
+              );
+            }),
+          ),
+          const SizedBox(width: 8),
+          _NotificationButton(),
+        ],
+      ),
+    );
+  }
+}
+
+class _NotificationButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {},
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            width: 46,
+            height: 46,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              shape: BoxShape.circle,
+              border: Border.all(color: AppColors.border, width: 1.5),
+            ),
+            child: const Icon(
+              Icons.notifications_none_rounded,
+              color: AppColors.ink,
+              size: 22,
+            ),
+          ),
+          Positioned(
+            right: 0,
+            top: 0,
+            child: Container(
+              width: 10,
+              height: 10,
+              decoration: BoxDecoration(
+                color: AppColors.danger,
+                shape: BoxShape.circle,
+                border: Border.all(color: AppColors.bg, width: 2),
+              ),
             ),
           ),
         ],

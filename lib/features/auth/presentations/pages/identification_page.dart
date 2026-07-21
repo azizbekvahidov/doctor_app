@@ -1,11 +1,7 @@
-import 'package:doctor_app/core/utils/asset_finder.dart';
-import 'package:doctor_app/core/design_system/widgets/buttons.dart';
-import 'package:doctor_app/core/design_system/widgets/circle.dart';
+import 'package:doctor_app/core/design_system/widgets/v2/v2.dart';
 import 'package:doctor_app/features/auth/presentations/controller/auth_controller.dart';
-import 'package:doctor_app/core/design_system/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shadcn_ui/shadcn_ui.dart';
 
 class IdentificationPage extends GetView<AuthController> {
   const IdentificationPage({super.key});
@@ -14,61 +10,54 @@ class IdentificationPage extends GetView<AuthController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: ShadButton.secondary(
+        leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
-          backgroundColor: Colors.transparent,
-          child: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back_rounded),
         ),
       ),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsetsGeometry.symmetric(vertical: 10),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 24,
+          ).copyWith(bottom: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                children: [
-                  Divider(thickness: 2),
-                  Circle(),
-                  SizedBox(height: 160),
-                  Column(
-                    children: [
-                      SvgPicture.asset(AssetFinder.icon('avatar'), height: 65),
-                      SizedBox(height: 10),
-                      Text(
-                        'identification_info'.tr,
-                        style: WorkSansStyle.headline3.copyWith(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 22,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ],
+              const Spacer(),
+              Container(
+                width: 96,
+                height: 96,
+                alignment: Alignment.center,
+                decoration: const BoxDecoration(
+                  color: AppColors.primaryTint,
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.face_retouching_natural_rounded,
+                  size: 48,
+                  color: AppColors.primary,
+                ),
               ),
-
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Obx(
-                  () => PrimaryButton(
-                    // onTap: () => Get.toNamed(Routes.onboard),
-                    onTap: () => controller.myIdRegister(),
-                    child: controller.isAuthorization.value
-                        ? Center(
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 1.5,
-                            ),
-                          )
-                        : Text(
-                            "identification".tr,
-                            style: WorkSansStyle.labelLarge.copyWith(
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                  ),
+              const SizedBox(height: 24),
+              Text(
+                'identification'.tr,
+                textAlign: TextAlign.center,
+                style: AppText.title,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'identification_info'.tr,
+                textAlign: TextAlign.center,
+                style: AppText.body.copyWith(color: AppColors.ink2),
+              ),
+              const Spacer(),
+              Obx(
+                () => AppButton(
+                  label: "identification".tr,
+                  block: true,
+                  loading: controller.isAuthorization.value,
+                  icon: const Icon(Icons.camera_alt_rounded),
+                  onPressed: () => controller.verifyAndLogin(),
                 ),
               ),
             ],

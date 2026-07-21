@@ -1,3 +1,4 @@
+import 'package:doctor_app/core/config/myid_settings.dart';
 import 'package:doctor_app/core/navigation/routes.dart';
 import 'package:doctor_app/core/services/secure_storage_service.dart';
 import 'package:doctor_app/core/utils/log_helper.dart';
@@ -83,38 +84,57 @@ class AuthController extends GetxController {
     super.onInit();
   }
 
+  /// Step 1 — validate the PINFL, then send the user to the identification
+  /// (face scan) screen. No session is requested until identification is done.
   Future<void> login() async {
+    final String pinfl = pinflController.text.trim();
+
+    if (pinfl.isEmpty) {
+      isTextFieldEmpty(true);
+      await Future.delayed(Duration(seconds: 1));
+      isTextFieldEmpty(false);
+      return;
+    }
+
+    await Get.toNamed(Routes.identification);
+  }
+
+  /// Step 2 — run the MyID face check and exchange the verified identity for a
+  /// session. Invoked from the identification screen.
+  Future<void> verifyAndLogin() async {
     try {
-      String pinfl = pinflController.text.trim();
+      final String pinfl = pinflController.text.trim();
 
       if (pinfl.isEmpty) {
-        isTextFieldEmpty(true);
-        await Future.delayed(Duration(seconds: 1));
-        isTextFieldEmpty(false);
+        Get.back();
         return;
       }
+
       isAuthorization.value = true;
-      AuthData? authData = await authRepository.login(pinfl);
-      await Future.delayed(Durations.extralong1);
-      if (authData == null) {
-        Notifier.showSnackbar(
-          content: Text(
-            'JSHSHR bo\'yicha ma\'lumotlar mavjud emas!',
-            style: WorkSansStyle.titleSmall.copyWith(
-              fontWeight: FontWeight.w500,
-              fontSize: 15,
-            ),
-          ),
-        );
-        return;
+
+      // 1. Face check first — the server trusts MyID, not the typed PINFL.
+      //    Always start the SDK: in the DEBUG sandbox FACE_DETECTION opens the
+      //    camera without production credentials.
+      final String? code = await verifyWithMyId(externalId: pinfl);
+
+      if (code == null && !MyIdSettings.allowLoginWithoutVerification) {
+        isAuthorization.value = false;
+        return; // cancelled or failed — already logged
       }
-      token = authData.token;
-      user = authData.user;
+
+      // 2. Exchange the verified identity for a session.
+      final AuthData? authData = await authRepository.login(
+        pinfl: pinfl,
+        code: code,
+      );
+      token = authData?.token;
+      user = authData?.user;
+
       if (token == null || user == null) {
         isAuthorization.value = false;
         Notifier.showSnackbar(
           content: Text(
-            'JSHSHR bo\'yicha ma\'lumotlar mavjud emas!',
+            'Kirishda xatolik yuz berdi. Qayta urinib ko\'ring.',
             style: WorkSansStyle.titleSmall.copyWith(
               fontWeight: FontWeight.w500,
               fontSize: 15,
@@ -123,19 +143,64 @@ class AuthController extends GetxController {
         );
         return;
       }
+
       await secureStorageService.saveUser(user!.toRawJson());
       await secureStorageService.saveToken(token!);
-      String registeredAt = user!.registeredAt != null
-          ? user!.registeredAt.toString()
-          : "";
       isAuthorization.value = false;
-      if (registeredAt.isEmpty) {
-        Get.toNamed(Routes.identification);
+
+      // 3. A verified identity that isn't registered yet is not an error — the
+      //    server has already created the account, so continue into
+      //    registration instead of reporting "not found".
+      // offAll so the identification screen can't be reached again by going back
+      // once a session already exists.
+      if (user!.registeredAt == null) {
+        await Get.offAllNamed(Routes.register);
       } else {
-        myIdRegister(isRegisteredAt: true);
+        await Get.offAllNamed(Routes.onboard);
       }
     } catch (e) {
-      LogHelper.error("Error:$e");
+      isAuthorization.value = false;
+      LogHelper.error("Login failed: $e");
+    }
+  }
+
+  /// Runs the MyID face check and returns its authorization code, or null when
+  /// the user cancelled / verification failed / MyID isn't configured.
+  Future<String?> verifyWithMyId({String? externalId}) async {
+    if (!MyIdSettings.isConfigured) {
+      // Not fatal: still start the SDK so the sandbox camera can open. MyID
+      // will surface its own error if it rejects the (empty) client id.
+      LogHelper.warning(
+        "MyID clientId is empty — starting the SDK anyway (sandbox).",
+      );
+    }
+
+    try {
+      final MyIdResult result = await MyIdClient.start(
+        config: MyIdConfig(
+          clientId: MyIdSettings.clientId,
+          environment: MyIdSettings.environment,
+          entryType: MyIdEntryType.FACE_DETECTION,
+          externalId: externalId,
+        ),
+        iosAppearance: MyIdIOSAppearance(),
+      );
+
+      final String? code = result.code;
+      if (code == null ||
+          code.isEmpty ||
+          code == "CANCELLED" ||
+          code == "USER_CANCELLED") {
+        LogHelper.warning("MyID verification not completed: $code");
+        return null;
+      }
+      return code;
+    } on PlatformException catch (e) {
+      LogHelper.error("MyID platform error: $e");
+      return null;
+    } catch (e) {
+      LogHelper.error("MyID error: $e");
+      return null;
     }
   }
 
@@ -182,42 +247,6 @@ class AuthController extends GetxController {
       LogHelper.error(e.toString());
     } finally {
       isAuthorization.value = false;
-    }
-  }
-
-  Future<void> myIdRegister({bool isRegisteredAt = false}) async {
-    isAuthorization.value = false;
-    try {
-      MyIdResult result = await MyIdClient.start(
-        config: MyIdConfig(
-          environment: MyIdEnvironment.DEBUG,
-          clientId: '',
-          entryType: MyIdEntryType.FACE_DETECTION,
-        ),
-        iosAppearance: MyIdIOSAppearance(),
-      );
-      LogHelper.warning("BASE64: ${result.base64}");
-      LogHelper.warning("CODE: ${result.code}");
-      LogHelper.warning("COMP: ${result.comparison}");
-      if (result.code == null ||
-          result.code == "CANCELLED" ||
-          result.code == "USER_CANCELLED") {
-        return;
-      }
-
-      if (result.base64 != null) {
-        if (isRegisteredAt) {
-          await Get.toNamed(Routes.onboard);
-        } else {
-          await Get.toNamed(Routes.register);
-        }
-      } else {
-        LogHelper.error("Face detection failed with code: ${result.code}");
-      }
-    } on PlatformException catch (e) {
-      LogHelper.warning("ERROR: ${e.toString()}");
-    } catch (e) {
-      LogHelper.error(e.toString());
     }
   }
 

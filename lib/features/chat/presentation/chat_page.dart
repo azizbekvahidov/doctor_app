@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:doctor_app/core/design_system/widgets/v2/v2.dart';
+import 'package:doctor_app/core/utils/log_helper.dart';
 import 'package:doctor_app/features/chat/domain/models/message.dart';
 import 'package:doctor_app/features/chat/presentation/widgets/chat/message_bubble.dart';
 import 'package:doctor_app/features/chat/presentation/widgets/chat/message_text_field.dart';
@@ -21,7 +23,6 @@ class _ChatPageState extends State<ChatPage> {
   Issue? issue;
 
   final issueController = Get.find<IssueController>();
-
   final TextEditingController _controller = TextEditingController();
 
   @override
@@ -31,23 +32,19 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   _initialize() async {
-    setState(() {
-      issue = Get.arguments;
-    });
+    setState(() => issue = Get.arguments);
     if (issue != null) {
       issueController.setIssueUUID(issue!.uuid!);
       issueController.getChatForIssue(issue!.uuid!);
       issueController.startChatStream(issue!.uuid!);
     }
-    await Future.delayed(Duration(milliseconds: 500));
-    setState(() {
-      isConnected = true;
-    });
+    await Future.delayed(const Duration(milliseconds: 500));
+    setState(() => isConnected = true);
   }
 
   @override
   void dispose() {
-    issueController.clearChat(); // cleanup when leaving page
+    issueController.clearChat();
     super.dispose();
   }
 
@@ -57,57 +54,77 @@ class _ChatPageState extends State<ChatPage> {
         allowMultiple: true,
         type: FileType.any,
       );
-
       if (result != null && result.files.isNotEmpty) {
         final files = result.paths
             .whereType<String>()
             .map((path) => File(path))
             .toList();
-
-        print('📁 Picked ${files.length} files:');
-        for (final f in files) {
-          print(' - ${f.path}');
-        }
-
-        // Pass a new list copy (prevents concurrent modification)
         issueController.selectFiles(List<File>.from(files));
-
-        print('✅ Files selected successfully');
-      } else {
-        print('⚠️ No files selected.');
       }
     } catch (e) {
-      print('❌ Error picking files: $e');
+      LogHelper.error('File pick error: $e');
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final name = issue?.patient?.fullName ?? '';
+    final initials = name.isNotEmpty ? name[0].toUpperCase() : '';
+
     return Scaffold(
+      backgroundColor: AppColors.bg,
       appBar: AppBar(
+        titleSpacing: 0,
         title: isConnected == false
-            ? const Text('Loading...')
-            : Text(issue?.patient?.fullName ?? ''),
+            ? Text('Loading...', style: AppText.body)
+            : Row(
+                children: [
+                  AppAvatar(size: 38, initials: initials),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Text(
+                      name,
+                      style: AppText.title.copyWith(fontSize: 17),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
       ),
       body: SafeArea(
         child: isConnected == false
-            ? Center(child: CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator())
             : Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
                     child: Obx(() {
                       if (issueController.chatLoading.value) {
                         return const Center(child: CircularProgressIndicator());
                       }
-
                       final List<Message> messages =
                           issueController.chatMessages;
-
                       if (messages.isEmpty) {
-                        return const Center(child: Text('No messages yet'));
+                        return Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(
+                                Icons.chat_bubble_outline_rounded,
+                                size: 40,
+                                color: AppColors.ink3,
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                'No messages yet',
+                                style: AppText.body.copyWith(
+                                  color: AppColors.ink3,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
                       }
-
                       return ListView.builder(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 8,
@@ -116,8 +133,7 @@ class _ChatPageState extends State<ChatPage> {
                         itemCount: messages.length,
                         itemBuilder: (context, index) {
                           final msg = messages[index];
-                          final isMine = msg.from == 'doctor'; // or 'patient'
-
+                          final isMine = msg.from == 'doctor';
                           return Align(
                             alignment: isMine
                                 ? Alignment.centerRight
@@ -132,20 +148,16 @@ class _ChatPageState extends State<ChatPage> {
                       );
                     }),
                   ),
-
                   MessageTextField(
-                    padding: const EdgeInsets.only(top: 10, bottom: 5, left: 10,right: 10),
                     controller: _controller,
                     onSelectFile: _pickFiles,
                     onSend: () async {
                       final text = _controller.text.trim();
                       if (text.isEmpty && issueController.files.isEmpty) return;
-
                       await issueController.sendMessage(
                         text,
                         filesList: issueController.files,
                       );
-
                       _controller.clear();
                     },
                   ),

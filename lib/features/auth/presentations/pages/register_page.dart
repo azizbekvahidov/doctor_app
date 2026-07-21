@@ -1,10 +1,8 @@
-import 'package:doctor_app/core/design_system/styles/app_colors.dart';
-import 'package:doctor_app/core/design_system/widgets/buttons.dart';
+import 'package:doctor_app/core/design_system/widgets/v2/v2.dart';
 import 'package:doctor_app/features/auth/domain/models/personal_data_form.dart';
 import 'package:doctor_app/features/auth/presentations/controller/auth_controller.dart';
 import 'package:doctor_app/features/auth/presentations/controller/register_screen_controller.dart';
 import 'package:doctor_app/features/auth/presentations/pages/widgets/personal_info_form.dart';
-import 'package:doctor_app/core/design_system/styles/text_styles.dart';
 import 'package:doctor_app/features/auth/presentations/pages/widgets/education_info_form.dart';
 import 'package:doctor_app/features/auth/presentations/pages/widgets/social_info_form.dart';
 import 'package:flutter/material.dart';
@@ -84,9 +82,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: AppColors.white,
       appBar: AppBar(
-        backgroundColor: AppColors.white,
         leading: IconButton(
           onPressed: () {
             if (page > 1) {
@@ -95,17 +91,35 @@ class _RegisterPageState extends State<RegisterPage> {
               Navigator.pop(context);
             }
           },
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back_rounded),
         ),
-        title: Column(
-          children: [Text("personal information".tr), Text("$page/3")],
+        title: Text(
+          "personal information".tr,
+          style: AppText.title.copyWith(fontSize: 18),
         ),
         centerTitle: true,
       ),
       body: SafeArea(
         child: ListView(
           children: [
-            const Divider(height: 1),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
+              child: Row(
+                children: List.generate(3, (i) {
+                  final done = i < page;
+                  return Expanded(
+                    child: Container(
+                      height: 5,
+                      margin: EdgeInsets.only(right: i < 2 ? 6 : 0),
+                      decoration: BoxDecoration(
+                        color: done ? AppColors.primary : AppColors.surface2,
+                        borderRadius: BorderRadius.circular(3),
+                      ),
+                    ),
+                  );
+                }),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: AnimatedSwitcher(
@@ -177,9 +191,13 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              child: PrimaryButton(
-                onTap: () async {
-                  if (page == 1) {
+              child: Obx(
+                () => AppButton(
+                  block: true,
+                  label: page == 3 ? 'save'.tr : 'next'.tr,
+                  loading: authController.isAuthorization.value,
+                  onPressed: () async {
+                    if (page == 1) {
                     final isValid = personalFormKey.currentState!.validate();
                     if (!isValid) {
                       await Future.delayed(const Duration(seconds: 2));
@@ -231,28 +249,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     await authController.register();
                   }
                 },
-                width: double.infinity,
-                child: Obx(() {
-                  if (authController.isAuthorization.value) {
-                    return Center(
-                      child: SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 1,
-                        ),
-                      ),
-                    );
-                  } else {
-                    return Text(
-                      page == 3 ? 'save'.tr : 'next'.tr,
-                      style: WorkSansStyle.labelLarge.copyWith(
-                        fontWeight: FontWeight.w500,
-                      ),
-                    );
-                  }
-                }),
+                ),
               ),
             ),
           ],

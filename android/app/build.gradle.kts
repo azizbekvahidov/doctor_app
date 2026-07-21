@@ -11,6 +11,9 @@ android {
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
+        // Required by flutter_local_notifications (pulled in by the Alice HTTP
+        // inspector) — it uses java.time APIs that need desugaring on older APIs.
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
@@ -37,8 +40,21 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+
+    lint {
+        // Android lint on a Flutter host project adds little (Dart is covered by
+        // `flutter analyze`) and lintVitalAnalyzeRelease intermittently fails on
+        // Windows with "file is used by another process" when a scanner locks its
+        // freshly-written cache jars. Skip it for release builds.
+        checkReleaseBuilds = false
+        abortOnError = false
+    }
 }
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }

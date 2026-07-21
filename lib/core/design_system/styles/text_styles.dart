@@ -1,131 +1,58 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
+/// Legacy type scale, now backed by Manrope (v2 design system).
+///
+/// The class keeps its original name and member set so screens that haven't
+/// been migrated to [AppText] still restyle to the new font. New code should
+/// prefer `AppText`.
 abstract class WorkSansStyle {
-  static const String fontFamily = 'WorkSans';
+  static TextStyle _m(
+    double size,
+    FontWeight weight, {
+    double? height,
+    double? letterSpacing,
+    Color? color,
+  }) => GoogleFonts.manrope(
+    fontSize: size,
+    fontWeight: weight,
+    height: height,
+    letterSpacing: letterSpacing,
+    color: color,
+  );
 
   // HEADLINES
-  static const TextStyle headline1 = TextStyle(
-    fontFamily: fontFamily,
-    fontWeight: FontWeight.w700,
-    fontSize: 32,
-    height: 1.3,
-  );
-
-  static const TextStyle headline2 = TextStyle(
-    fontFamily: fontFamily,
-    fontWeight: FontWeight.w700,
-    fontSize: 28,
-    height: 1.3,
-  );
-
-  static const TextStyle headline3 = TextStyle(
-    fontFamily: fontFamily,
-    fontWeight: FontWeight.w600,
-    fontSize: 24,
-    height: 1.3,
-  );
-
-  static const TextStyle headline4 = TextStyle(
-    fontFamily: fontFamily,
-    fontWeight: FontWeight.w600,
-    fontSize: 20,
-    height: 1.3,
-  );
-
-  static const TextStyle headline5 = TextStyle(
-    fontFamily: fontFamily,
-    fontWeight: FontWeight.w600,
-    fontSize: 16,
-    height: 1.3,
-  );
+  static TextStyle get headline1 => _m(32, FontWeight.w800, height: 1.2);
+  static TextStyle get headline2 => _m(28, FontWeight.w800, height: 1.2);
+  static TextStyle get headline3 => _m(24, FontWeight.w700, height: 1.25);
+  static TextStyle get headline4 => _m(20, FontWeight.w700, height: 1.25);
+  static TextStyle get headline5 => _m(16, FontWeight.w700, height: 1.3);
 
   // TITLES
-  static const TextStyle titleLarge = TextStyle(
-    fontFamily: fontFamily,
-    fontWeight: FontWeight.w600,
-    fontSize: 22,
-    height: 1.4,
-  );
+  static TextStyle get titleLarge => _m(22, FontWeight.w700, height: 1.3);
+  static TextStyle get titleMedium => _m(18, FontWeight.w600, height: 1.35);
+  static TextStyle get titleSmall => _m(16, FontWeight.w600, height: 1.4);
 
-  static const TextStyle titleMedium = TextStyle(
-    fontFamily: fontFamily,
-    fontWeight: FontWeight.w500,
-    fontSize: 18,
-    height: 1.4,
-  );
-
-  static const TextStyle titleSmall = TextStyle(
-    fontFamily: fontFamily,
-    fontWeight: FontWeight.w500,
-    fontSize: 16,
-    height: 1.4,
-  );
-
-  // BODY TEXT
-  static const TextStyle bodyLarge = TextStyle(
-    fontFamily: fontFamily,
-    fontWeight: FontWeight.w400,
-    fontSize: 18,
-    height: 1.5,
-  );
-
-  static const TextStyle body = TextStyle(
-    fontFamily: fontFamily,
-    fontWeight: FontWeight.w400,
-    fontSize: 16,
-    height: 1.5,
-  );
-
-  static const TextStyle bodySmall = TextStyle(
-    fontFamily: fontFamily,
-    fontWeight: FontWeight.w400,
-    fontSize: 14,
-    height: 1.4,
-  );
+  // BODY
+  static TextStyle get bodyLarge => _m(18, FontWeight.w500, height: 1.5);
+  static TextStyle get body => _m(16, FontWeight.w500, height: 1.5);
+  static TextStyle get bodySmall => _m(14, FontWeight.w500, height: 1.4);
 
   // LABELS
-  static const TextStyle labelLarge = TextStyle(
-    fontFamily: fontFamily,
-    fontWeight: FontWeight.w700,
-    fontSize: 16,
-    letterSpacing: 0.5,
-  );
+  static TextStyle get labelLarge =>
+      _m(16, FontWeight.w700, letterSpacing: 0.2);
+  static TextStyle get label => _m(14, FontWeight.w600, letterSpacing: 0.2);
+  static TextStyle get labelSmall => _m(12, FontWeight.w600, letterSpacing: 0.2);
 
-  static const TextStyle label = TextStyle(
-    fontFamily: fontFamily,
-    fontWeight: FontWeight.w500,
-    fontSize: 14,
-    letterSpacing: 0.5,
-  );
-
-  static const TextStyle labelSmall = TextStyle(
-    fontFamily: fontFamily,
-    fontWeight: FontWeight.w500,
-    fontSize: 12,
-    letterSpacing: 0.5,
-  );
-
-  // CAPTION / HINT TEXT
-  static const TextStyle caption = TextStyle(
-    fontFamily: fontFamily,
-    fontWeight: FontWeight.w400,
-    fontSize: 12,
-    color: Colors.grey,
-  );
-
-  // OVERLINE / TAGS
-  static const TextStyle overline = TextStyle(
-    fontFamily: fontFamily,
-    fontWeight: FontWeight.w600,
-    fontSize: 10,
+  // CAPTION / OVERLINE
+  static TextStyle get caption =>
+      _m(12, FontWeight.w500, color: const Color(0xFFA5A8AF));
+  static TextStyle get overline => _m(
+    10,
+    FontWeight.w700,
     letterSpacing: 1.0,
-    color: Colors.grey,
+    color: const Color(0xFFA5A8AF),
   );
-
-  static const TextStyle overlineLight = TextStyle(
-    fontFamily: fontFamily,
-    fontWeight: FontWeight.w500,
-    fontSize: 11,
-    color: Colors.black,
-  );
+  static TextStyle get overlineLight =>
+      _m(11, FontWeight.w500, color: const Color(0xFF191A1E));
 }

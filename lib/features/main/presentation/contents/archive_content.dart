@@ -35,8 +35,8 @@ class ArchiveContent extends GetView<MainPageController> {
             final archived = issueController.archivedIssues[index];
             return ArchivedItem(archived: archived);
           },
-          padding: EdgeInsets.symmetric(horizontal: 15),
-          separatorBuilder: (context, index) => SizedBox(height: 10),
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+          separatorBuilder: (context, index) => const SizedBox(height: 10),
         );
       }),
     );

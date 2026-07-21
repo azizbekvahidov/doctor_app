@@ -1,5 +1,4 @@
-
-import 'package:doctor_app/core/design_system/styles/text_styles.dart';
+import 'package:doctor_app/core/design_system/widgets/v2/v2.dart';
 import 'package:flutter/material.dart';
 
 class PatientRowDetailInfo extends StatelessWidget {
@@ -16,9 +15,20 @@ class PatientRowDetailInfo extends StatelessWidget {
   Widget build(BuildContext context) => Row(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Text("$label:", style: WorkSansStyle.titleMedium),
-      SizedBox(width: 10),
-      Expanded(child: Text(value, style: WorkSansStyle.titleMedium)),
+      SizedBox(
+        width: 110,
+        child: Text(
+          label,
+          style: AppText.caption.copyWith(color: AppColors.ink3),
+        ),
+      ),
+      const SizedBox(width: 12),
+      Expanded(
+        child: Text(
+          value,
+          style: AppText.body.copyWith(fontWeight: FontWeight.w600),
+        ),
+      ),
     ],
   );
 }

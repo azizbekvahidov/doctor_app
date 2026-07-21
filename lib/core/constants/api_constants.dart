@@ -3,9 +3,10 @@ class ApiConstants {
   static const apiEgov = "/api/egov";
   static const apiDoctor = "/api/doctor";
   static const apiList = '/api/list';
+  static const apiAuth = '/api/auth';
 
-  // Auth
-  static const String login = "$apiEgov/auth";
+  // Auth — login exchanges a verified MyID code for a session.
+  static const String login = "$apiAuth/login";
   static const String register = "$apiDoctor/register";
   static const String token = "$apiEgov/get-token";
   static const String logout = "$apiEgov/logout";

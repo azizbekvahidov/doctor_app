@@ -1,3 +1,4 @@
+import 'package:doctor_app/core/design_system/widgets/v2/v2.dart';
 import 'package:doctor_app/features/main/presentation/contents/archive_content.dart';
 import 'package:doctor_app/features/profile/presentation/profile_page.dart';
 
@@ -46,60 +47,14 @@ class _MainPageState extends State<MainPage> {
           child: pages[index],
         ),
       ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.symmetric(
-          vertical: 10,
-          horizontal: 25,
-        ).copyWith(bottom: 20),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.07),
-              blurRadius: 8,
-              offset: const Offset(0, -2),
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildNavItem(Icons.home, "Home", 0),
-            _buildNavItem(Icons.search, "Search", 1),
-            _buildNavItem(Icons.person, "Profile", 2),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNavItem(IconData icon, String label, int i) {
-    final bool isSelected = i == index;
-
-    return GestureDetector(
-      onTap: () => setState(() => index = i),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.teal.withOpacity(0.1) : Colors.transparent,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, color: isSelected ? Colors.teal : Colors.grey, size: 26),
-            // const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-                color: isSelected ? Colors.teal : Colors.grey,
-              ),
-            ),
-          ],
-        ),
+      bottomNavigationBar: AppTabBar(
+        currentIndex: index,
+        onTap: (i) => setState(() => index = i),
+        items: const [
+          AppTabItem(icon: Icons.home_rounded, label: "Home"),
+          AppTabItem(icon: Icons.inbox_rounded, label: "Archive"),
+          AppTabItem(icon: Icons.person_rounded, label: "Profile"),
+        ],
       ),
     );
   }
